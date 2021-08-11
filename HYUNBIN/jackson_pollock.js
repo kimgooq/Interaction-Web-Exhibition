@@ -42,15 +42,21 @@ function CircleOne(x, y, col, id) {
 
   this.display = function () {
     fill(this.col);
-    ellipse(this.x, this.y, this.speed);
+    if (this.speed>120){
+      this.speed = 120
+      ellipse(this.x, this.y, this.speed);
+    }
+    else{
+      ellipse(this.x, this.y, this.speed+2);
+    }
   };
 
   this.update = function () {
     px = pow(mouseX - pmouseX, 2);
     py = pow(mouseY - pmouseY, 2);
     this.speed = sqrt(px + py);
-    this.x += (mouseX - this.x + this.speed) / 48;
-    this.y += (mouseY - this.y + this.speed) / 48;
+    this.x += (mouseX - this.x + this.speed) / 36;
+    this.y += (mouseY - this.y + this.speed) / 36;
   };
 
   this.trans = function () {
