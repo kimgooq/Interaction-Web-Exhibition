@@ -7,6 +7,7 @@ function setup(){
 	seed = random(1000);
 
     colors = [
+        
         color(112,112,74), //green
         color(245,198,110), //yellow
         color(242,229,194), //cream
@@ -45,11 +46,11 @@ function mouseDragged(){
 }
 
 function drizzle(){
-    let s = 1+30/dist(brush.px, brush.py, brush.x, brush.y);
-	s=min(15,s);
-	strokeWeight(s);
-	stroke(0);
-	line(brush.px, brush.py, brush.x, brush.y);
+    // let s = 1+30/dist(brush.px, brush.py, brush.x, brush.y);
+	// s=min(15,s);
+	// strokeWeight(s);
+	// stroke(0);
+	line(mouseX, mouseY, pmouseX, pmouseY);
 	// stroke(255);
 	// line(width-brush.px, height-brush.py, width-brush.x, height-brush.y);
 	
