@@ -4,11 +4,153 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="index.js" type="module"></script>
     <link rel="stylesheet" href="style.css" />
     <title>Document</title>
   </head>
   <body>
-    <canvas id="c"></canvas>
+    <script src="https://threejs.org/build/three.min.js"></script>
+    <script src="http://fenixrepo.fao.org/cdn/js/threejs/4.4/OrbitControls.js"></script>
+    <script>
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        perserveDrawingBuffer: true,
+      });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      const camera_parameters = [
+        45,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000,
+      ];
+      const camera = new THREE.PerspectiveCamera(...camera_parameters);
+      camera.position.z = 5;
+
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0xffffff);
+
+      let controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.update();
+
+      function MY_TV() {
+        this.box_WHD = [0.5, 0.5, 0.5];
+        this.box_geometry = new THREE.BoxGeometry(...this.box_WHD);
+        this.box_material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });
+        this.box = new THREE.Mesh(this.box_geometry, this.box_material);
+        this.box.position.set(0, 0, 0);
+
+        this.plane_WHD = [0.3, 0.3, 1];
+        this.plane_geometry = new THREE.PlaneGeometry(...this.plane_WHD);
+        this.plane_material = new THREE.MeshPhongMaterial({ color: 0x808080 });
+        this.plane = new THREE.Mesh(this.plane_geometry, this.plane_material);
+        this.plane.position.set(0.3, 0, 0);
+        this.plane.rotation.y = Math.PI / 2;
+        this.box.add(this.plane);
+
+        this.set = (x, y, z) => {
+          this.box.position.set(x, y, z);
+        };
+
+        this.rotation = (x, y, z) => {
+          this.box.rotation.x = x;
+          this.box.rotation.y = y;
+          this.box.rotation.z = z;
+        };
+
+        this.addTV = () => {
+          scene.add(this.box);
+        };
+      }
+
+      const addTV_asCircle = () => {
+        for (let i = 0; i < 360; i += 15) {
+          let TV1 = new MY_TV();
+          let TV11 = new MY_TV();
+          let TV12 = new MY_TV();
+          let TV2 = new MY_TV();
+          let TV21 = new MY_TV();
+          let TV22 = new MY_TV();
+          let TV3 = new MY_TV();
+          let TV31 = new MY_TV();
+          let TV32 = new MY_TV();
+          let size1 = 4.0;
+          let size2 = 3.0;
+          let size3 = 2.0;
+          let rad = (i * Math.PI) / 180;
+          TV1.set(Math.cos(rad) * size1, Math.sin(rad) * size1, 0);
+          TV11.set(Math.cos(rad) * size1, Math.sin(rad) * size1, 0.6);
+          TV12.set(Math.cos(rad) * size1, Math.sin(rad) * size1, 1.2);
+          TV2.set(Math.cos(rad) * size2, Math.sin(rad) * size2, 1.8);
+          TV21.set(Math.cos(rad) * size2, Math.sin(rad) * size2, 2.4);
+          TV22.set(Math.cos(rad) * size2, Math.sin(rad) * size2, 3.0);
+          TV3.set(Math.cos(rad) * size3, Math.sin(rad) * size3, 3.6);
+          TV31.set(Math.cos(rad) * size3, Math.sin(rad) * size3, 4.2);
+          TV32.set(Math.cos(rad) * size3, Math.sin(rad) * size3, 4.8);
+          // box.rotation.x = i;
+          // box.rotation.y = Math.PI / 2;
+          TV1.rotation(0, 0, rad);
+          TV11.rotation(0, 0, rad);
+          TV12.rotation(0, 0, rad);
+          TV2.rotation(0, 0, rad);
+          TV21.rotation(0, 0, rad);
+          TV22.rotation(0, 0, rad);
+          TV3.rotation(0, 0, rad);
+          TV31.rotation(0, 0, rad);
+          TV32.rotation(0, 0, rad);
+          TV1.addTV();
+          TV11.addTV();
+          TV12.addTV();
+          TV2.addTV();
+          TV21.addTV();
+          TV22.addTV();
+          TV3.addTV();
+          TV31.addTV();
+          TV32.addTV();
+        }
+      };
+
+      addTV_asCircle();
+
+      let framesPerSecond = 60;
+
+      let animate = function () {
+        setTimeout(function () {
+          requestAnimationFrame(animate);
+        }, 1000 / framesPerSecond);
+
+        renderer.render(scene, camera);
+      };
+
+      function MY_Light(color, intensity, pos) {
+        this.color = color;
+        this.intensity = intensity;
+        this.light = new THREE.AmbientLight(this.color, this.intensity);
+        this.pos = pos;
+
+        this.set = () => {
+          this.light.position.set(...this.pos);
+        };
+
+        this.addLight = () => {
+          scene.add(this.light);
+        };
+      }
+
+      const light1 = new MY_Light(0xffffff, 1, [-1, -2, 4]);
+      light1.set();
+      light1.addLight();
+      /*
+      const light2 = new MY_Light(0xffffff, 1, [5, 8, 10]);
+      light2.set();
+      light2.addLight();
+      const light3 = new MY_Light(0xffffff, 1, [1, 5, 6]);
+      light3.set();
+      light3.addLight();
+      */
+
+      renderer.render(scene, camera);
+      animate();
+    </script>
   </body>
 </html>
