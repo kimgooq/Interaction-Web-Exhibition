@@ -2,7 +2,7 @@ let img;
 let particles = [];
 
 function preload() {
-  let passStr = "./images/img_0.jpeg";
+  let passStr = "../images/img_0.jpeg";
   img = loadImage(passStr);
 }
 
