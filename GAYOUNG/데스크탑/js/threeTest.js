@@ -25,32 +25,7 @@
 // animate();
 
 // 파킹관련 클래스
-class PickHelper{
-    constructor(){
-        this.raycaster = new THREE.raycaster();
-        this.pickObject = null;
-        this.pickedObjectSavedColor = 0;
-    }
 
-    pick(normalizedPosition, scene, camera, time){
-        // 이미 다른 물체를 피킹했다면 색을 복원하기
-        if(this.pickObject){
-            this.pickObject.material.emissive.setHex(this.pickedObjectSavedColor);
-            this.pickedObject = undefined;
-        }
-
-        // 절두체 안에 광선을 쏜다
-        this.raycaster.setFromCamera(normalizedPosition,camera);
-        // 광선과 교차하는 물체들을 배열로 만든다
-        const intertsectedObjects = this.raycaster.intertsectedObjects(scene,children);
-
-        if(intertsectedObjects.length){
-            
-        }
-
-
-    }
-}
 
 function main(){
 
@@ -115,4 +90,82 @@ function main(){
 
     }
 
+    class PickHelper{
+        constructor(){
+            this.raycaster = new THREE.raycaster();
+            this.pickedObject = null;
+            this.pickedObjectSavedColor = 0;
+        }
+    
+        pick(normalizedPosition, scene, camera, time){
+            // 이미 다른 물체를 피킹했다면 색을 복원하기
+            if(this.pickedObject){
+                this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
+                this.pickedObject = undefined;
+            }
+    
+            // 절두체 안에 광선을 쏜다
+            this.raycaster.setFromCamera(normalizedPosition,camera);
+            
+            // 광선과 교차하는 물체들을 배열로 만든다
+            const intertsectedObjects = this.raycaster.intertsectedObjects(scene,children);
+    
+            if(intertsectedObjects.length){
+                // 첫 번째 물체가 제일 가까우므로 해당 물체를 고른다
+                this.pickedObject = intertsectedObjects[0].object;
+                // 기존의 색을 저장하기
+                this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
+                // emissive 색을 빨강/노랑으로 빛나게 만듭니다
+                this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+            }
+        }
+    }
+
+    // 사용자의 마우스 포인터 아래의 있는 요소를 피킹하도록한다
+    const pickPosition = { x : 0, y : 0 };
+    clearPickPosition();
+
+    function getCanvasRelativePosition(event){
+        const rect = canvas.getBoundingClientRect();
+        return{
+            x : ( event.clientX - rect.left ) * canvas.width / rect.width,
+            y : ( event.clientX - rect.top ) * canvas.boxHeight / rect.height, 
+        }
+    }
+
+    function setPickPosition(event){
+        const pos = getCanvasRelativePosition(event);
+
+        pickPosition.x = (pos.x / canvas.width) * 2 - 1;
+        pickPosition.y = (pos.y / canvas.height) * -2 + 1; //reverse Y
+    }
+
+    function clearPickPosition(){
+        /*
+        마우스의 경우는 항상 위치가 있어 그다지 큰 상관이 없지만,
+        터치 같은 경우 사용자가 손가락을 떼면 피킹을 멈춰야 합니다.
+        자금은 일단 어떤 것도 선택할 수 없으로 지정해두었습니다.
+        */
+
+        pickPosition.x = -100000;
+        pickPosition.y = -100000;
+    }
+    
+    // 마우스 좌표를 정규화 캔버스 크기와 상관없이
+    // 완쪽 끝이 -1 오른쪽 끝이 +1이 벡터값이 필요
+    window.addEventListener('mousemove', setPickPosition);
+    window.addEventListener('mouseout', clearPickPosition);
+    window.addEventListener('mouseleave', clearPickPosition);
+
+    // 모바일 환경을 지원하기 위한 이벤트 리스너
+    window.adddEventListener('touchstart',(event) =>{
+        event.preventDefault(); // 스크롤 이벤트 방지
+        setPickPosition(event.touches[0]);
+    }, {passive : false});
+
+    window.addEventListener('touchmove', (event) =>{
+        setPickPosition(event.touches[0]);
+    });
+
+    window.addEventListener('touched',clearPickPosition);
 }
