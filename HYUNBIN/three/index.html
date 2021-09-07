@@ -28,21 +28,22 @@
       camera.position.z = 5;
 
       const scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xffffff); // set background color
+      // scene.background = new THREE.Color(0xffffff); // set background color
+      scene.background = new THREE.Color(0x000000); // set background color
 
       let controls = new THREE.OrbitControls(camera, renderer.domElement); // use mouse control
       controls.update();
 
-      function MY_TV(isUpside) {
-        this.box_WHD = [0.5, 0.5, 0.5];
+      function MY_TV(isUpside, scale) {
+        this.box_WHD = [scale, scale, scale];
         this.box_geometry = new THREE.BoxGeometry(...this.box_WHD);
-        this.box_material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });
+        this.box_material = new THREE.MeshPhongMaterial({ color: 0x808080 });
         this.box = new THREE.Mesh(this.box_geometry, this.box_material);
         this.box.position.set(0, 0, 0);
 
-        this.plane_WHD = [0.3, 0.3, 1];
+        this.plane_WHD = [scale - 0.2, scale - 0.2, 1];
         this.plane_geometry = new THREE.PlaneGeometry(...this.plane_WHD);
-        this.plane_material = new THREE.MeshPhongMaterial({ color: 0x808080 });
+        this.plane_material = new THREE.MeshPhongMaterial({ color: 0x87ceeb });
         this.plane = new THREE.Mesh(this.plane_geometry, this.plane_material);
         if (isUpside) {
           this.plane.position.set(0, 0, 0.3);
@@ -67,12 +68,12 @@
         };
       }
 
-      const addTV_4 = (degree, size, up_pos, isUpside, z_position) => {
+      const addTV_4 = (scale, degree, size, up_pos, isUpside, z_position) => {
         for (let i = 0; i < 360; i += degree) {
-          let TV1 = new MY_TV(isUpside);
-          let TV2 = new MY_TV(isUpside);
-          let TV3 = new MY_TV(isUpside);
-          let TV4 = new MY_TV(isUpside);
+          let TV1 = new MY_TV(isUpside, scale);
+          let TV2 = new MY_TV(isUpside, scale);
+          let TV3 = new MY_TV(isUpside, scale);
+          let TV4 = new MY_TV(isUpside, scale);
           let rad = (i * Math.PI) / 180;
           TV1.set(Math.cos(rad) * size, Math.sin(rad) * size, up_pos);
           TV2.set(
@@ -101,9 +102,9 @@
         }
       };
 
-      const addTV_1 = (degree, size, up_pos, isUpside, z_position) => {
+      const addTV_1 = (scale, degree, size, up_pos, isUpside, z_position) => {
         for (let i = 0; i < 360; i += degree) {
-          let TV1 = new MY_TV(isUpside);
+          let TV1 = new MY_TV(isUpside, scale);
           let rad = (i * Math.PI) / 180;
           TV1.set(Math.cos(rad) * size, Math.sin(rad) * size, up_pos);
           TV1.rotation(0, 0, rad);
@@ -112,21 +113,21 @@
       };
 
       // degree, size, up_pos, isUpside, z_position
-      addTV_4(5, 6.0, 0, true, false);
-      addTV_4(5, 5.5, 0, false, true);
-      addTV_1(10, 5.5, 2.4, true, false);
-      addTV_4(10, 5.0, 2.4, false, true);
-      addTV_1(15, 5.0, 4.8, true, false);
-      addTV_4(15, 4.5, 4.8, false, true);
-      addTV_1(15, 3.5, 7.2, true, false);
-      addTV_4(18, 3.0, 7.2, false, true);
-      addTV_1(18, 2.5, 9.6, true, false);
+      addTV_4(0.4, 5, 4.0, 0, true, false);
+      addTV_4(0.4, 5, 3.5, 0, false, true);
+      addTV_1(0.4, 5, 3.5, 2.4, true, false);
+      addTV_4(0.4, 5, 3.0, 2.4, false, true);
+      addTV_1(0.5, 8, 3.0, 4.8, true, false);
+      addTV_4(0.5, 8, 2.5, 4.8, false, true);
+      addTV_1(0.5, 12, 2.5, 7.2, true, false);
+      addTV_4(0.4, 12, 2.0, 7.2, false, true);
+      addTV_1(0.4, 15, 2.0, 9.6, true, false);
       for (let j = 1; j <= 9; j++) {
-        addTV_1(20, 1.5, 9.6 + 0.6 * j, false, true);
+        addTV_1(0.4, 20, 1.5, 9.6 + 0.6 * j, false, true);
       }
-      addTV_1(90, 1.0, 15.0, true, false);
+      addTV_1(0.3, 90, 1.0, 15.0, true, false);
       for (let j = 1; j <= 9; j++) {
-        addTV_1(90, 0.5, 15.0 + 0.6 * j, false, true);
+        addTV_1(0.3, 90, 0.5, 15.0 + 0.6 * j, false, true);
       }
 
       // rest of setting
@@ -143,7 +144,8 @@
       function MY_Light(color, intensity, pos) {
         this.color = color;
         this.intensity = intensity;
-        this.light = new THREE.AmbientLight(this.color, this.intensity);
+        // this.light = new THREE.AmbientLight(this.color, this.intensity);
+        this.light = new THREE.DirectionalLight(this.color, this.intensity);
         this.pos = pos;
 
         this.set = () => {
