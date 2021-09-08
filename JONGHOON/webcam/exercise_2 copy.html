@@ -45,6 +45,11 @@
 				const mesh = new THREE.Mesh( geometry, material );
 				//mesh.lookAt( camera.position );
 				scene.add( mesh );
+				const pupil_geometry = new THREE.SphereGeometry( 0.5, 32, 16 );
+        		const pupil_material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+        		const pupil_sphere = new THREE.Mesh( pupil_geometry, pupil_material );
+        		scene.add( pupil_sphere );
+        		pupil_sphere.position.z=6.5;
 				/*for ( let i = 1, l = count; i <= l; i ++ ) {
 
 					const phi = Math.acos( - 1 + ( 2 * i ) / l );
