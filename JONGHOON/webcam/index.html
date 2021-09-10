@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Photobooth</title>
+    <script src="http://threejs.org/build/three.min.js"></script>
+
+  </head>
+  <body>
+    <video id="video" width="320" height="240" style="visibility: hidden; float:left;">Video stream not available.</video>
+    <canvas id="video_canvas" width="320" height="240" style=" float:left;"></canvas>
+  </body>
+  <script>
+  video = document.getElementById('video');
+  canvas = document.getElementById('video_canvas');
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(function(stream) {
+        video.srcObject = stream;
+        video.play();
+    })
+    .catch(function(err) {
+        console.log("An error occured! " + err);
+    });
+
+  </script>
+  <script src="js/basic.js" charset="utf-8"></script>
+</html>

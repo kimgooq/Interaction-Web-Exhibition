@@ -1,0 +1,17 @@
+body {
+    overflow: hidden;
+    margin: 0px;
+    font-family: monospace;
+}
+
+a {
+    color: white;
+}
+
+#instructions {
+    color: white;
+    position: absolute;
+    left: 50%;
+    top: 10px;
+    margin-left: -220px;
+}
