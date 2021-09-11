@@ -9,7 +9,7 @@ import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/exampl
 const manager = new THREE.LoadingManager();
 const textureLoader = new THREE.TextureLoader(manager);
 
-let scene,sphere,camera,renderer,light1,rayCast,controls,clock,mouse;
+let scene,sphere,camera,renderer,light1,rayCast,controls,clock,mouse,canvas;
 
 let createSphere = function(pos){
     // pos -> 벡터값이 매개변수로 들어옴
@@ -18,6 +18,8 @@ let createSphere = function(pos){
     let material = new THREE.MeshPhongMaterial({color:0xffffff*Math.random(),shininess:100});
     sphere = new THREE.Mesh(geometry,material);
     sphere.position.set(pos.x,pos.y,pos.z);
+    
+    console.log("pos : \n"+pos.x+"\n"+pos.y+"\n"+pos.z)
     scene.add(sphere);
 
 }
@@ -40,9 +42,13 @@ let init = function(){
     mouse = new THREE.Vector2();
     mouse.x = mouse.y = -1;
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth*0.375,window.innerHeight*0.375);
-    document.getElementById('webgl-pick').appendChild(renderer.domElement);
+//     canvas = document.querySelector('#c');
+//   const renderer = new THREE.WebGLRenderer({canvas});
+
+    canvas = document.querySelector('#webgl-pick');
+    renderer = new THREE.WebGLRenderer({canvas});
+    // renderer.setSize(window.innerWidth*0.375,window.innerHeight*0.375);
+    // document.getElementById('webgl-pick').appendChild(renderer.domElement);
 
     // 사용자가 화면을 마우스로 클릭하면 마우스 클릭 이벤트 실행하고
     // sphere가 화면에 나타나야한다
@@ -62,19 +68,38 @@ let onMouseClick = function(e){
     let gap1 = e.clientX - e.offsetX;
     let gap2 = e.clientY - e.offsetY;
 
-    mouse.x = ((e.clientX - gap1) / (window.innerWidth*0.375)) *2 - 1;
-    mouse.y = -((e.clientX - gap2) / (window.innerWidth*0.375)) *2 + 1;
+    mouse.x = ((e.clientX - gap1) / window.innerWidth) *2 - 1;
+    mouse.y = -((e.clientX - gap2) / window.innerWidth) *2 + 1;
 
     rayCast.setFromCamera(mouse, camera);
     // rayCast.ray.at(50) -> ray 메소드 : 카메라에서 ~50까지의 거리 범위 설정
-    createSphere(rayCast.ray.at(50));
+
+    console.log(rayCast.ray.at(100));
+
+    createSphere(rayCast.ray.at(100));
 }
 
 let mainLoop = function(){
     // controls.update(clock.getDelta());
+    if (resizeRendererToDisplaySize(renderer)) {
+        const canvas = renderer.domElement;
+        camera.aspect = canvas.clientWidth / canvas.clientHeight;
+        camera.updateProjectionMatrix();
+      }
+
     controls.update();
     requestAnimationFrame(mainLoop);
     renderer.render(scene,camera);
+}
+function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
 }
 
 init();
