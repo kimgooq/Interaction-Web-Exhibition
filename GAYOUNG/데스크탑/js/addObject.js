@@ -12,6 +12,66 @@ const textureLoader = new THREE.TextureLoader(manager);
 var scene,camera,renderer,light1,rayCast,controls,clock,mouse,canvas;
 var sphere = new Array();
 
+
+class PickHelper {
+    constructor() {
+      this.raycaster = new THREE.Raycaster();
+      this.pickedObject = null;
+      this.pickedObjectSavedColor = 0;
+    }
+    pick(normalizedPosition, scene, camera, time) {
+      // 이미 다른 물체를 피킹했다면 색을 복원합니다
+      if (this.pickedObject) {
+        this.pickedObject.material.emissive.setHex(this.pickedObjectSavedColor);
+        this.pickedObject = undefined;
+      }
+   
+      // 절두체 안에 광선을 쏩니다
+      this.raycaster.setFromCamera(normalizedPosition, camera);
+      // 광선과 교차하는 물체들을 배열로 만듭니다
+      const intersectedObjects = this.raycaster.intersectObjects(scene.children);
+      if (intersectedObjects.length) {
+        // 첫 번째 물체가 제일 가까우므로 해당 물체를 고릅니다
+        this.pickedObject = intersectedObjects[0].object;
+        // 기존 색을 저장해둡니다
+        this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
+        // emissive 색을 빨강/노랑으로 빛나게 만듭니다
+        this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+      }
+    }
+  }
+
+  const pickPosition = { x: 0, y: 0 };
+  clearPickPosition();
+
+  function getCanvasRelativePosition(event) {
+    const rect = canvas.getBoundingClientRect();
+    return {
+      x: (event.clientX - rect.left) * canvas.width  / rect.width,
+      y: (event.clientY - rect.top ) * canvas.height / rect.height,
+    };
+  }
+   
+  function setPickPosition(event) {
+    const pos = getCanvasRelativePosition(event);
+    pickPosition.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+    pickPosition.y = - ( e.clientY / window.innerHeight ) * 2 + 1;  // Y 축을 뒤집었음
+  }
+   
+  function clearPickPosition() {
+    /**
+     * 마우스의 경우는 항상 위치가 있어 그다지 큰
+     * 상관이 없지만, 터치 같은 경우 사용자가 손가락을
+     * 떼면 피킹을 멈춰야 합니다. 지금은 일단 어떤 것도
+     * 선택할 수 없는 값으로 지정해두었습니다
+     **/
+    pickPosition.x = -100000;
+    pickPosition.y = -100000;
+  }
+
+
+
+
 let createSphere = function(pos){
     // pos -> 벡터값이 매개변수로 들어옴
 
@@ -57,11 +117,40 @@ let init = function(){
     // 이를 위해서 사용자의 마우스 이벤트 좌표를 추출하고, 마우스 좌표값을 rayCast에 넣어서
     // raycaster.ray 기능을 활성화
     renderer.domElement.addEventListener("click",onMouseClick,false);
+    renderer.domElement.addEventListener("mousemove",onMouseMove,false);
 
     controls = new OrbitControls(camera,renderer.domElement);
     controls.target.set(0,0,0);
     
 
+}
+
+let onMouseMove = function(e){
+
+    // var vec = new THREE.Vector3(); // create once and reuse
+    // var pos = new THREE.Vector3(); // create once and reuse
+
+    // vec.set(
+    //     ( e.clientX / window.innerWidth ) * 2 - 1,
+    //     - ( e.clientY / window.innerHeight ) * 2 + 1,
+    //     0.5 );
+    
+    // vec.unproject( camera );
+
+    // vec.sub( camera.position ).normalize();
+
+    // var distance = - camera.position.z / vec.z;
+
+    // pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
+
+    // rayCast.setFromCamera(mouse, camera);
+
+
+    // let intersects = rayCast.intersectObjects(scene.children);
+    // intersects.forEach(obj=>obj.object.material.color.set(0x00ff00));
+    // console.log(intersects)
+    console.log(e.touches[0])
+    setPickPosition(e.touches[0]);
 }
 
 let onMouseClick = function(e){
@@ -97,9 +186,40 @@ let onMouseClick = function(e){
 
     pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
 
+    rayCast.setFromCamera(mouse,camera);
+ 
     createSphere(pos);
 
+    // let intersects = rayCast.intersectObjects(scene.children);
+    // console.log(intersects)
+    // if(intersects.length == 0){  
+    //     createSphere(pos);
+    //     return; }
+    // else{
+    //     let hit = intersects[0].object
+
+    //     sphere.forEach( (obj,index)=>{
+    
+    //              if(hit == obj.object){
+    
+    //                     balloons.splice(index,1);
+    
+    //                     scene.remove(obj.object)
+    
+    //              }
+    
+    //   })
+    // }
+    
+   
+
+    
+
+    
+
 }
+
+
 
 let mainLoop = function(){
     // controls.update(clock.getDelta());
@@ -115,9 +235,11 @@ let mainLoop = function(){
             value.position.y += 0.2;
         });
     }
-   
+    
     requestAnimationFrame(mainLoop);
     renderer.render(scene,camera);
+
+    
 
 }
 function resizeRendererToDisplaySize(renderer) {

@@ -70,19 +70,6 @@ let init = function(){
     camera.position.set(0,10,40);
 
     camera.lookAt(scene.position);
-
-    
-
-    // light1 = new THREE.DirectionalLight(0xffffff,1);
-
-    // light2 = new THREE.DirectionalLight(0xffffff,1);
-
-    // light2.position.set(0,10,2);
-
-    // scene.add(light1);
-
-    // scene.add(light2);
-
     
     light1 = new THREE.DirectionalLight(0xffffff,1);
     scene.add(light1);
