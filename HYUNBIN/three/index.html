@@ -25,14 +25,20 @@
         1000,
       ];
       const camera = new THREE.PerspectiveCamera(...camera_parameters);
-      camera.position.z = 5;
+      camera.up.set(0, 0, 1); // orbit axis
+      camera.position.set(0, 40, 40);
 
       const scene = new THREE.Scene();
-      // scene.background = new THREE.Color(0xffffff); // set background color
       scene.background = new THREE.Color(0x000000); // set background color
 
       let controls = new THREE.OrbitControls(camera, renderer.domElement); // use mouse control
-      controls.update();
+      controls.enableDamping = true; // set inertia true for smooth animation
+      controls.dampingFactor = 0.05;
+      controls.target.set(0, 0, 10);
+      controls.screenSpacePanning = false;
+      controls.minDistance = 10;
+      controls.maxDistance = 100;
+      controls.maxPolarAngle = Math.PI / 2;
 
       function MY_TV(isUpside, scale) {
         this.box_WHD = [scale, scale, scale];
@@ -66,7 +72,17 @@
         this.addTV = () => {
           scene.add(this.box);
         };
+
+        this.changeColor = () => {
+          this.plane.material.color.setRGB(
+            Math.random(),
+            Math.random(),
+            Math.random()
+          );
+        };
       }
+
+      let TVs = [];
 
       const addTV_4 = (scale, degree, size, up_pos, isUpside, z_position) => {
         for (let i = 0; i < 360; i += degree) {
@@ -99,6 +115,7 @@
           TV2.addTV();
           TV3.addTV();
           TV4.addTV();
+          TVs.push(TV1, TV2, TV3, TV4);
         }
       };
 
@@ -109,6 +126,7 @@
           TV1.set(Math.cos(rad) * size, Math.sin(rad) * size, up_pos);
           TV1.rotation(0, 0, rad);
           TV1.addTV();
+          TVs.push(TV1);
         }
       };
 
@@ -131,13 +149,11 @@
       }
 
       // rest of setting
-      let framesPerSecond = 60;
 
-      let animate = function () {
-        setTimeout(function () {
-          requestAnimationFrame(animate);
-        }, 1000 / framesPerSecond);
+      const animate = function () {
+        requestAnimationFrame(animate);
 
+        controls.update();
         renderer.render(scene, camera);
       };
 
@@ -157,19 +173,25 @@
         };
       }
 
-      const light1 = new MY_Light(0xffffff, 1, [-1, -2, 4]);
-      light1.set();
-      light1.addLight();
-      /*
       const light2 = new MY_Light(0xffffff, 1, [5, 8, 10]);
       light2.set();
       light2.addLight();
+
+      /*
+      const light1 = new MY_Light(0xffffff, 1, [-1, -2, 4]);
+      light1.set();
+      light1.addLight();
       const light3 = new MY_Light(0xffffff, 1, [1, 5, 6]);
       light3.set();
       light3.addLight();
-      */
+       */
 
-      renderer.render(scene, camera);
+      window.addEventListener("mousemove", () => {
+        for (TV of TVs) {
+          TV.changeColor();
+        }
+      });
+
       animate();
     </script>
   </body>

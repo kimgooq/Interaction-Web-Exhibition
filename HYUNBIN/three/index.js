@@ -1,20 +1,29 @@
 // import * as THREE from "https://cdn.skypack.dev/three@0.130.1";
+// import { OrbitControls } from './resources/threejs/r132/examples/jsm/controls/OrbitControls.js';
 
 const canvas = document.getElementById("c");
 const renderer = new THREE.WebGLRenderer({ canvas });
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-const camera_parameters = [120, 2, 0.1, 5];
+// const camera_parameters = [120, 2, 0.1, 5];
+const camera_parameters = [60, window.innerWidth / window.innerHeight, 1, 1000];
 const camera = new THREE.PerspectiveCamera(...camera_parameters);
-camera.position.z = 5;
+camera.position.set(400, 200, 0);
+// camera.position.z = 5;
 // camera.position.x = 0;
 // camera.position.y = -5;
 
 const scene = new THREE.Scene();
 
 let controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.update();
+// inertia
+controls.enableDamping = true;
+controls.dampingFactor = 0.05;
+controls.screenSpacePanning = false;
+controls.minDistance = 100;
+controls.maxDistance = 500;
+controls.maxPolarAngle = Math.PI / 2;
 
 function MY_TV() {
   this.box_WHD = [0.5, 0.5, 0.5];
@@ -70,27 +79,16 @@ const addTV_asCircle = () => {
 
 addTV_asCircle();
 
-// function render(time) {
-//   time *= 0.001;
+// let framesPerSecond = 60;
 
-//   box.rotation.x = time;
-//   box.rotation.y = time;
-//   renderer.render(scene, camera);
+const animate = function () {
+  requestAnimationFrame(animate);
+  // setTimeout(function () {
+  // }, 1000 / framesPerSecond);
 
-//   requestAnimationFrame(render);
-// }
-
-let framesPerSecond = 60;
-
-let animate = function () {
-  setTimeout(function () {
-    requestAnimationFrame(animate);
-  }, 1000 / framesPerSecond);
-
+  controls.update();
   renderer.render(scene, camera);
 };
-
-animate();
 
 const color = 0xffffff;
 const intensity = 1;
@@ -98,5 +96,6 @@ const light = new THREE.DirectionalLight(color, intensity);
 light.position.set(-5, -5, 10);
 scene.add(light);
 
-renderer.render(scene, camera);
+animate();
+// renderer.render(scene, camera);
 // requestAnimationFrame(render);
