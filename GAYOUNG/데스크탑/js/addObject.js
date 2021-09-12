@@ -9,18 +9,23 @@ import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/exampl
 const manager = new THREE.LoadingManager();
 const textureLoader = new THREE.TextureLoader(manager);
 
-let scene,sphere,camera,renderer,light1,rayCast,controls,clock,mouse,canvas;
+var scene,camera,renderer,light1,rayCast,controls,clock,mouse,canvas;
+var sphere = new Array();
 
 let createSphere = function(pos){
     // pos -> 벡터값이 매개변수로 들어옴
 
     let geometry = new THREE.SphereGeometry(4,30,30);
     let material = new THREE.MeshPhongMaterial({color:0xffffff*Math.random(),shininess:100});
-    sphere = new THREE.Mesh(geometry,material);
-    sphere.position.set(pos.x,pos.y,pos.z);
+    let ballon = new THREE.Mesh(geometry,material);
+    ballon.position.set(pos.x,pos.y,pos.z);
     
-    console.log("pos : \n"+pos.x+"\n"+pos.y+"\n"+pos.z)
-    scene.add(sphere);
+    // console.log("pos : \n"+pos.x+"\n"+pos.y+"\n"+pos.z)
+    scene.add(ballon);
+
+    sphere.push(ballon);
+    console.log(sphere);
+
 
 }
 
@@ -35,8 +40,8 @@ let init = function(){
 
     light1 = new THREE.DirectionalLight(0xffffff,1);
     scene.add(light1);
-    let grid = new THREE.GridHelper(100,20);
-    scene.add(grid);
+    // let grid = new THREE.GridHelper(100,20);
+    // scene.add(grid);
 
     rayCast = new THREE.Raycaster();
     mouse = new THREE.Vector2();
@@ -65,15 +70,35 @@ let onMouseClick = function(e){
     // let gap1 = e.clientX - e.offsetX;
     // let gap2 = e.clientY - e.offsetY;
 
-    mouse.x = (e.clientX / window.innerWidth) *2 - 1;
-    mouse.y = -(e.clientX / window.innerWidth) *2 + 1;
+    // mouse.x = (e.clientX / window.innerWidth) *2 - 1;
+    // mouse.y = -(e.clientX / window.innerWidth) *2 + 1;
 
-    rayCast.setFromCamera(mouse, camera);
-    // rayCast.ray.at(50) -> ray 메소드 : 카메라에서 ~50까지의 거리 범위 설정
-    console.log("mouse.x : "+mouse.x+"\n mouse.y : "+mouse.y+"\n");
-    console.log(rayCast.ray.at(100));
+    // rayCast.setFromCamera(mouse, camera);
+    // // rayCast.ray.at(50) -> ray 메소드 : 카메라에서 ~50까지의 거리 범위 설정
+    // console.log("mouse.x : "+mouse.x+"\n mouse.y : "+mouse.y+"\n");
+    // console.log(rayCast.ray.at(100));
 
-    createSphere(rayCast.ray.at(100));
+    // createSphere(rayCast.ray.at(100));
+
+
+    var vec = new THREE.Vector3(); // create once and reuse
+    var pos = new THREE.Vector3(); // create once and reuse
+
+    vec.set(
+        ( e.clientX / window.innerWidth ) * 2 - 1,
+        - ( e.clientY / window.innerHeight ) * 2 + 1,
+        0.5 );
+    
+    vec.unproject( camera );
+
+    vec.sub( camera.position ).normalize();
+
+    var distance = - camera.position.z / vec.z;
+
+    pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
+
+    createSphere(pos);
+
 }
 
 let mainLoop = function(){
@@ -85,8 +110,15 @@ let mainLoop = function(){
       }
 
     controls.update();
+    if(sphere != null){
+        sphere.forEach(function(value){
+            value.position.y += 0.2;
+        });
+    }
+   
     requestAnimationFrame(mainLoop);
     renderer.render(scene,camera);
+
 }
 function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
@@ -98,6 +130,7 @@ function resizeRendererToDisplaySize(renderer) {
     }
     return needResize;
 }
+
 
 init();
 mainLoop();
