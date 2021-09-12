@@ -177,55 +177,89 @@ function main() {
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
 
-  const fov = 60;
-  const aspect = 2;   //캔버스 기본값
-  const near = 0.1;
-  const far = 200;
-  const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.z = 30;
-
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('white');
+  scene.background = new THREE.Color(0xffffff);
+
+  const camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,1000);
+  camera.position.set(0,30,55);
+
+  const light1 = new THREE.DirectionalLight(0xffffff,1);
+  scene.add(light1);
+
+  var sphere = new Array();
+  // const boxWidth = 1;
+  // const boxHeight = 1;
+  // const boxDepth = 1;
+  // const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+  // function rand(min, max) {
+  //   if (max === undefined) {
+  //     max = min;
+  //     min = 0;
+  //   }
+  //   return min + (max - min) * Math.random();
+  // }
+
+  // function randomColor() {
+  //   return `hsl(${rand(360) | 0}, ${rand(50, 100) | 0}%, 50%)`;
+  // }
+
+  // const numObjects = 100;
+  // for (let i = 0; i < numObjects; ++i) {
+  //   const material = new THREE.MeshPhongMaterial({
+  //     color: randomColor(), 
+  //   });
+
+  //   const cube = new THREE.Mesh(geometry, material);
+  //   scene.add(cube);
+
+  //   cube.position.set(rand(-20, 20), rand(-20, 20), rand(-20, 20));
+  //   cube.rotation.set(rand(Math.PI), rand(Math.PI), 0);
+  //   cube.scale.set(rand(3, 6), rand(3, 6), rand(3, 6));
+  // }
+
+  let onMouseClick = function(e){
+
+    var vec = new THREE.Vector3(); // create once and reuse
+    var pos = new THREE.Vector3(); // create once and reuse
+
+    vec.set(
+        ( e.clientX / window.innerWidth ) * 2 - 1,
+        - ( e.clientY / window.innerHeight ) * 2 + 1,
+        0.5 );
+    
+    vec.unproject( camera );
+
+    vec.sub( camera.position ).normalize();
+
+    var distance = - camera.position.z / vec.z;
+
+    pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
+
+   
+ 
+    createSphere(pos);
 
 
-  {
-    const color = 0xFFFFFF;
-    const intensity = 1;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(-1, 2, 4);
-    camera.add(light);
-  }
+}
 
-  const boxWidth = 1;
-  const boxHeight = 1;
-  const boxDepth = 1;
-  const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+let createSphere = function(pos){
+  // pos -> 벡터값이 매개변수로 들어옴
 
-  function rand(min, max) {
-    if (max === undefined) {
-      max = min;
-      min = 0;
-    }
-    return min + (max - min) * Math.random();
-  }
+  let geometry = new THREE.SphereGeometry(4,30,30);
+  let material = new THREE.MeshPhongMaterial({color:0xffffff*Math.random(),shininess:100});
+  let ballon = new THREE.Mesh(geometry,material);
+  ballon.position.set(pos.x,pos.y,pos.z);
+  
+  // console.log("pos : \n"+pos.x+"\n"+pos.y+"\n"+pos.z)
+  scene.add(ballon);
 
-  function randomColor() {
-    return `hsl(${rand(360) | 0}, ${rand(50, 100) | 0}%, 50%)`;
-  }
+  sphere.push(ballon);
+  console.log(sphere);
 
-  const numObjects = 100;
-  for (let i = 0; i < numObjects; ++i) {
-    const material = new THREE.MeshPhongMaterial({
-      color: randomColor(), 
-    });
 
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
+}
 
-    cube.position.set(rand(-20, 20), rand(-20, 20), rand(-20, 20));
-    cube.rotation.set(rand(Math.PI), rand(Math.PI), 0);
-    cube.scale.set(rand(3, 6), rand(3, 6), rand(3, 6));
-  }
 
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
@@ -264,6 +298,9 @@ function main() {
         // set its emissive color to flashing red/yellow
         this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
       }
+      // 마지막을 제외한 나머지 삭제
+      if(this.pickedObject != sphere[sphere.length - 1])
+        scene.remove(this.pickedObject);
     }
   }
 
@@ -280,12 +317,15 @@ function main() {
       camera.updateProjectionMatrix();
     }
 
-    cameraPole.rotation.y = time * .1;
-
     pickHelper.pick(pickPosition, scene, camera, time);
 
     renderer.render(scene, camera);
 
+    if(sphere != null){
+      sphere.forEach(function(value){
+          value.position.y += 0.2;
+      });
+  }
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
@@ -299,7 +339,6 @@ function main() {
   }
 
   function setPickPosition(event) {
-    
     const pos = getCanvasRelativePosition(event);
     pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
     pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
@@ -313,6 +352,7 @@ function main() {
     pickPosition.x = -100000;
     pickPosition.y = -100000;
   }
+  window.addEventListener("click",onMouseClick,false);
   window.addEventListener('mousemove', setPickPosition);
   window.addEventListener('mouseout', clearPickPosition);
   window.addEventListener('mouseleave', clearPickPosition);

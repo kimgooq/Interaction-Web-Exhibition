@@ -210,10 +210,6 @@ let onMouseClick = function(e){
     
     //   })
     // }
-    
-   
-
-    
 
     
 
