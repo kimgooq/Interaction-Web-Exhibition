@@ -297,10 +297,17 @@ let createSphere = function(pos){
         this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
         // set its emissive color to flashing red/yellow
         this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
+        
+            // 마지막을 제외한 나머지 삭제
+        if(this.pickedObject != sphere[sphere.length - 1])
+          scene.remove(this.pickedObject);
+        // console.log(this.pickedObject.position)
+        // this.pickedObject.position.set(10,10,10);
+      
       }
-      // 마지막을 제외한 나머지 삭제
-      if(this.pickedObject != sphere[sphere.length - 1])
-        scene.remove(this.pickedObject);
+      
+        // this.pickedObject.position.set(rand(-20, 20), rand(-20, 20), rand(-20, 20));
+      
     }
   }
 
@@ -359,7 +366,7 @@ let createSphere = function(pos){
 
   window.addEventListener('touchstart', (event) => {
     // prevent the window from scrolling
-    event.preventDefault();
+    event.preventDefault(); 
     setPickPosition(event.touches[0]);
   }, {passive: false});
 
