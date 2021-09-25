@@ -9,13 +9,39 @@ function main() {
   const renderer = new THREE.WebGLRenderer({canvas});
 
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xffffff);
+  scene.background = new THREE.Color("#C8EBFA");
 
   const camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,1000);
-  camera.position.set(0,30,-55);
+  camera.position.set(10,10,10);
 
-  const light1 = new THREE.DirectionalLight(0xffffff,1);
+
+  const light1 = new THREE.DirectionalLight(0xffffff,5);
   scene.add(light1);
+  light1.position.set(0, 0, 500);
+
+  const light2 = new THREE.DirectionalLight(0xffffff,5);
+  scene.add(light2);
+  light2.position.set(-50, 100, 0);
+
+  const light3 = new THREE.DirectionalLight(0xffffff,5);
+  scene.add(light3);
+  light3.position.set(50, 100, 0);
+
+  const light4 = new THREE.DirectionalLight(0xffffff,5);
+  scene.add(light4);
+  light4.position.set(0, 0, -500);
+  
+  const helper1 = new THREE.DirectionalLightHelper(light1);
+  scene.add(helper1);
+  
+  const helper2 = new THREE.DirectionalLightHelper(light2);
+  scene.add(helper2);
+
+  const helper3 = new THREE.DirectionalLightHelper(light3);
+  scene.add(helper3);
+
+  const helper4 = new THREE.DirectionalLightHelper(light4);
+  scene.add(helper4);
 
   // let grid = new THREE.GridHelper(100,20);
   // scene.add(grid);
@@ -50,11 +76,28 @@ function main() {
 
 // }
 
-  loader.load( 'model/scene.glb', function ( gltf ) {
+loader.load( 'model/red.glb', function ( gltf ) {
+
+  // gltf.scene.position.set(0,0,0);
+  // scene.add(gltf.scene);
+
+
+  gltf.scene.position.set(0,0,0);
+  let balloon = gltf.scene.clone();
+  scene.add(balloon);
+
+  sphere.push(balloon);
+  console.log(sphere)
+
+});
+
+  loader.load( 'model/silver.glb', function ( gltf ) {
     // console.log("A")
     // console.log(gltf.scene)
     // scene.add( gltf.scene );
-
+    // gltf.scene.position.set(0,0,0);
+    // scene.add(gltf.scene);
+    // gltf.scene.scale.set(70,70,70);
     var createSphere = function(pos){
       // pos -> 벡터값이 매개변수로 들어옴
     
@@ -62,7 +105,7 @@ function main() {
       // let material = new THREE.MeshPhongMaterial({color:0xffffff*Math.random(),shininess:100});
       // let ballon = new THREE.Mesh(geometry,material);
       gltf.scene.position.set(pos.x,pos.y,pos.z);
-      gltf.scene.scale.set(70,70,70);
+      // gltf.scene.scale.set(70,70,70);
       // console.log("pos : \n"+pos.x+"\n"+pos.y+"\n"+pos.z)
       let balloon = gltf.scene.clone();
       scene.add(balloon);
@@ -90,19 +133,16 @@ function main() {
 
       pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
 
-    
-  
       createSphere(pos);
 
+    }
+    window.addEventListener("click",onMouseClick,false);
 
-  }
-  window.addEventListener("click",onMouseClick,false);
+  }, undefined, function ( error ) {
 
-}, undefined, function ( error ) {
+    console.error( error );
 
-  console.error( error );
-
-} );
+  } );
 
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
@@ -173,7 +213,7 @@ function main() {
 
     if(sphere != null){
       sphere.forEach(function(value){
-          value.position.y += 0.2;
+          value.position.y += 0.1;
       });
   }
     requestAnimationFrame(render);
