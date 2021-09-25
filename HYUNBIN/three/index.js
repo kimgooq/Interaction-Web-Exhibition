@@ -1,21 +1,63 @@
-// import * as THREE from "https://cdn.skypack.dev/three@0.130.1";
+import * as THREE from "./three.module.js";
+import { TrackballControls } from "./TrackballControls.js";
+import { CSS3DRenderer, CSS3DObject } from "./CSS3DRenderer.js";
 // import { OrbitControls } from './resources/threejs/r132/examples/jsm/controls/OrbitControls.js';
 
 const canvas = document.getElementById("c");
-const renderer = new THREE.WebGLRenderer({ canvas });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 
-// const camera_parameters = [120, 2, 0.1, 5];
 const camera_parameters = [60, window.innerWidth / window.innerHeight, 1, 1000];
 const camera = new THREE.PerspectiveCamera(...camera_parameters);
 camera.position.set(400, 200, 0);
-// camera.position.z = 5;
-// camera.position.x = 0;
-// camera.position.y = -5;
 
 const scene = new THREE.Scene();
 
+const renderer = new CSS3DRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const controls = new TrackballControls(camera, renderer.domElement);
+controls.rotateSpeed = 4;
+
+function Element(id, x, y, z, ry) {
+  const div = document.createElement("div");
+  div.style.width = "480px";
+  div.style.height = "360px";
+  div.style.backgroundColor = "#000";
+
+  const iframe = document.createElement("iframe");
+  iframe.style.width = "480px";
+  iframe.style.height = "360px";
+  iframe.style.border = "0px";
+  iframe.src = [
+    "https://www.youtube.com/embed/",
+    id,
+    "?autoplay=1&mute=1&controls=0&loop=1&rel=0",
+  ].join("");
+  div.appendChild(iframe);
+
+  const object = new CSS3DObject(div);
+  object.position.set(x, y, z);
+  object.rotation.y = ry;
+
+  return object;
+}
+
+const group = new THREE.Group();
+group.add(new Element("SJOz3qjfQXU", 0, 0, 240, 0));
+group.add(new Element("Y2-xZ-1HE-Q", 240, 0, 0, Math.PI / 2));
+group.add(new Element("IrydklNpcFI", 0, 0, -240, Math.PI));
+group.add(new Element("9ubytEsCaS0", -240, 0, 0, -Math.PI / 2));
+// scene.add(group);
+
+// const box_WHD = [200, 200, 200];
+// const box_geometry = new THREE.BoxGeometry(...box_WHD);
+// const box_material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });
+// const box = new THREE.Mesh(box_geometry, box_material);
+// box.position.set(0, 0, 0);
+// group.add(box);
+scene.add(group);
+
+/*
 let controls = new THREE.OrbitControls(camera, renderer.domElement);
 // inertia
 controls.enableDamping = true;
@@ -24,7 +66,9 @@ controls.screenSpacePanning = false;
 controls.minDistance = 100;
 controls.maxDistance = 500;
 controls.maxPolarAngle = Math.PI / 2;
+*/
 
+/*
 function MY_TV() {
   this.box_WHD = [0.5, 0.5, 0.5];
   this.box_geometry = new THREE.BoxGeometry(...this.box_WHD);
@@ -78,13 +122,10 @@ const addTV_asCircle = () => {
 };
 
 addTV_asCircle();
-
-// let framesPerSecond = 60;
+*/
 
 const animate = function () {
   requestAnimationFrame(animate);
-  // setTimeout(function () {
-  // }, 1000 / framesPerSecond);
 
   controls.update();
   renderer.render(scene, camera);
@@ -93,9 +134,7 @@ const animate = function () {
 const color = 0xffffff;
 const intensity = 1;
 const light = new THREE.DirectionalLight(color, intensity);
-light.position.set(-5, -5, 10);
+light.position.set(5, 8, 10);
 scene.add(light);
 
 animate();
-// renderer.render(scene, camera);
-// requestAnimationFrame(render);
