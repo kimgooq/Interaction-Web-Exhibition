@@ -1,13 +1,6 @@
 let img = new Image();
-img.src = "../images/img_3.jpeg";
+img.src = "../images/img_0.jpeg";
 // img.crossorigin = "Anonymous";
-let canvases = document.querySelectorAll("canvas");
-let canvasContexts = [];
-canvases.forEach((el) => {
-  el.width = 728;
-  el.height = 525;
-  canvasContexts.push(el.getContext("2d"));
-});
 
 function getPixelTotalValue(imgData, i, threshold) {
   return 0.2126 * imgData[i] +
@@ -21,13 +14,18 @@ function getPixelTotalValue(imgData, i, threshold) {
 // 1. r b g
 const sP1 = (imgData) => {
   for (let i = 0; i < imgData.length; i += 4) {
-    let temp1 = imgData[i];
-    let temp2 = imgData[i + 1];
-    let temp3 = imgData[i + 2];
+    let value = getPixelTotalValue(imgData, i, 100);
+    if (value !== 255) {
+      imgData[i] = imgData[i + 1] = imgData[i + 2] = value;
+    } else {
+      let temp1 = imgData[i];
+      let temp2 = imgData[i + 1];
+      let temp3 = imgData[i + 2];
 
-    imgData[i] = temp1;
-    imgData[i + 1] = temp3;
-    imgData[i + 2] = temp2;
+      imgData[i] = temp1;
+      imgData[i + 1] = temp3;
+      imgData[i + 2] = temp2;
+    }
   }
 };
 
@@ -236,10 +234,22 @@ let sP_functions = [
 ];
 
 img.onload = function () {
+  let canvases = document.querySelectorAll("canvas");
+  let canvasContexts = [];
+  canvases.forEach((el) => {
+    el.width = img.width;
+    el.height = img.height;
+    canvasContexts.push(el.getContext("2d"));
+  });
   canvasContexts[4].drawImage(img, 0, 0);
   canvasContexts.forEach((el, i) => {
     if (i !== 4) {
-      let imageData = canvasContexts[4].getImageData(0, 0, 728, 525);
+      let imageData = canvasContexts[4].getImageData(
+        0,
+        0,
+        img.width,
+        img.height
+      );
       let editedImageData = imageData;
       editPixels(editedImageData.data);
       el.putImageData(editedImageData, 0, 0);
