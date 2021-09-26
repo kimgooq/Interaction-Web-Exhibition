@@ -42,20 +42,145 @@ function Element(id, x, y, z, ry) {
   return object;
 }
 
+function MY_VIDEO(size, x, y, z, ry, id) {
+  const iframe = document.createElement("div");
+  iframe.className = size;
+  iframe.style.border = "0px";
+  iframe.style.backgroundColor = "gold";
+  // iframe.src = [
+  //   "https://www.youtube.com/embed/",
+  //   id,
+  //   "?autoplay=1mute=1&controls=0&loop=1&rel=0",
+  // ].join("");
+  const object = new CSS3DObject(iframe);
+  object.position.set(x, y, z);
+  object.rotation.y = ry;
+  return object;
+}
+
+function MY_RECT(size, x, y, z, ry) {
+  const div = document.createElement("div");
+  div.className = size;
+
+  const object = new CSS3DObject(div);
+  object.position.set(x, y, z);
+  object.rotation.y = ry;
+  return object;
+}
+
+function MY_TOP(size, x, y, z, ry) {
+  // need dynamic value
+  const div = document.createElement("div");
+  div.style.width = "240px";
+  div.style.height = "240px";
+  div.style.backgroundColor = "lightblue";
+  div.style.border = "1px solid black;";
+
+  const object = new CSS3DObject(div);
+  object.position.set(x, y + 90, z - 120);
+  object.rotation.x = (Math.PI * 3) / 2;
+  object.rotation.y = ry;
+  return object;
+}
+
+function MY_TV(size, x, y, z, rad, dist, dir) {
+  const group = new THREE.Group();
+  group.add(new MY_VIDEO(size, 0, 0, z, 0, "SJOz3qjfQXU"));
+  group.add(new MY_TOP(size, 0, 0, z, 0));
+  group.add(new MY_RECT(size, z, 0, 0, Math.PI / 2));
+  group.add(new MY_RECT(size, 0, 0, -z, Math.PI));
+  group.add(new MY_RECT(size, -z, 0, 0, -Math.PI / 2));
+  group.position.set(Math.sin(rad) * dist, y, Math.cos(rad) * dist);
+  if (dir === "h") {
+    group.rotation.x = (Math.PI * 3) / 2; // heading upside
+    group.rotation.z = rad; // heading upside
+  } else if (dir === "v") {
+    group.rotation.y = rad; // heading outside
+  }
+  scene.add(group);
+}
+
+// first
+for (let i = 0; i < 360; i += 10) {
+  let rad = (i * Math.PI) / 180;
+  for (let j = 0; j < 4; j++) {
+    const zeroTV = new MY_TV("x-small", 0, 0, 120, rad, 2100 + j * 300, "h");
+    scene.add(zeroTV);
+  }
+}
+
+// second
+for (let i = 0; i < 360; i += 15) {
+  let rad = (i * Math.PI) / 180;
+  for (let j = 0; j < 3; j++) {
+    const zeroTV = new MY_TV("x-small", 0, 240 + j * 240, 120, rad, 1800, "v");
+    scene.add(zeroTV);
+  }
+  const firstTV = new MY_TV("x-small", 0, 960, 120, rad, 1800, "h");
+  scene.add(firstTV);
+}
+
+// third
+for (let i = 0; i < 360; i += 15) {
+  let rad = (i * Math.PI) / 180;
+  for (let j = 0; j < 3; j++) {
+    const zeroTV = new MY_TV("x-small", 0, 1200 + j * 240, 120, rad, 1500, "v");
+    scene.add(zeroTV);
+  }
+  const firstTV = new MY_TV("x-small", 0, 1920, 120, rad, 1500, "h");
+  scene.add(firstTV);
+}
+
+// forth
+for (let i = 0; i < 360; i += 15) {
+  let rad = (i * Math.PI) / 180;
+  for (let j = 0; j < 3; j++) {
+    const zeroTV = new MY_TV("x-small", 0, 2160 + j * 240, 120, rad, 1200, "v");
+    scene.add(zeroTV);
+  }
+  const firstTV = new MY_TV("x-small", 0, 2880, 120, rad, 1200, "h");
+  scene.add(firstTV);
+}
+
+// fifth
+for (let i = 0; i < 360; i += 30) {
+  let rad = (i * Math.PI) / 180;
+  for (let j = 0; j < 9; j++) {
+    const zeroTV = new MY_TV("x-small", 0, 3120 + j * 240, 120, rad, 800, "v");
+    scene.add(zeroTV);
+  }
+}
+
+// sixth
+for (let i = 0; i < 360; i += 90) {
+  let rad = (i * Math.PI) / 180;
+  for (let j = 0; j < 9; j++) {
+    const zeroTV = new MY_TV("x-small", 0, 5280 + j * 240, 120, rad, 400, "v");
+    scene.add(zeroTV);
+  }
+}
+
+// TEST SIZES
+/*
+const secondTV = new MY_TV("medium", 0, 0, 240, "rx", "ry");
+scene.add(secondTV);
+
+const thirdTV = new MY_TV("large", 0, 0, 320, "rx", "ry");
+scene.add(thirdTV);
+
+const forthTV = new MY_TV("x-large", 0, 0, 360, "rx", "ry");
+scene.add(forthTV);
+*/
+
+// VIDEO TEST
+/*
 const group = new THREE.Group();
 group.add(new Element("SJOz3qjfQXU", 0, 0, 240, 0));
 group.add(new Element("Y2-xZ-1HE-Q", 240, 0, 0, Math.PI / 2));
 group.add(new Element("IrydklNpcFI", 0, 0, -240, Math.PI));
 group.add(new Element("9ubytEsCaS0", -240, 0, 0, -Math.PI / 2));
-// scene.add(group);
-
-// const box_WHD = [200, 200, 200];
-// const box_geometry = new THREE.BoxGeometry(...box_WHD);
-// const box_material = new THREE.MeshPhongMaterial({ color: 0x44aa88 });
-// const box = new THREE.Mesh(box_geometry, box_material);
-// box.position.set(0, 0, 0);
-// group.add(box);
 scene.add(group);
+*/
 
 /*
 let controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -131,10 +256,10 @@ const animate = function () {
   renderer.render(scene, camera);
 };
 
-const color = 0xffffff;
-const intensity = 1;
-const light = new THREE.DirectionalLight(color, intensity);
-light.position.set(5, 8, 10);
-scene.add(light);
+// const color = 0xffffff;
+// const intensity = 1;
+// const light = new THREE.DirectionalLight(color, intensity);
+// light.position.set(5, 8, 10);
+// scene.add(light);
 
 animate();
