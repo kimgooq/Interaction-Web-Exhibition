@@ -1,4 +1,52 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: gray;
+}
+
+.x-small {
+  width: 240px;
+  height: 180px;
+  background-color: lightblue;
+  border: 1px solid black;
+}
+
+.small {
+  width: 360px;
+  height: 240px;
+  background-color: teal;
+  border: 1px solid black;
+}
+
+.medium {
+  width: 480px;
+  height: 360px;
+  /* background-color: tomato; */
+}
+
+.large {
+  width: 640px;
+  height: 480px;
+  background-color: thistle;
+}
+
+.x-large {
+  width: 720px;
+  height: 640px;
+  background-color: lightgreen;
 }
