@@ -5,14 +5,25 @@ import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/
 // import Stats from 'three/examples/jsm/libs/stats.module'
 
 function main() {
+  var pickedObject;
   const canvas = document.querySelector('#c');
   const renderer = new THREE.WebGLRenderer({canvas});
-
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color("#C8EBFA");
+  // 하늘색 배경
+  // scene.background = new THREE.Color("#C8EBFA");
+
+  const backgroundLoader = new THREE.TextureLoader();
+  const texture = backgroundLoader.load(
+  'model/sunflowers.jpg',
+  () => {
+    const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+    rt.fromEquirectangularTexture(renderer, texture);
+    scene.background = rt.texture;
+  });
+
 
   const camera = new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,1,1000);
-  camera.position.set(10,10,10);
+  camera.position.set(3,-13,14);
 
 
   const light1 = new THREE.DirectionalLight(0xffffff,5);
@@ -31,6 +42,7 @@ function main() {
   scene.add(light4);
   light4.position.set(0, 0, -500);
   
+  
   const helper1 = new THREE.DirectionalLightHelper(light1);
   scene.add(helper1);
   
@@ -46,79 +58,56 @@ function main() {
   // let grid = new THREE.GridHelper(100,20);
   // scene.add(grid);
 
-
   var sphere = new Array();
-
   const loader = new GLTFLoader();
-  
 
   const controls = new OrbitControls(camera,renderer.domElement);
   controls.target.set(0,0,0);
 
 
-loader.load( 'model/red.glb', function ( gltf ) {
 
 
-  gltf.scene.position.set(0,0,0);
-  let balloon = gltf.scene.clone();
-  scene.add(balloon);
+  loader.load( 'model/blue.glb', function ( gltf ) {
 
-  sphere.push(balloon);
-  
-
-});
+    gltf.scene.position.set(0,0,0);
+    let balloon = gltf.scene.clone();
+    scene.add(balloon);
+    sphere.push(balloon);
+    
+  });
 
   var count = 0;
-  
-  let color = ["red","orange","yellow","blue","silver"];
-
-  // modelLoad(color[count]);
+  let color = ["blue","magenta","yellow","orange","red"];
 
   // 물리엔진
   Ammo().then( start )
-            
   function start(){
-
       //code goes here
-
   }
 
   var createSphere = function(pos,color){
     // pos -> 벡터값이 매개변수로 들어옴
-  
-    // let geometry = new THREE.SphereGeometry(4,30,30);
-    // let material = new THREE.MeshPhongMaterial({color:0xffffff*Math.random(),shininess:100});
-    // let ballon = new THREE.Mesh(geometry,material);
 
     loader.load( 'model/'+color+'.glb', function ( gltf ) {
-       
-        
-    
       gltf.scene.position.set(pos.x,pos.y,pos.z);
       // gltf.scene.scale.set(70,70,70);
       // console.log("pos : \n"+pos.x+"\n"+pos.y+"\n"+pos.z)
       let balloon = gltf.scene.clone();
       scene.add(balloon);
-    
       sphere.push(balloon);
       // console.log(sphere[sphere.length-1].children[0].children)
   
     }, undefined, function ( error ) {
-  
       console.error( error );
-  
     } );
     
-  
   }
 
   var onMouseClick = function(e){
     console.log(count);
     count++;
-    if(count == 5){
+    if(count == 5)
       count = 0;
-    }
-
     var vec = new THREE.Vector3(); // create once and reuse
     var pos = new THREE.Vector3(); // create once and reuse
 
@@ -128,17 +117,14 @@ loader.load( 'model/red.glb', function ( gltf ) {
         0.5 );
     
     vec.unproject( camera );
-
     vec.sub( camera.position ).normalize();
 
     var distance = - camera.position.z / vec.z;
-
     pos.copy( camera.position ).add( vec.multiplyScalar( distance ) );
 
     createSphere(pos,color[count]);
 
   }
-  window.addEventListener("click",onMouseClick,false);
 
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
@@ -150,7 +136,7 @@ loader.load( 'model/red.glb', function ( gltf ) {
     }
     return needResize;
   }
-
+/*
   class PickHelper {
     constructor() {
       this.raycaster = new THREE.Raycaster();
@@ -171,17 +157,11 @@ loader.load( 'model/red.glb', function ( gltf ) {
       const intersectedObjects = this.raycaster.intersectObjects(scene.children);
       
 
-      // console.log(intersectedObjects)
+      // 물체를 감지한 경우
       if (intersectedObjects.length) {
           
-        
         // pick the first object. It's the closest one
         this.pickedObject = intersectedObjects[0].object;
-        // save its color
-        this.pickedObjectSavedColor = this.pickedObject.material.emissive.getHex();
-        // set its emissive color to flashing red/yellow
-        this.pickedObject.material.emissive.setHex((time * 8) % 2 > 1 ? 0xFFFF00 : 0xFF0000);
-        
             // 마지막을 제외한 나머지 삭제
         if(this.pickedObject != sphere[sphere.length - 1])
           scene.remove(this.pickedObject);
@@ -194,11 +174,11 @@ loader.load( 'model/red.glb', function ( gltf ) {
       
     }
   }
-
+*/
   const pickPosition = {x: 0, y: 0};
-  const pickHelper = new PickHelper();
+  // const pickHelper = new PickHelper();
   clearPickPosition();
-
+  /*
   function render(time) {
     time *= 0.001;  // convert to seconds;
 
@@ -208,18 +188,70 @@ loader.load( 'model/red.glb', function ( gltf ) {
       camera.updateProjectionMatrix();
     }
 
-    pickHelper.pick(pickPosition, scene, camera, time);
+    // pickHelper.pick(pickPosition, scene, camera, time);
 
     renderer.render(scene, camera);
 
+    
     if(sphere != null){
+
+      // 하늘위로 날라가는 애니메이션
       sphere.forEach(function(value){
-          value.position.y += 0.1;
-      });
+          // value.position.y += 0.1;
+    });
   }
     requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
+*/
+
+  var step = 0;
+  //animation
+  animation();
+  function animation(time) {     
+    time *= 0.001;  // convert to seconds;
+
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera.updateProjectionMatrix();
+    }
+
+    if(sphere != null){
+      sphere.forEach(function(value){
+        // step += 0.01;
+        // value.position.x = 2 + ( 10 * (Math.cos(step)));
+        // value.position.y = 2 + ( 10 * Math.abs(Math.sin(step)));
+        value.position.y += 0.1;
+        value.rotation.x += 0.02;
+        // value.rotation.y += 0.02;
+        value.rotation.z += 0.02;
+        // console.log(value.rotation)
+      }); 
+    }
+      requestAnimationFrame(animation);
+      renderer.render(scene, camera);
+  }
+
+  function animationTest(){
+    pickedObject.rotation.x += 0.02;
+    pickedObject.rotation.y += 0.02;
+    pickedObject.rotation.z += 0.02;
+    pickedObject.position.y += 0.1;
+  }
+
+  function animationTest2(){
+    
+    if(sphere != null){
+
+      // 하늘위로 날라가는 애니메이션
+      sphere.forEach(function(value){
+          // value.position.y += 0.1;
+          value.rotation.x -= 0.02;
+          value.rotation.y += 0.02; 
+      });
+    }
+  }
 
   function getCanvasRelativePosition(event) {
     const rect = canvas.getBoundingClientRect();
@@ -230,81 +262,35 @@ loader.load( 'model/red.glb', function ( gltf ) {
   }
 
   function setPickPosition(e) {
-    let raycaster = new THREE.Raycaster();
+      let raycaster = new THREE.Raycaster();
+      const pos = getCanvasRelativePosition(e);
 
-    const pos = getCanvasRelativePosition(e);
-    pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
-    pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
-    // let mouse;
-    //1. sets the mouse position with a coordinate system where the center
-    //   of the screen is the origin
-    // mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-    // mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+      //1. sets the mouse position with a coordinate system where the center
+      //   of the screen is the origin
+      pickPosition.x = (pos.x / canvas.width ) *  2 - 1;
+      pickPosition.y = (pos.y / canvas.height) * -2 + 1;  // note we flip Y
+      
+      //2. set the picking ray from the camera position and mouse coordinates
+      raycaster.setFromCamera( pickPosition, camera );    
 
-    //2. set the picking ray from the camera position and mouse coordinates
-    raycaster.setFromCamera( pickPosition, camera );    
+      //3. compute intersections (note the 2nd parameter)
+      var intersects = raycaster.intersectObjects( scene.children, true );
+      if(intersects.length > 0){
 
-    //3. compute intersections (note the 2nd parameter)
-    var intersects = raycaster.intersectObjects( scene.children, true );
-    if(intersects.length > 0){
-
-      let pickedObject = intersects[0].object;
+        pickedObject = intersects[0].object;
 
       sphere.forEach(function(value,index){
-        if(pickedObject.uuid == value.children[0].children[0].uuid){
+      if(pickedObject.uuid == value.children[0].children[0].uuid){
           // value
-        }
+      
+          console.log(intersects[0].object.uuid)
+          requestAnimationFrame(animationTest);
+          // setTimeout(function() { console.log("test"); },1000);
+          // requestAnimationFrame(animationTest2);
+      }
           // scene.remove(value);
-      });
-      
-      
-
-      // scene.remove(pickedObject);
-      console.log(intersects[0].object.uuid)
-      // if(pickedObject != sphere[sphere.length - 1])
-      //   console.log( intersects);   
-          // scene.remove(this.pickedObject);
+    });
     }
- 
-
-
-    for ( var i = 0; i < intersects.length; i++ ) {
-       
-        /*
-            An intersection has the following properties :
-                - object : intersected object (THREE.Mesh)
-                - distance : distance from camera to intersection (number)
-                - face : intersected face (THREE.Face3)
-                - faceIndex : intersected face index (number)
-                - point : intersection point (THREE.Vector3)
-                - uv : intersection point in the object's UV coordinates (THREE.Vector2)
-        */
-    }
-// Step 2: Detect normal objects
-    //1. sets the mouse position with a coordinate system where the center
-    //   of the screen is the origin
-    pickPosition.x = ( e.clientX / window.innerWidth ) * 2 - 1;
-    pickPosition.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
-
-    //2. set the picking ray from the camera position and mouse coordinates
-    raycaster.setFromCamera( pickPosition, camera );    
-
-    //3. compute intersections (no 2nd parameter true anymore)
-    var intersects = raycaster.intersectObjects( scene.children );
-
-    for ( var i = 0; i < intersects.length; i++ ) {
-        console.log( intersects[ i ] ); 
-        /*
-            An intersection has the following properties :
-                - object : intersected object (THREE.Mesh)
-                - distance : distance from camera to intersection (number)
-                - face : intersected face (THREE.Face3)
-                - faceIndex : intersected face index (number)
-                - point : intersection point (THREE.Vector3)
-                - uv : intersection point in the object's UV coordinates (THREE.Vector2)
-        */
-    }
-
 
   }
 
@@ -316,7 +302,7 @@ loader.load( 'model/red.glb', function ( gltf ) {
     pickPosition.x = -100000;
     pickPosition.y = -100000;
   }
-  // window.addEventListener("click",onMouseClick,false);
+  window.addEventListener("click",onMouseClick,false);
   window.addEventListener('mousemove', setPickPosition);
   window.addEventListener('mouseout', clearPickPosition);
   window.addEventListener('mouseleave', clearPickPosition);
