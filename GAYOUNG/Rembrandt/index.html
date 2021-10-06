@@ -3,11 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <!-- keep the line below for OpenProcessing compatibility -->
-    <script src="https://openprocessing.org/openprocessing_sketch.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.min.js"></script>
-    <script src="mySketch.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
 
     <style>
       html,
@@ -19,87 +16,6 @@
   </head>
 
   <body>
-    <script>
-      // Pixel-sized particles version, of 'surfs_up'.
-      // Particles are now directly noise driven omitting the flow field.
-      // Array[], particle, pixel, noise()
-      // Mouse click to reset, mouseX adjusts background clear.
-
-      particles = new Array();
-      let alpha;
-
-      const setup = () => {
-        size(900, 200);
-        background(0);
-        noStroke();
-        setParticles();
-      };
-
-      const draw = () => {
-        frameRate(20);
-        alpha = map(mouseX, 0, width, 5, 35);
-        fill(0, alpha);
-        rect(0, 0, width, height);
-
-        loadPixels();
-        particles.forEach((value) => {
-          value.move();
-        });
-        updatePixels();
-      };
-
-      Particle = (xIn, yIn, cIn) => {
-        this.posX = xIn;
-        this.posY = yIn;
-        this.color = cIn;
-
-        this.move = () => {
-          update();
-          wrap();
-          display();
-        };
-
-        // Particle(float xIn, float yIn, color cIn) {
-        //     posX = xIn;
-        //     posY = yIn;
-        //     c = cIn;
-        // }
-      };
-
-      setParticles = () => {
-        particles = new Particle[6000]();
-        for (let i = 0; i < 6000; i++) {
-          let x = random(width);
-          let y = random(height);
-          let adj = map(y, 0, height, 255, 0);
-          let c = color(40, adj, 255);
-          particles[i] = Particle(x, y, c);
-        }
-      };
-
-      mousePressed = () => {
-        setParticles();
-      };
-
-      update = () => {
-        incr += 0.008;
-        theta = noise(posX * 0.006, posY * 0.004, incr) * TWO_PI;
-        posX += 2 * cos(theta);
-        posY += 2 * sin(theta);
-      };
-
-      display = () => {
-        if (posX > 0 && posX < width && posY > 0 && posY < height) {
-          pixels[posX + posY * width] = c;
-        }
-      };
-
-      wrap = () => {
-        if (posX < 0) posX = width;
-        if (posX > width) posX = 0;
-        if (posY < 0) posY = height;
-        if (posY > height) posY = 0;
-      };
-    </script>
+    <script src = "test.js"></script>
   </body>
 </html>
