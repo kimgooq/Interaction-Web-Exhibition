@@ -5,28 +5,63 @@ width = 900;
 height = 200;
 
 let img;
+
+function setup() {
+  createCanvas(900, 200);
+  image(img, 0, 0, width, height);
+  // size(900, 200);
+  background(0);
+  noStroke();
+  setParticles();
+}
+
+function draw() {
+  for (particle of particles) {
+    // particle.move();
+  }
+
+  background("black");
+  fill("black");
+  frameRate(20);
+  alpha = map(mouseX, 0, width, 5, 35);
+  fill(0, alpha);
+  rect(0, 0, width, height);
+
+  loadPixels();
+  // particles.forEach((value) => {
+  //   value.move();
+  //   console.log(value);
+  // });
+
+  updatePixels();
+}
+
 function preload() {
   img = loadImage("image.jpg");
 }
 
-Particle = function (xIn, yIn, cIn) {
+function Particle(xIn, yIn, cIn) {
   this.posX = xIn;
   this.posY = yIn;
   this.color = cIn;
   this.incr;
 
+  this.test = () => {
+    console.log(this.posX);
+  };
+
   this.move = function () {
-    // console.log(this.posX);
-    // this.update();
+    this.update();
     this.wrap();
     this.display();
   };
 
   this.update = function () {
     this.incr += 0.008;
+    // console.log(this.posX);
     let theta = noise(this.posX * 0.006, this.posY * 0.004, this.incr) * TWO_PI;
     // ******
-    console.log(noise(this.posX * 0.006, this.posY * 0.004, this.incr));
+    // console.log(noise(this.posX * 0.006, this.posY * 0.004, this.incr));
     this.posX += 2 * cos(theta);
 
     this.posY += 2 * sin(theta);
@@ -51,37 +86,6 @@ Particle = function (xIn, yIn, cIn) {
       // console.log(pixels);
     }
   };
-};
-
-function setup() {
-  createCanvas(900, 200);
-  image(img, 0, 0, width, height);
-  // size(900, 200);
-  background(0);
-  noStroke();
-  setParticles();
-}
-
-function draw() {
-  for (particle of particles) {
-    particle.move();
-    // console.log(particle);
-  }
-
-  background("black");
-  fill("black");
-  frameRate(20);
-  alpha = map(mouseX, 0, width, 5, 35);
-  fill(0, alpha);
-  rect(0, 0, width, height);
-
-  loadPixels();
-  // particles.forEach((value) => {
-  //   value.move();
-  //   console.log(value);
-  // });
-
-  updatePixels();
 }
 
 // Particle.prototype = Object.create(Particle.prototype);
