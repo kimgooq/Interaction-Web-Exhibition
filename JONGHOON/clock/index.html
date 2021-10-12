@@ -4,21 +4,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>-->
-  <!--><link rel="stylesheet" href="style.css">-->
+  <!--<link rel="stylesheet" href="style.css">-->
   <title>Document</title>
 </head>
 <body>
 	<script type="module">
 	import * as THREE from 'https://cdn.skypack.dev/three@0.132.2';
-    //import { OrbitControls } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js';
+    import { OrbitControls } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js';
 	import { FBXLoader } from 'https://cdn.skypack.dev/three@0.132.2/examples/jsm/loaders/FBXLoader.js';
-    import { OrbitControls } from './OrbitControls.js';
+    //import { OrbitControls } from './OrbitControls.js';
+	let camera, scene, renderer;
+	camera = new THREE.PerspectiveCamera( 60, 640, 480, 0.1, 100 );
+	camera.position.z = 15;
+
+	scene = new THREE.Scene();
+	scene.background = new THREE.Color( 0xa0a0a0 );
+	renderer = new THREE.WebGLRenderer( { antialias: true } );
+	renderer.setSize( 640, 480 );
+	document.body.appendChild( renderer.domElement );
+	const controls = new OrbitControls( camera, renderer.domElement );
+	window.addEventListener( 'resize', onWindowResize );
+	
+	function onWindowResize() {
+		camera.aspect = 640/480;
+		camera.updateProjectionMatrix();
+		renderer.setSize( 640, 480 );
+
+	}
+
 	const loader = new FBXLoader();
-	loader.load( 'Clock2.fbx', function ( fbx ) {
-		scene.add( fbx.scene );
+	loader.load( 'Clock2.fbx', function ( object ) {
+		scene.add( object );
+		object.position.x=0;
+		object.position.y=0;
+		object.position.z=0;
 	}, undefined, function ( error ) {
 		console.error( error );
-	} );	
+	} );
+
+	renderer.render( scene, camera );
 	</script>
 </body>
 </html>
