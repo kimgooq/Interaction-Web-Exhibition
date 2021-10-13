@@ -1,0 +1,148 @@
+<!--참고 https://stemkoski.github.io/Three.js/Bubble.html -->
+<!-- https://threejs.org/examples/webgl_morphtargets_sphere -->
+<!DOCTYPE html>
+<html lang="en">
+  <link />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="FULLSCREEN" style="position: absolute; left: 0px; top: 0px"></div>
+
+    <!--<script src="./three.module.js"></script>-->
+    <!--<script src="./FresnelShader.js"></script>-->
+    <!-- <script src="https://cdn.skypack.dev/three@0.133.1/build/three.module.js"></script> -->
+
+    <script type="module">
+      import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module.js";
+
+      //THREE.FresnelShader = {
+      var fShader = (THREE.FresnelShader = {
+        uniforms: {
+          mRefractionRatio: { type: "f", value: 1.02 },
+          mFresnelBias: { type: "f", value: 0.1 },
+          mFresnelPower: { type: "f", value: 2.0 },
+          mFresnelScale: { type: "f", value: 1.0 },
+          tCube: { type: "t", value: null },
+        },
+
+        vertexShader: [
+          "uniform float mRefractionRatio;",
+          "uniform float mFresnelBias;",
+          "uniform float mFresnelScale;",
+          "uniform float mFresnelPower;",
+
+          "varying vec3 vReflect;",
+          "varying vec3 vRefract[3];",
+          "varying float vReflectionFactor;",
+
+          "void main() {",
+
+          "vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );",
+          "vec4 worldPosition = modelMatrix * vec4( position, 1.0 );",
+
+          "vec3 worldNormal = normalize( mat3( modelMatrix[0].xyz, modelMatrix[1].xyz, modelMatrix[2].xyz ) * normal );",
+
+          "vec3 I = worldPosition.xyz - cameraPosition;",
+
+          "vReflect = reflect( I, worldNormal );",
+          "vRefract[0] = refract( normalize( I ), worldNormal, mRefractionRatio );",
+          "vRefract[1] = refract( normalize( I ), worldNormal, mRefractionRatio * 0.99 );",
+          "vRefract[2] = refract( normalize( I ), worldNormal, mRefractionRatio * 0.98 );",
+          "vReflectionFactor = mFresnelBias + mFresnelScale * pow( 1.0 + dot( normalize( I ), worldNormal ), mFresnelPower );",
+
+          "gl_Position = projectionMatrix * mvPosition;",
+
+          "}",
+        ], //.join("\n"),
+
+        fragmentShader: [
+          "uniform samplerCube tCube;",
+
+          "varying vec3 vReflect;",
+          "varying vec3 vRefract[3];",
+          "varying float vReflectionFactor;",
+
+          "void main() {",
+
+          "vec4 reflectedColor = textureCube( tCube, vec3( -vReflect.x, vReflect.yz ) );",
+          "vec4 refractedColor = vec4( 1.0 );",
+
+          "refractedColor.r = textureCube( tCube, vec3( -vRefract[0].x, vRefract[0].yz ) ).r;",
+          "refractedColor.g = textureCube( tCube, vec3( -vRefract[1].x, vRefract[1].yz ) ).g;",
+          "refractedColor.b = textureCube( tCube, vec3( -vRefract[2].x, vRefract[2].yz ) ).b;",
+
+          "gl_FragColor = mix( refractedColor, reflectedColor, clamp( vReflectionFactor, 0.0, 1.0 ) );",
+
+          "}",
+        ], //.join("\n"),
+      });
+      //import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module.js";
+      //import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js";
+      //import { StereoEffect } from "https://cdn.skypack.dev/three@0.133.1/examples/jsm/effects/StereoEffect.js";
+
+      var scene, camera, renderer, container;
+
+      //scene
+      scene = new THREE.Scene();
+
+      //camera
+      var SCREEN_WIDTH = window.innerWidth,
+        SCREEN_HEIGHT = window.innerHeight;
+      var VIEW_ANGLE = 45,
+        ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT,
+        NEAR = 0.1,
+        FAR = 20000;
+      camera = new THREE.PerspectiveCamera(VIEW_ANGLE, ASPECT, NEAR, FAR);
+      scene.add(camera);
+      camera.position.set(0, 150, 400);
+      camera.lookAt(scene.position);
+
+      //RENDERER
+      renderer = new THREE.WebGLRenderer({ antialias: true });
+      //renderer = new THREE.CanvasRenderer();
+      renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+      container = document.getElementById("FULLSCREEN");
+      container.appendChild(renderer.domElement);
+
+      //LIGHT
+      var light = new THREE.PointLight(0xffffff);
+      light.position.set(0, 250, 0);
+      scene.add(light);
+
+      //
+      //var fShader = THREE.FresnelShader;
+      var fresnelUniforms = {
+        mRefractionRatio: { type: "f", value: 1.02 },
+        mFresnelBias: { type: "f", value: 0.1 },
+        mFresnelPower: { type: "f", value: 2.0 },
+        mFresnelScale: { type: "f", value: 1.0 },
+        //tCube: { type: "t", value: refractSphereCamera.renderTarget }, //  textureCube }
+        tCube: { type: "t", value: camera.renderTarget }, //  textureCube }
+      };
+      var bubbleMaterial = new THREE.ShaderMaterial({
+        uniforms: fresnelUniforms,
+        //vertexShader: fShader.vertexShader,
+        //fragmentShader: fShader.fragmentShader,
+        vertexShader: THREE.FresnelShader.vertexShader,
+        fragmentShader: THREE.FresnelShader.fragmentShader,
+      });
+
+      var sphereGeometry = new THREE.SphereGeometry(100, 64, 32);
+      this.sphere = new THREE.Mesh(sphereGeometry, bubbleMaterial);
+      sphere.position.set(0, 50, 100);
+      scene.add(sphere);
+
+      renderer.render(scene, camera);
+
+      document.addEventListener("mousemove", onDocumentMouseMove);
+
+      function onDocumentMouseMove(event) {
+        mouseX = (event.clientX - windowHalfX) * 10;
+        mouseY = (event.clientY - windowHalfY) * 10;
+      }
+    </script>
+  </body>
+</html>
