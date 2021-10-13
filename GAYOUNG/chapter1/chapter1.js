@@ -11,21 +11,29 @@ Controls:
 	- Press the right mouse button to display the underlying particle system.
 */
 
-/*
 // If you get an error about max uniforms then you can decrease these 2 values :(
 const MAX_PARTICLE_COUNT = 70;
 const MAX_TRAIL_COUNT = 30;
 
-var colorScheme = ["#E69F66", "#DF843A", "#D8690F", "#B1560D", "#8A430A"];
-var shaded = true;
-var theShader;
-var shaderTexture;
-var trail = [];
-var particles = [];
+let colorScheme = ["#E69F66", "#DF843A", "#D8690F", "#B1560D", "#8A430A"];
+let shaded = true;
+let theShader;
+let shaderTexture;
+
+let simpleShader;
+let simpleShaderTexture;
+
+let trail = [];
+let particles = [];
+let img;
 
 function preload() {
-  img = loadImage("cow.jpg");
+  // img = loadImage("cow.jpg");
   theShader = new p5.Shader(this.renderer, vertShader, fragShader);
+
+  simpleShader = loadShader("assets/basic.vert", "assets/basic.frag");
+
+  img = loadImage("cow.jpg");
 }
 
 function setup() {
@@ -36,6 +44,8 @@ function setup() {
     min(windowWidth, windowHeight),
     WEBGL
   );
+
+  img.resize(min(windowWidth, windowHeight), min(windowWidth, windowHeight));
 
   canvas.canvas.oncontextmenu = () => false; // Removes right-click menu.
   noCursor();
@@ -98,21 +108,31 @@ function draw() {
   if (shaded) {
     // **** Apply Shader **** //
     // Display shader.
+    // shaderTexture.shader(simpleShader);
     shaderTexture.shader(theShader);
+
     let data = serializeSketch();
-    theShader.setUniform("tex", img);
     theShader.setUniform("resolution", [width, height]);
     theShader.setUniform("trailCount", trail.length);
     theShader.setUniform("trail", data.trails);
     theShader.setUniform("particleCount", particles.length);
     theShader.setUniform("particles", data.particles);
     theShader.setUniform("colors", data.colors);
+    theShader.setUniform("colorBackground", [0, 1, 0]);
+    // theShader.setUniform("uTexture", img);
 
+    // simpleShader.setUniform("uTexture", img);
     shaderTexture.rect(0, 0, width, height);
+    // shaderTexture.rect(0, 0, width, height);
+    background(153);
+    texture(img);
     texture(shaderTexture);
+
+    // box(200, 200, 200);
+
     rect(0, 0, width, height);
   } else {
-    image(img, 0, 0);
+    // image(img, 0, 0);
     // Display points.
     stroke(255, 200, 0);
     for (let i = 0; i < particles.length; i++) {
@@ -230,36 +250,3 @@ let fragShader = `
 			gl_FragColor = vec4(r, g, b, 1.0);
 	}
 `;
- */
-
-// 이 변수는 셰이더 객체를 담습니다.
-let theShader;
-// 이 변수는 웹캠 비디오를 담습니다.
-let cam;
-
-function preload() {
-  // 셰이더 불러오기
-  theShader = loadShader("assets/webcam.vert", "assets/webcam.frag");
-}
-
-function setup() {
-  // 셰이더 작동을 위해 WEBGL 모드가 필요합니다.
-  createCanvas(710, 400, WEBGL);
-  noStroke();
-
-  cam = createCapture(VIDEO);
-  cam.size(710, 400);
-
-  cam.hide();
-}
-
-function draw() {
-  // shader()는 활성화 셰이더를 theShader로 설정합니다.
-  shader(theShader);
-
-  // cam을 텍스처로 보내기
-  theShader.setUniform("tex0", cam);
-
-  // rect()함수로 화면에 기하 추가하기
-  rect(0, 0, width, height);
-}
