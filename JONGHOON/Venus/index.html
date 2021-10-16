@@ -1,5 +1,8 @@
 <!--참고 https://stemkoski.github.io/Three.js/Bubble.html -->
 <!-- https://threejs.org/examples/webgl_morphtargets_sphere -->
+<!-- https://jsfiddle.net/8n36c47p/4/ -->
+<!-- https://threejs.org/docs/#api/en/materials/ShaderMaterial -->
+
 <!DOCTYPE html>
 <html lang="en">
   <link />
@@ -19,7 +22,8 @@
       import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module.js";
 
       //THREE.FresnelShader = {
-      var fShader = (THREE.FresnelShader = {
+      console.log(THREE.FresnelShader);
+      THREE.FresnelShader = {
         uniforms: {
           mRefractionRatio: { type: "f", value: 1.02 },
           mFresnelBias: { type: "f", value: 0.1 },
@@ -78,7 +82,7 @@
 
           "}",
         ], //.join("\n"),
-      });
+      };
       //import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module.js";
       //import * as THREE from "https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.module.js";
       //import { StereoEffect } from "https://cdn.skypack.dev/three@0.133.1/examples/jsm/effects/StereoEffect.js";

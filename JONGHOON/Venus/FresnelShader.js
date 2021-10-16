@@ -3,7 +3,7 @@
  *
  * Based on Nvidia Cg tutorial
  */
-import * as THREE from "./three.module.js";
+//import * as THREE from "./three.module.js";
 THREE.FresnelShader = {
   uniforms: {
     mRefractionRatio: { type: "f", value: 1.02 },

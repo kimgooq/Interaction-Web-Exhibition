@@ -8,11 +8,11 @@
   </head>
   <body>
     <div id="FULLSCREEN" style="position: absolute; left: 0px; top: 0px"></div>
-    <!-- <script src="./custom_three.js"></script> -->
+    <script src="./custom_three.js"></script>
     <!-- <script src="./three.module.js"></script> -->
     <script src="./stats.min.js"></script>
     <script type="module">
-      import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module.js";
+      //import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module.js";
       //if (!THREE.Supports.webgl) THREE.Supports.addGetWebGLMessage();
 
       //var raycaster = new THREE.Raycaster();
@@ -66,8 +66,8 @@
         scene = new THREE.Scene();
         sceneCube = new THREE.Scene();
 
-        var geometry = new THREE.Sphere(100, 32, 16);
-        //var geometry = new Sphere(100, 32, 16);
+        //var geometry = new THREE.Sphere(100, 32, 16);
+        var geometry = new Sphere(100, 32, 16);
 
         var path = "./image/";
         var format = ".jpg";
@@ -80,8 +80,8 @@
           path + "nz" + format,
         ];
 
-        var images = THREE.ImageUtils.loadArray(urls);
-        //var images = ImageUtils.loadArray(urls);
+        //var images = THREE.ImageUtils.loadArray(urls);
+        var images = ImageUtils.loadArray(urls);
         var textureCube = new THREE.Texture(images);
 
         var shader = ShaderUtils.lib["fresnel"];
@@ -96,12 +96,15 @@
         };
         var material = new THREE.MeshShaderMaterial(parameters);
 
-        for (var i = 0; i < 500; i++) {
+        for (var i = 0; i < 200; i++) {
           var mesh = new THREE.Mesh(geometry, material);
           mesh.position.x = Math.random() * 10000 - 5000;
           mesh.position.y = Math.random() * 10000 - 5000;
           mesh.position.z = Math.random() * 10000 - 5000;
-          mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 4 + 1;
+          mesh.scale.x =
+            mesh.scale.y =
+            mesh.scale.z =
+              Math.random() * 2.5 + 0.5;
           scene.addObject(mesh);
 
           meshes[i] = mesh;
@@ -198,11 +201,16 @@
           var m = meshes[i];
           var d = deltas[i];
 
-          m.position.y += d * 10;
+          m.position.y += d * 5;
+          //m.position.x += d * Math.random(-10, 10);
+          //m.position.z = -1000;
           m.position.x = 5000 * Math.cos(timer + i);
           m.position.z = 5000 * Math.sin(timer + i * 1.1);
 
-          if (m.position.y > 5000) m.position.y -= 10000;
+          if (m.position.y > 2500) m.position.y -= 5000;
+          if (m.position.x > 4000) m.position.x -= 6000;
+          else if (m.position.x < -4000) m.position.x += 6000;
+          if (m.position.z > 3000) m.position.z -= 6000;
         }
         ////////////////////
 
