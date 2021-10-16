@@ -11,6 +11,16 @@ Controls:
 	- Press the right mouse button to display the underlying particle system.
 */
 
+/* 
+  Concept : 깜깜한 동굴 속 벽화를 불빛을 비추어 해당 벽화를 확인할 수 있는 그런 느낌
+
+  첫번째 시도 : Magical trail shader 예시를 통해 뒤에 마우스를 무브하면 불빛이 흔들리는 효과를 준다
+  하지만.. 한 캔버스에 Shader가 하나만 적용되다 보니 이미지를 동시에 적용하기 어려워보임
+
+  두번째 시도 : 클리핑 마스크를 이용하여 마우스 무브한 곳은 다 지워지는 것
+
+*/
+
 // If you get an error about max uniforms then you can decrease these 2 values :(
 const MAX_PARTICLE_COUNT = 70;
 const MAX_TRAIL_COUNT = 30;
@@ -118,7 +128,8 @@ function draw() {
     theShader.setUniform("particleCount", particles.length);
     theShader.setUniform("particles", data.particles);
     theShader.setUniform("colors", data.colors);
-    theShader.setUniform("colorBackground", [0, 1, 0]);
+    theShader.setUniform("image", img);
+    // theShader.setUniform("colorBackground", [0, 1, 0]);
     // theShader.setUniform("uTexture", img);
 
     // simpleShader.setUniform("uTexture", img);
@@ -207,7 +218,7 @@ let vertShader = `
 
 let fragShader = `
 	precision highp float;
-
+  
 	uniform vec2 resolution;
 	uniform int trailCount;
 	uniform vec2 trail[${MAX_TRAIL_COUNT}];
@@ -215,12 +226,15 @@ let fragShader = `
 	uniform vec3 particles[${MAX_PARTICLE_COUNT}];
 	uniform vec3 colors[${MAX_PARTICLE_COUNT}];
 
+  
+
 	void main() {
 			vec2 st = gl_FragCoord.xy / resolution.xy;  // Warning! This is causing non-uniform scaling.
 
 			float r = 0.0;
 			float g = 0.0;
 			float b = 0.0;
+
 
 			for (int i = 0; i < ${MAX_TRAIL_COUNT}; i++) {
 				if (i < trailCount) {
