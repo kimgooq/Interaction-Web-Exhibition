@@ -13,13 +13,19 @@ function preload() {
 }
 // setup() runs after preload, once()
 function setup() {
-  createCanvas(710, 400);
+  // createCanvas(710, 400);
+  let canvas = createCanvas(windowWidth, windowHeight);
+  console.log(windowWidth);
+  img.resize(windowWidth, windowHeight);
+  console.log(img.width);
+
   pixelDensity(1);
   frameRate(30);
 }
 
 function draw() {
   image(img, 0, 0);
+
   // Only need to load the pixels[] array once, because we're only
   // manipulating pixels[] inside draw(), not drawing shapes.
   loadPixels();
@@ -32,20 +38,22 @@ function draw() {
       // Get the R,G,B values from image
       let r, g, b;
       r = img.pixels[loc];
-      // g = img.pixels[loc+1];
-      // b = img.pixels[loc+2];
+      g = img.pixels[loc + 1];
+      b = img.pixels[loc + 2];
+
       // Calculate an amount to change brightness based on proximity to the mouse
       // The closer the pixel is to the mouse, the lower the value of "distance"
-      let maxdist = 50; //dist(0,0,width,height);
+      let maxdist = 150; //dist(0,0,width,height);
       let d = dist(x, y, mouseX, mouseY);
       let adjustbrightness = (255 * (maxdist - d)) / maxdist;
       r += adjustbrightness;
-      // g += adjustbrightness;
-      // b += adjustbrightness;
+      g += adjustbrightness;
+      b += adjustbrightness;
+
       // Constrain RGB to make sure they are within 0-255 color range
       r = constrain(r, 0, 255);
-      // g = constrain(g, 0, 255);
-      // b = constrain(b, 0, 255);
+      g = constrain(g, 0, 255);
+      b = constrain(b, 0, 255);
       // Make a new color and set pixel in the window
       //   let pixloc = (y * width + x) * 4;
       let pixloc = (y * width + x) * 4;
@@ -54,8 +62,8 @@ function draw() {
         console.log(pixloc);
       }
       pixels[pixloc] = r;
-      pixels[pixloc + 1] = r;
-      pixels[pixloc + 2] = r;
+      pixels[pixloc + 1] = g;
+      pixels[pixloc + 2] = b;
       pixels[pixloc + 3] = 255; // Always have to set alpha
     }
   }
