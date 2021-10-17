@@ -14,7 +14,7 @@ img.addEventListener("load", () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   let particlesArray = [];
-  const numberOfParticles = 30000;
+  const numberOfParticles = 3000;
 
   let mappedImage = [];
   for (let y = 0; y < canvas.height; y++) {
@@ -88,4 +88,23 @@ img.addEventListener("load", () => {
     requestAnimationFrame(animate); // call self-func again and again
   }
   animate();
+
+  let x_pos;
+  let y_pos;
+
+  canvas.addEventListener("mousemove", (e) => {
+    x_pos = e.pageX;
+    y_pos = e.pageY;
+    console.log(e.pageX, e.clientX);
+  });
+
+  function draw_circle() {
+    ctx.beginPath();
+    ctx.fillStyle = "blue";
+    ctx.rect(x_pos, 0, x_pos + 10, y_pos);
+    // ctx.arc(x_pos, y_pos, 50, 0, Math.PI * 2);
+    ctx.fill(); // fill the color
+    requestAnimationFrame(draw_circle);
+  }
+  draw_circle();
 });
