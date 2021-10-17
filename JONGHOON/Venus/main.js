@@ -80,46 +80,46 @@ function init() {
   );
   camera.position.z = -4000;
 
-  // const textureCube = new THREE.CubeTextureLoader()
-  //   .setPath("./image/")
-  //   .load(["px.jpg", "nx.jpg", "py.jpg", "ny.jpg", "pz.jpg", "nz.jpg"]);
-  // textureCube.mapping = THREE.CubeRefractionMapping;
-  // textureCube.mapping = THREE.UVMapping;
+  const textureCube = new THREE.CubeTextureLoader()
+    .setPath("./image/")
+    .load(["px.jpg", "nx.jpg", "py.jpg", "ny.jpg", "pz.jpg", "nz.jpg"]);
+  textureCube.mapping = THREE.CubeRefractionMapping;
+  textureCube.mapping = THREE.UVMapping;
 
-  var path = "./image/";
-  var format = ".jpg";
-  var urls = [
-    path + "px" + format,
-    path + "nx" + format,
-    path + "py" + format,
-    path + "ny" + format,
-    path + "pz" + format,
-    path + "nz" + format,
-  ];
+  // var path = "./image/";
+  // var format = ".jpg";
+  // var urls = [
+  //   path + "px" + format,
+  //   path + "nx" + format,
+  //   path + "py" + format,
+  //   path + "ny" + format,
+  //   path + "pz" + format,
+  //   path + "nz" + format,
+  // ];
 
-  var loadedtex = {};
-  var textureloaded = 0;
-  var to_load = [
-    "image/px.jpg",
-    "image/nx.jpg",
-    "image/py.jpg",
-    "image/ny.jpg",
-    "image/pz.jpg",
-    "image/nz.jpg",
-  ];
+  // var loadedtex = {};
+  // var textureloaded = 0;
+  // var to_load = [
+  //   "image/px.jpg",
+  //   "image/nx.jpg",
+  //   "image/py.jpg",
+  //   "image/ny.jpg",
+  //   "image/pz.jpg",
+  //   "image/nz.jpg",
+  // ];
 
-  var textureCube = new THREE.TextureLoader();
-  var load_textures = function () {
-    if (textureloaded == to_load.length) {
-      return;
-    }
-    var texture = to_load[textureloaded];
-    textureCube.load(texture, function (tex) {
-      loadedtex[texture] = tex;
-      textureloaded += 1;
-      load_textures();
-    });
-  };
+  // var textureCube = new THREE.TextureLoader();
+  // var load_textures = function () {
+  //   if (textureloaded == to_load.length) {
+  //     return;
+  //   }
+  //   var texture = to_load[textureloaded];
+  //   textureCube.load(texture, function (tex) {
+  //     loadedtex[texture] = tex;
+  //     textureloaded += 1;
+  //     load_textures();
+  //   });
+  // };
 
   // const textureCube = new THREE.Texture({image = urls});
 
