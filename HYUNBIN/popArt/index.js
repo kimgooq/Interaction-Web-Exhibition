@@ -3,12 +3,18 @@ img.src = "../images/img_0.jpeg";
 // img.crossorigin = "Anonymous";
 
 function getPixelTotalValue(imgData, i, threshold) {
-  return 0.2126 * imgData[i] +
-    0.7152 * imgData[i + 1] +
-    0.0722 * imgData[i + 2] >=
-    threshold
-    ? 255
-    : 0;
+  let pixel_value =
+    0.2126 * imgData[i] + 0.7152 * imgData[i + 1] + 0.0722 * imgData[i + 2];
+  if (pixel_value > 200) {
+    return 255;
+  } else if (pixel_value > 150) {
+    return 200;
+  } else if (pixel_value > 100) {
+    return 150;
+  } else if (pixel_value > 50) {
+    return 0;
+  }
+  // threshold ? 255 : 0;
 }
 
 // 1. r b g
