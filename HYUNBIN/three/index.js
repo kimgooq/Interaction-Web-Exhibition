@@ -42,9 +42,11 @@ function Element(id, x, y, z, ry) {
   return object;
 }
 
-function MY_VIDEO(size, x, y, z, ry, id) {
+function MY_VIDEO(size, x, y, z, ry, id, classIndex) {
+  // const iframe = document.createElement("iframe");
   const iframe = document.createElement("div");
-  iframe.className = size;
+  iframe.classList.add(`level_${classIndex}`);
+  iframe.classList.add(size);
   iframe.style.border = "0px";
   iframe.style.backgroundColor = "gold";
   // iframe.src = [
@@ -83,9 +85,9 @@ function MY_TOP(size, x, y, z, ry) {
   return object;
 }
 
-function MY_TV(size, x, y, z, rad, dist, dir) {
+function MY_TV(size, x, y, z, rad, dist, dir, classIndex) {
   const group = new THREE.Group();
-  group.add(new MY_VIDEO(size, 0, 0, z, 0, "SJOz3qjfQXU"));
+  group.add(new MY_VIDEO(size, 0, 0, z, 0, "SJOz3qjfQXU", classIndex));
   group.add(new MY_TOP(size, 0, 0, z, 0));
   group.add(new MY_RECT(size, z, 0, 0, Math.PI / 2));
   group.add(new MY_RECT(size, 0, 0, -z, Math.PI));
@@ -104,7 +106,7 @@ function MY_TV(size, x, y, z, rad, dist, dir) {
 for (let i = 0; i < 360; i += 10) {
   let rad = (i * Math.PI) / 180;
   for (let j = 0; j < 4; j++) {
-    const zeroTV = new MY_TV("x-small", 0, 0, 120, rad, 2100 + j * 300, "h");
+    const zeroTV = new MY_TV("x-small", 0, 0, 120, rad, 2100 + j * 300, "h", 1);
     scene.add(zeroTV);
   }
 }
@@ -113,10 +115,19 @@ for (let i = 0; i < 360; i += 10) {
 for (let i = 0; i < 360; i += 15) {
   let rad = (i * Math.PI) / 180;
   for (let j = 0; j < 3; j++) {
-    const zeroTV = new MY_TV("x-small", 0, 240 + j * 240, 120, rad, 1800, "v");
+    const zeroTV = new MY_TV(
+      "x-small",
+      0,
+      240 + j * 240,
+      120,
+      rad,
+      1800,
+      "v",
+      2
+    );
     scene.add(zeroTV);
   }
-  const firstTV = new MY_TV("x-small", 0, 960, 120, rad, 1800, "h");
+  const firstTV = new MY_TV("x-small", 0, 960, 120, rad, 1800, "h", 3);
   scene.add(firstTV);
 }
 
@@ -124,10 +135,19 @@ for (let i = 0; i < 360; i += 15) {
 for (let i = 0; i < 360; i += 15) {
   let rad = (i * Math.PI) / 180;
   for (let j = 0; j < 3; j++) {
-    const zeroTV = new MY_TV("x-small", 0, 1200 + j * 240, 120, rad, 1500, "v");
+    const zeroTV = new MY_TV(
+      "x-small",
+      0,
+      1200 + j * 240,
+      120,
+      rad,
+      1500,
+      "v",
+      4
+    );
     scene.add(zeroTV);
   }
-  const firstTV = new MY_TV("x-small", 0, 1920, 120, rad, 1500, "h");
+  const firstTV = new MY_TV("x-small", 0, 1920, 120, rad, 1500, "h", 5);
   scene.add(firstTV);
 }
 
@@ -135,10 +155,19 @@ for (let i = 0; i < 360; i += 15) {
 for (let i = 0; i < 360; i += 15) {
   let rad = (i * Math.PI) / 180;
   for (let j = 0; j < 3; j++) {
-    const zeroTV = new MY_TV("x-small", 0, 2160 + j * 240, 120, rad, 1200, "v");
+    const zeroTV = new MY_TV(
+      "x-small",
+      0,
+      2160 + j * 240,
+      120,
+      rad,
+      1200,
+      "v",
+      6
+    );
     scene.add(zeroTV);
   }
-  const firstTV = new MY_TV("x-small", 0, 2880, 120, rad, 1200, "h");
+  const firstTV = new MY_TV("x-small", 0, 2880, 120, rad, 1200, "h", 7);
   scene.add(firstTV);
 }
 
@@ -146,7 +175,16 @@ for (let i = 0; i < 360; i += 15) {
 for (let i = 0; i < 360; i += 30) {
   let rad = (i * Math.PI) / 180;
   for (let j = 0; j < 9; j++) {
-    const zeroTV = new MY_TV("x-small", 0, 3120 + j * 240, 120, rad, 800, "v");
+    const zeroTV = new MY_TV(
+      "x-small",
+      0,
+      3120 + j * 240,
+      120,
+      rad,
+      800,
+      "v",
+      8
+    );
     scene.add(zeroTV);
   }
 }
@@ -155,7 +193,16 @@ for (let i = 0; i < 360; i += 30) {
 for (let i = 0; i < 360; i += 90) {
   let rad = (i * Math.PI) / 180;
   for (let j = 0; j < 9; j++) {
-    const zeroTV = new MY_TV("x-small", 0, 5280 + j * 240, 120, rad, 400, "v");
+    const zeroTV = new MY_TV(
+      "x-small",
+      0,
+      5280 + j * 240,
+      120,
+      rad,
+      400,
+      "v",
+      9
+    );
     scene.add(zeroTV);
   }
 }

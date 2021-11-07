@@ -92,6 +92,7 @@
         };
         var material = new THREE.MeshShaderMaterial(parameters);
 
+        console.log(material);
         for (var i = 0; i < 500; i++) {
           var mesh = new THREE.Mesh(geometry, material);
           mesh.position.x = Math.random() * 10000 - 5000;
