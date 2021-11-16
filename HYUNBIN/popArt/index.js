@@ -2,6 +2,65 @@ let img = new Image();
 img.src = "../images/img_0.jpeg";
 // img.crossorigin = "Anonymous";
 
+let currentIndex = 0; // 현재 마우스 위치
+let canvasContexts = []; // 캔버스 이미지 데이터
+let imageFilters = []; // 미리 필터된 데이터를 저장
+
+// 빨 0
+// 노 0
+// 초 0
+// 파 0
+// 보 0
+
+// 배열로 선언
+// 00 01 02
+// 10 11 12
+// 20 21 22
+
+// (A,B) 와 (C,D)
+// 거리 계산 => Math.sqrt( Math.pow( Math.abs(C - A), 2 ) + Math.pow( Math.abs(D - B), 2 ) )
+// 0 1 2
+// 1 2 3
+// 2 3 4
+
+// 매핑하기
+// 0 빨
+// 1 노
+// 2 초
+// 3 파
+// 4 보
+
+document.querySelectorAll("canvas").forEach((el) => {
+  el.addEventListener("mouseover", (e) => {
+    console.log(e.target.classList.value);
+    let here = e.target.classList.value.split(",");
+    // here[1], here[2]
+
+    document.querySelectorAll("canvas").forEach((cnv, i) => {
+      let there = cnv.classList.value.split(",");
+      let d = Math.round(
+        Math.sqrt(
+          Math.pow(Math.abs(there[1] - here[1]), 2) +
+            Math.pow(Math.abs(there[2] - here[2]), 2)
+        )
+      );
+      if (d === 0) {
+        canvasContexts[i].putImageData(imageFilters[0], 0, 0);
+        // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
+      } else if (d === 1) {
+        canvasContexts[i].putImageData(imageFilters[1], 0, 0);
+        // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
+      } else if (d === 2) {
+        canvasContexts[i].putImageData(imageFilters[2], 0, 0);
+        // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
+      } else if (d === 3) {
+        canvasContexts[i].putImageData(imageFilters[3], 0, 0);
+        // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
+      }
+    });
+  });
+});
+
 function getPixelTotalValue(imgData, i, threshold) {
   let pixel_value =
     0.2126 * imgData[i] + 0.7152 * imgData[i + 1] + 0.0722 * imgData[i + 2];
@@ -35,66 +94,66 @@ const sP1 = (imgData) => {
   }
 };
 
-// 2. b r g
+// 2. b r g => 빨강으로
 const sP2 = (imgData) => {
   for (let i = 0; i < imgData.length; i += 4) {
-    let temp1 = imgData[i];
-    let temp2 = imgData[i + 1];
-    let temp3 = imgData[i + 2];
+    // let temp1 = imgData[i];
+    // let temp2 = imgData[i + 1];
+    // let temp3 = imgData[i + 2];
 
-    imgData[i] = temp3;
-    imgData[i + 1] = temp1;
-    imgData[i + 2] = temp2;
+    imgData[i] = 255;
+    // imgData[i + 1] = temp1;
+    // imgData[i + 2] = temp2;
   }
 };
 
-// 3. b g r
+// 3. b g r => 초록으로
 const sP3 = (imgData) => {
   for (let i = 0; i < imgData.length; i += 4) {
-    let temp1 = imgData[i];
-    let temp2 = imgData[i + 1];
-    let temp3 = imgData[i + 2];
+    // let temp1 = imgData[i];
+    // let temp2 = imgData[i + 1];
+    // let temp3 = imgData[i + 2];
 
-    imgData[i] = temp3;
-    imgData[i + 1] = temp2;
-    imgData[i + 2] = temp1;
+    // imgData[i] = temp3;
+    imgData[i + 1] = 255;
+    // imgData[i + 2] = temp1;
   }
 };
 
-// 4. g r b
+// 4. g r b => 파랑으로
 const sP4 = (imgData) => {
   for (let i = 0; i < imgData.length; i += 4) {
-    let temp1 = imgData[i];
-    let temp2 = imgData[i + 1];
-    let temp3 = imgData[i + 2];
+    // let temp1 = imgData[i];
+    // let temp2 = imgData[i + 1];
+    // let temp3 = imgData[i + 2];
 
-    imgData[i] = temp2;
-    imgData[i + 1] = temp1;
-    imgData[i + 2] = temp3;
+    // imgData[i] = temp2;
+    // imgData[i + 1] = temp1;
+    imgData[i + 2] = 255;
   }
 };
 
-// 5. g b r
+// 5. g b r => 노랑으로
 const sP5 = (imgData) => {
   for (let i = 0; i < imgData.length; i += 4) {
-    let temp1 = imgData[i];
-    let temp2 = imgData[i + 1];
-    let temp3 = imgData[i + 2];
+    // let temp1 = imgData[i];
+    // let temp2 = imgData[i + 1];
+    // let temp3 = imgData[i + 2];
 
-    imgData[i] = temp2;
-    imgData[i + 1] = temp3;
-    imgData[i + 2] = temp1;
+    imgData[i] = 255;
+    imgData[i + 1] = 255;
+    // imgData[i + 2] = temp1;
   }
 };
 
-// 6. r g 0 (inv)
+// 6. r g 0 (inv) => 보라
 const sP6 = (imgData) => {
   for (let i = 0; i < imgData.length; i += 4) {
-    let temp1 = imgData[i];
-    let temp2 = imgData[i + 1];
+    // let temp1 = imgData[i];
+    // let temp2 = imgData[i + 1];
 
-    imgData[i] = temp1 ^ 255;
-    imgData[i + 1] = temp2 ^ 255;
+    imgData[i] = 128;
+    imgData[i + 2] = 128;
   }
 };
 
@@ -220,53 +279,67 @@ const sP17 = (imgData) => {
 };
 
 let sP_functions = [
-  sP1,
-  sP2,
-  sP3,
-  sP4,
-  sP5,
-  sP6,
-  sP7,
-  sP8,
-  sP9,
-  sP10,
-  sP11,
-  sP12,
-  sP13,
-  sP14,
-  sP15,
-  sP16,
-  sP17,
+  // sP1,
+  sP2, // 빨
+  sP3, // 노
+  sP4, // 초
+  sP5, // 파
+  sP6, // 보
+  // sP7,
+  // sP8,
+  // sP9,
+  // sP10,
+  // sP11,
+  // sP12,
+  // sP13,
+  // sP14,
+  // sP15,
+  // sP16,
+  // sP17,
 ];
 
 img.onload = function () {
   let canvases = document.querySelectorAll("canvas");
-  let canvasContexts = [];
   canvases.forEach((el) => {
     el.width = img.width;
     el.height = img.height;
     canvasContexts.push(el.getContext("2d"));
   });
-  canvasContexts[4].drawImage(img, 0, 0);
   canvasContexts.forEach((el, i) => {
-    if (i !== 4) {
-      let imageData = canvasContexts[4].getImageData(
+    el.drawImage(img, 0, 0);
+    if (i < 6) {
+      let imageData = canvasContexts[i].getImageData(
         0,
         0,
         img.width,
         img.height
       );
       let editedImageData = imageData;
-      editPixels(editedImageData.data);
-      el.putImageData(editedImageData, 0, 0);
+      editPixels(editedImageData.data, i);
+      imageFilters.push(editedImageData); // 미리 필터 저장
     }
   });
+
+  // canvasContexts[4].drawImage(img, 0, 0);
+  // canvasContexts.forEach((el, i) => {
+  //   if (i !== 4) {
+  //     let imageData = canvasContexts[4].getImageData(
+  //       0,
+  //       0,
+  //       img.width,
+  //       img.height
+  //     );
+  //     let editedImageData = imageData;
+  //     editPixels(editedImageData.data);
+  //     el.putImageData(editedImageData, 0, 0);
+  //   }
+  // });
 };
 
-function editPixels(imgData) {
+function editPixels(imgData, i) {
   const rand_index = Math.floor(Math.random() * sP_functions.length);
-  sP_functions[rand_index](imgData);
-  sP_functions.splice(rand_index, 1);
+  sP_functions[i](imgData);
+  // sP_functions.splice(rand_index, 1);
 
   /*
   let value = getPixelTotalValue(imgData, i, 100);
