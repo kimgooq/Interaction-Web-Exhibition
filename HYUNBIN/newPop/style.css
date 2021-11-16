@@ -21,8 +21,13 @@ body {
 */
 
 #temp {
+  /* width: 100vw;
+  height: 100vh; */
+  /* background-image: url("../images/img_3.jpeg"); */
+  /* background-repeat: repeat; */
+}
+
+#cnv {
   width: 100vw;
   height: 100vh;
-  background-image: url("../images/img_3.jpeg");
-  /* background-repeat: repeat; */
 }
