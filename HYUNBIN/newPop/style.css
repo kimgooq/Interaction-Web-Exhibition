@@ -1,0 +1,28 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  max-width: 100vw;
+  min-height: 100vh;
+  /* overflow: hidden; */
+}
+
+/*
+#container {
+  width: inherit;
+  height: inherit;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-rows: repeat(5, minmax(300px, 1fr));
+}
+*/
+
+#temp {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../images/img_3.jpeg");
+  /* background-repeat: repeat; */
+}
