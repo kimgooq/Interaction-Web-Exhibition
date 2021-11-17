@@ -1,3 +1,7 @@
+window.onload = function () {
+  document.getElementById("bgm").play();
+};
+
 import * as THREE from "https://cdn.skypack.dev/three@0.133.1/build/three.module.js";
 //import * as THREE from "./three.module.js";
 //import { cloneUniforms } from "https://cdn.skypack.dev/three@0.133.1/src/renderers/shaders/UniformsUtils.js";
@@ -10,6 +14,8 @@ var bubble_speed = 1;
 
 let mouseX = 0,
   mouseY = 0;
+
+var audio = document.getElementById("audio_play");
 
 const mouse = new THREE.Vector2();
 const rayCast = new THREE.Raycaster();
@@ -172,9 +178,13 @@ function onMouseClick(e) {
   if (INTERSECTED != intersects[0].object) {
     INTERSECTED = intersects[0].object;
     scene.remove(INTERSECTED);
+    audio.play();
     //console.log(INTERSECTED);
   }
 }
+// function play_sound(event){
+//   var audio = document.getElementById('audio_play');
+// }
 
 function MouseWheel(event) {
   console.log(event.wheelDelta);

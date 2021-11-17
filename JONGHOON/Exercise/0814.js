@@ -26,10 +26,9 @@ function Particle(x_pos, y_pos, col, size) {
         //continuous = continuous + 1;
       }
       //console.log(continuous);
-    }
-    else if ( continuous == 1){
-        //console.log("pass continuous");
-      if (this.x_pos>= 50 && this.x_pos < 100) {
+    } else if (continuous == 1) {
+      //console.log("pass continuous");
+      if (this.x_pos >= 50 && this.x_pos < 100) {
         console.log("pass");
         this.y_pos += 15;
         continuous = continuous + 1;
@@ -50,9 +49,9 @@ function Particle(x_pos, y_pos, col, size) {
     ellipse(this.x_pos, this.y_pos, this.size);
   };
 
-  this.check = function(){
-      console.log(continuous)
-  }
+  this.check = function () {
+    console.log(continuous);
+  };
 
   this.trans = function () {
     translate(this.x_pos, this.y_pos);
