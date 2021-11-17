@@ -4,9 +4,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <audio id="audio_play" src="./sound_bubble.mp3"></audio>
     <title>Document</title>
   </head>
   <body>
+    <iframe src="./silence.mp3" allow="autoplay" style="display: none"></iframe>
+    <audio id="bgm" currentTime="0" loop="loop">
+      <source src="./bgm_Venus.mp3" type="audio/mp3" />
+    </audio>
     <!-- <div id="FULLSCREEN" style="position: absolute; left: 0px; top: 0px"></div> -->
     <!-- <script src="./custom_three.js"></script> -->
     <!-- <script src="./three.module.js"></script> -->

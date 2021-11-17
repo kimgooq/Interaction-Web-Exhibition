@@ -42,6 +42,12 @@ function canvasApp() {
     reOffset();
   };
 
+  // 물 떨어지는 BGM
+  setTimeout(() => {
+    document.querySelector("#water_dripping").muted = false;
+    document.querySelector("#water_dripping").play();
+  }, 1000);
+
   canvas.addEventListener("mousemove", mouseMove, false);
   canvas.addEventListener("touchmove", mouseMove, false);
   //클릭하면 점점 크기 커짐
@@ -52,6 +58,10 @@ function canvasApp() {
       else count += 50;
       if (count >= 250) count = 0;
       console.log(count);
+      setTimeout(() => {
+        document.querySelector("#click").muted = false;
+        document.querySelector("#click").play();
+      }, 10);
     },
     false
   );
