@@ -3,6 +3,7 @@ window.addEventListener("load", eventWindowLoaded, false);
 var Debugger = function () {};
 let count = 100;
 let light = 0.35;
+let musicOn = 0;
 
 Debugger.log = function (message) {
   try {
@@ -43,10 +44,8 @@ function canvasApp() {
   };
 
   // 물 떨어지는 BGM
-  setTimeout(() => {
-    document.querySelector("#water_dripping").muted = false;
-    document.querySelector("#water_dripping").play();
-  }, 1000);
+  document.querySelector("#water_dripping").muted = false;
+  // document.querySelector("#water_dripping").play();
 
   canvas.addEventListener("mousemove", mouseMove, false);
   canvas.addEventListener("touchmove", mouseMove, false);
@@ -58,10 +57,11 @@ function canvasApp() {
       else count += 50;
       if (count >= 250) count = 0;
       console.log(count);
-      setTimeout(() => {
-        document.querySelector("#click").muted = false;
-        document.querySelector("#click").play();
-      }, 10);
+      // setTimeout(() => {
+
+      // }, 10);
+      document.querySelector("#click").muted = false;
+      document.querySelector("#click").play();
     },
     false
   );

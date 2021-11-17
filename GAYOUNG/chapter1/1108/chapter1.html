@@ -21,20 +21,20 @@
         background: url("cow.jpg") center;
         width: 100vw;
         min-height: 100%;
+        overflow: hidden;
       }
     </style>
   </head>
   <body>
     <canvas id="canvasOne" width="500" height="300"></canvas>
     <!-- mp3 -->
-    <audio id="click" autoplay="autoplay" muted="muted">
+    <audio id="click" autoplay="true" muted="muted">
       <source src="./mp3/click.mp3" type="audio/mp3" />
     </audio>
-    <audio id="water_dripping" autoplay="autoplay" muted="muted">
+    <audio id="water_dripping" autoplay="true" muted="muted">
       <source src="./mp3/water_dripping.mp3" type="audio/mp3" />
     </audio>
     <!-- Script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="chapter.js"></script>
   </body>
 </html>

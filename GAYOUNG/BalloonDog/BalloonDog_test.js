@@ -4,6 +4,8 @@ import { OrbitControls } from "https://unpkg.com/three@0.126.1/examples/jsm/cont
 import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/loaders/GLTFLoader.js";
 // import Stats from 'three/examples/jsm/libs/stats.module'
 
+let state = false;
+
 function main() {
   var pickedObject;
   const canvas = document.querySelector("#c");
@@ -42,6 +44,14 @@ function main() {
   const light4 = new THREE.DirectionalLight(0xffffff, 5);
   scene.add(light4);
   light4.position.set(0, 0, -500);
+  console.log(document.querySelector("#balloon_bgm"));
+  document.querySelector("#balloon_bgm").muted = false;
+  // document.querySelector("#balloon_bgm").play();
+
+  // setTimeout(() => {
+  //   audioPlay.pause()
+  //   audioPlay.load()
+  // }, 10)
 
   // DirectionalLightHelper
   // const helper1 = new THREE.DirectionalLightHelper(light1);
@@ -64,7 +74,7 @@ function main() {
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.target.set(0, 0, 0);
-  controls.enabled = false;
+  // controls.enabled = false;
 
   loader.load("model/blue.glb", function (gltf) {
     gltf.scene.position.set(0, 0, 0);
@@ -123,7 +133,18 @@ function main() {
     var distance = -camera.position.z / vec.z;
     pos.copy(camera.position).add(vec.multiplyScalar(distance));
 
-    createSphere(pos, color[count]);
+    if (state == false) {
+      state = true;
+      createSphere(pos, color[count]);
+      console.log(document.querySelector("#balloon_effects"));
+      document.querySelector("#balloon_effects").muted = false;
+      document.querySelector("#balloon_effects").load();
+      document.querySelector("#balloon_effects").play();
+      console.log(state);
+    } else {
+      document.querySelector("#balloon_effects").pause();
+      state = false;
+    }
 
     // sphere[-1].scale.set(70, 70, 70);
     console.log(sphere[sphere.length - 1].scale);
@@ -154,14 +175,34 @@ function main() {
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
     }
-
     if (sphere != null) {
-      sphere.forEach(function (value) {
-        value.position.y += 0.1;
-        value.rotation.x += 0.02;
-        value.rotation.z += 0.02;
+      let num = 70;
+      num += 0.1;
+      if (state == true && sphere[sphere.length - 1].scale.x <= 2.6) {
+        sphere[sphere.length - 1].scale.x += 0.01;
+        sphere[sphere.length - 1].scale.y += 0.01;
+        sphere[sphere.length - 1].scale.z += 0.01;
+        console.log(sphere[sphere.length - 1].scale.x);
+        // sphere[sphere.length - 1].scale.set(num, num, num);
+
+        console.log();
+      }
+      sphere.forEach(function (value, index) {
+        if (index != sphere.length - 1 || state == false) {
+          value.position.y += 0.1;
+          value.rotation.x += 0.02;
+          value.rotation.z += 0.02;
+        }
       });
     }
+
+    // if (sphere != null) {
+    //   sphere.forEach(function (value) {
+    //     value.position.y += 0.1;
+    //     value.rotation.x += 0.02;
+    //     value.rotation.z += 0.02;
+    //   });
+    // }
     requestAnimationFrame(animation);
     renderer.render(scene, camera);
   }
@@ -232,8 +273,8 @@ function main() {
     pickPosition.y = -100000;
   }
 
-  // window.addEventListener("click", onMouseClick, false);
-  window.addEventListener("mousedown", onMouseClick);
+  window.addEventListener("click", onMouseClick, false);
+  // window.addEventListener("mousedown", onMouseClick);
   window.addEventListener("mouseup", () => {
     // controls.enabled = true;
     console.log("mouseup");
