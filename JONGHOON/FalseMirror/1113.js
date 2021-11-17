@@ -41,8 +41,11 @@ function init() {
 
   renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(640, 480);
+  // renderer.setSize(640, 480);
+  renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
+
+  console.log(window.innerWidth);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableZoom = false;
@@ -73,14 +76,19 @@ function init() {
   }
 }
 
+// function onWindowResize() {
+//   camera.aspect = 640 / 480;
+//   camera.updateProjectionMatrix();
+
+//   //renderer.setSize( window.innerWidth, window.innerHeight );
+//   renderer.setSize(640, 480);
+// }
 function onWindowResize() {
-  camera.aspect = 640 / 480;
+  camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 
-  //renderer.setSize( window.innerWidth, window.innerHeight );
-  renderer.setSize(640, 480);
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
-
 function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
