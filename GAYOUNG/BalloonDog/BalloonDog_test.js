@@ -44,8 +44,15 @@ function main() {
   const light4 = new THREE.DirectionalLight(0xffffff, 5);
   scene.add(light4);
   light4.position.set(0, 0, -500);
-  console.log(document.querySelector("#balloon_bgm"));
-  document.querySelector("#balloon_bgm").muted = false;
+  // console.log(document.querySelector("#balloon_bgm"));
+  const listener = new THREE.AudioListener();
+  camera.add(listener);
+  const sound = new THREE.Audio(listener);
+
+  // load a sound and set it as the Audio object's buffer
+  const audioLoader = new THREE.AudioLoader();
+  // document.querySelector("#balloon_bgm").muted = false;
+
   // document.querySelector("#balloon_bgm").play();
 
   // setTimeout(() => {
@@ -169,6 +176,13 @@ function main() {
   animation();
   function animation(time) {
     time *= 0.001; // convert to seconds;
+
+    audioLoader.load("./mp3/balloon_bgm.mp3", function (buffer) {
+      sound.setBuffer(buffer);
+      sound.setLoop(true);
+      sound.setVolume(0.5);
+      sound.play();
+    });
 
     if (resizeRendererToDisplaySize(renderer)) {
       const canvas = renderer.domElement;
