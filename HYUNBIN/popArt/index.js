@@ -44,6 +44,7 @@ document.querySelectorAll("canvas").forEach((el) => {
             Math.pow(Math.abs(there[2] - here[2]), 2)
         )
       );
+      console.log(d);
       if (d === 0) {
         canvasContexts[i].putImageData(imageFilters[0], 0, 0);
         // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
@@ -55,6 +56,12 @@ document.querySelectorAll("canvas").forEach((el) => {
         // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
       } else if (d === 3) {
         canvasContexts[i].putImageData(imageFilters[3], 0, 0);
+        // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
+      } else if (d === 4) {
+        canvasContexts[i].putImageData(imageFilters[4], 0, 0);
+        // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
+      } else if (d === 5) {
+        canvasContexts[i].putImageData(imageFilters[5], 0, 0);
         // canvasContexts[here[0]].putImageData(imageFilters[here[0]], 0, 0);
       }
     });
@@ -338,7 +345,7 @@ img.onload = function () {
 
 function editPixels(imgData, i) {
   const rand_index = Math.floor(Math.random() * sP_functions.length);
-  sP_functions[i](imgData);
+  sP_functions[i % 5](imgData);
   // sP_functions.splice(rand_index, 1);
 
   /*

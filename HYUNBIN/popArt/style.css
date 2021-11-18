@@ -14,13 +14,13 @@ body {
 
 .container {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
   /* grid-gap: 0; */
 }
 
 canvas {
   border: 1px solid black;
-  width: max(300px, 15vw);
-  height: min(400px, 30vh);
+  width: max(200px, 10vw);
+  height: min(200px, 15vw);
 }
