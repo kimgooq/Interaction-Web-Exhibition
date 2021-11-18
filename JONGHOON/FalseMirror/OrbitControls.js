@@ -144,12 +144,25 @@ class OrbitControls extends EventDispatcher {
     };
 
     this.reset = function () {
+      //수정
+      const data = {
+        lerpAlpha: 0.07,
+        lerpVectorsAlpha: 0,
+      };
+      // cube1.position.lerp(v1, data.lerpAlpha)
+      // cube2.position.lerpVectors(v1, v2, data.lerpVectorsAlpha)
+
       scope.target.copy(scope.target0);
-      scope.object.position.copy(scope.position0);
+      // scope.target.lerp(scope.target0, 0.1);
+      // scope.object.position.copy(scope.position0);
+      scope.object.position.lerp(scope.position0, 0.1);
       scope.object.zoom = scope.zoom0;
 
       scope.object.updateProjectionMatrix();
       scope.dispatchEvent(_changeEvent);
+      //수정
+      // const custom_target = new Vector3(0, 0, 15);
+      // scope.object.position = custom_target;
 
       scope.update();
 
@@ -173,7 +186,11 @@ class OrbitControls extends EventDispatcher {
       const twoPI = 2 * Math.PI;
 
       return function update() {
+        //수정
         const position = scope.object.position;
+        // const custom_target = new Vector3(0, 0, 15);
+        // const position = custom_target;
+        // console.log(position);
 
         offset.copy(position).sub(scope.target);
 
@@ -260,8 +277,9 @@ class OrbitControls extends EventDispatcher {
 
           panOffset.set(0, 0, 0);
         }
+        //수정
 
-        scale = 1;
+        // scale = 1;
 
         // update condition is:
         // min(camera displacement, camera rotation in radians)^2 > EPS
@@ -541,6 +559,8 @@ class OrbitControls extends EventDispatcher {
 
     function handleMouseUp(/*event*/) {
       // no-op
+      //수정
+      // scope.reset();
     }
 
     function handleMouseWheel(event) {

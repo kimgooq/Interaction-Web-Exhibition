@@ -1,0 +1,186 @@
+<html>
+
+<head>
+    <title>2017204063 남현우</title>
+</head>
+
+<body>
+    <script type="module">
+        import * as THREE from "./js/three.module.js";
+        import { OrbitControls } from "./js/OrbitControls.js";
+        import { GUI } from './js/dat.gui.module.js';     //필요한 라이브러리들 임포트.
+        
+        
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); 
+        const renderer = new THREE.WebGLRenderer(); //camera, scene, renderer 생성.
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(renderer.domElement);
+        document.addEventListener("mousedown", mouseMouseDownHandler, false);
+        document.addEventListener("mousemove", mouseMouseMoveHandler, false);
+        document.addEventListener('contextmenu', function (e) {
+            e.preventDefault();     //마우스다운,무브,컨텍스트메뉴에 의한 기본 이벤트발생 설정.
+        }, false);
+
+
+        const geometry = new THREE.BoxGeometry(1, 1, 1);                     //지오메트리 가로세로높이1인 큐브형태로 생성.
+        const texture = new THREE.TextureLoader().load('./smile.jpg');      //텍스쳐에 이미지 로드.
+        const material = new THREE.MeshPhongMaterial({ color: 0xFFFFFF, map: texture });   //머테리얼에 텍스쳐 설정
+        const cube = new THREE.Mesh(geometry, material); //메쉬객체 cube에 지오메트리, 머테리얼 설정을 통해 큐브생성.
+        scene.add(cube);        //큐브추가.
+        scene.add(new THREE.AxesHelper(2)); //x,y,z축 생성.
+
+        let light = new THREE.DirectionalLight(0xFFFFFF, 1);    //디렉셔널라이트로 색,강도 설정.(화이트,강도:1)
+        light.position.set(-2, 2, 2);      //라이트 기본 위치 설정.
+        light.target = cube;    //라이트가 비출 타겟 큐브로 설정.
+        scene.add(light);       //라이트 추가.
+        let light_helper = new THREE.DirectionalLightHelper(light, 0.3);    //헬퍼를 통해 크기0.3의 빛을 시각화.
+        scene.add(light_helper);    //라이트 시각화한 헬퍼 추가.
+
+        camera.position.set(0, 0, 15);  //카메라 기본위치 설정
+        camera.target = cube;           //카메라가 보여줄 타겟 큐브로 설정.
+        camera.up.set(0, 1, 0);         //카메라가 정면으로 보이게 설정. 디폴트값(0,1,0)
+
+        const controls = new OrbitControls(camera, renderer.domElement);    //컨트롤 이름의 객체에 오르빗컨트롤 생성.
+        controls.target.set(0, 0, 0);   //컨트롤 타겟을 0,0,0으로 설정. (큐브위치임)
+        SetOrbitControls(true);         //오르빗컨트롤 활성화.
+
+        function SetOrbitControls(enable_orbitctr) {
+            controls.enabled = enable_orbitctr;
+            controls.enablePan = true;
+            controls.enableZoom = true;
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.update();     
+             //오르빗컨트롤을 사용하기위한 기본 설정들을 돕는 생성자 함수.
+             //enable_orbitctr에 따라서 활성 및 비활성화 가능.
+        }
+
+        let mode_movement = "none"; //모드 무브먼트 변수 none으로 설정. (뒤에서 이를 활용하여 gui 설정.)
+        createPanel();      
+        render_animation();
+
+        function render_animation() {       //렌더링 실행 함수.
+            window.requestAnimationFrame(render_animation);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        function createPanel() {
+            let parameters = {      //변수 파라미터 안에 a,b,c 객체 생성과 동시에 b를 트루 나머지를 거짓으로 초기화.
+                a: false,
+                b: true,
+                c: false,
+            }
+
+            function setChecked(prop) {
+                for (let param in parameters) {
+                    parameters[param] = false;      
+                }
+                parameters[prop] = true;
+                if (parameters['a'] == true) {
+                    mode_movement = "camera";
+                    SetOrbitControls(true);
+                }
+                else if (parameters['b'] == true) {
+                    mode_movement = "object";
+                    SetOrbitControls(false);
+                }
+                else if (parameters['c'] == true) {
+                    mode_movement = "light";
+                    SetOrbitControls(false);
+                }   //gui를 통해 어떤 기능을 선택했는가에 따라서 오르빗컨트롤의 활성화 여부와 모드무브먼트 변수 값의 설정을 달리함.
+            }
+            const panel = new GUI({ width: 310 });      //gui 가로크기 설정.
+            const folder1 = panel.addFolder('Base Actions');
+            folder1.add(parameters, 'a').name('camera movement').listen().onChange(function () { setChecked("a") });
+            folder1.add(parameters, 'b').name('object movement').listen().onChange(function () { setChecked("b") });
+            folder1.add(parameters, 'c').name('light movement').listen().onChange(function () { setChecked("c") }); 
+            //gui를 설정하면서 폴더를 통해서 한 기능 선택시 다른기능 선택이 풀리도록 설정.
+            setChecked("b");
+            folder1.open();     //디폴트를 b가 선택되게 해두고 폴더를 열어두게 설정.
+        }
+
+        let pos_np_start, pos_cam_start = new THREE.Vector3(), pos_cube_start = new THREE.Vector3();    //마우스 포인터, 카메라 위치, 큐브 초기위치를 나타낼 변수들 생성.
+        let pos_light_start = new THREE.Vector3();//라이트 위치 생성.
+        let cube_matrixWorld_start = new THREE.Matrix4();   //큐브 위치를 매트릭스로 나타낼 변수 생성.
+
+        function mouseMouseDownHandler(e) {
+            cube_matrixWorld_start.copy(cube.matrixWorld);     
+            pos_light_start.copy(light.position);
+            pos_cam_start.copy(controls.object.position)
+            pos_cube_start.copy(cube.position); //마우스 클릭시 각 변수들에 위치값들 초기화.
+            pos_np_start = new THREE.Vector3(e.clientX / window.innerWidth, -e.clientY / window.innerHeight, -1).unproject(controls.object);
+            //마우스 위치를 비율로 계산하여 우리가 보는 화면의 영역 값에서 월드스페이스 값으로 전환.
+        }   
+
+        function update_light(pos) {
+            light.position.set(pos.x, pos.y, pos.z);    //라이트 위치를 pos위치에 맞춰 초기화.
+            scene.remove(light_helper);                 //라이트 헬퍼 삭제
+            light_helper = new THREE.DirectionalLightHelper(light, 0.3);    //라이트 헬퍼 재설정.
+            scene.add(light_helper);                    //라이트 헬퍼 다시 생성.
+        }
+
+        const rot_sensitive = 5;                 //로테이션 민감도 5로 설정. 굉장히 미비하게 돌아가는 것을 배하기 위함.
+        function mouseMouseMoveHandler(e) {
+            if (e.which == 1) { //마우스 움직일때, 좌클릭일때 실행.
+                let pos_np_end = new THREE.Vector3(e.clientX / window.innerWidth, -e.clientY / window.innerHeight, -1).unproject(controls.object);
+                //마우스 위치를 비율로 계산하여 우리가 보는 화면의 영역 값에서 월드스페이스 값으로 전환.
+                let vec_cam2pos_s = new THREE.Vector3();
+                let vec_cam2pos_e = new THREE.Vector3();
+                let cube_matrixWorld_start = new THREE.Matrix4();
+                vec_cam2pos_s.subVectors(pos_np_start, pos_cam_start);
+                vec_cam2pos_e.subVectors(pos_np_end, pos_cam_start);
+                //화면 영역으로 마우스의 시작점과 끝점을 벡터로 계산 및 저장.
+                let vec_rot_axis = new THREE.Vector3();
+                vec_rot_axis.crossVectors(vec_cam2pos_e, vec_cam2pos_s);
+                vec_rot_axis.normalize();
+                //벡터 로테이션 각도를 화면영역 시작점과 끝점의 교차곱으로 계산하여 단위벡터화.
+                let angle_rad = vec_cam2pos_s.angleTo(vec_cam2pos_e);
+                //시작점과 끝점의 위치를 토대로 두 점 사이의 각도를 계산하여 angle_rad에 저장.
+                const mat_rot = new THREE.Matrix4().makeRotationAxis(vec_rot_axis, angle_rad * rot_sensitive);
+                //메트릭스4 형 변수 mat_rot에 위에서 계산한 각도와 단위벡터 방향으로 회전하도록 설정.
+                if (mode_movement == "object") {        //오브젝트모드이며 좌클릭시 실행.
+                    const matrixWorld = new THREE.Matrix4();
+                    matrixWorld.multiplyMatrices(mat_rot, cube_matrixWorld_start);  //위에서 구한 매트릭스 변수와 큐브위치를 곱해 matrixWorld 행렬에 저장.
+                    cube.setRotationFromMatrix(matrixWorld);    //그 행렬을 통해 큐브를 로테이션.
+                }
+                else {                                  //좌클릭시 오브젝트, 카메라 모드가 아닐때 실행.
+                    const matrixWorld = new THREE.Matrix4();
+                    matrixWorld.multiplyMatrices(mat_rot, cube_matrixWorld_start);  
+                    light.setRotationFromMatrix(matrixWorld.invert());  //오브젝트와 같으나 방향이 반대가 되어 invert를 통해 반전시켜 로테이션.
+                }
+
+
+
+            }
+            else if (e.which == 3) {        //우클릭시 실행.
+                let pos_np_end = new THREE.Vector3(e.clientX / window.innerWidth, -e.clientY / window.innerHeight, -1).unproject(controls.object);  //로테이션과 같은 원리.
+                let vec_cam2cube = new THREE.Vector3(); 
+                vec_cam2cube.subVectors(cube.position, controls.object.position);//큐브의 위치와 카메라의 오브젝트 위치를 통해 캠큐브라는 위치벡터를 계산.
+                let dist = vec_cam2cube.length(); //캠큐브의 길이를 dist에 저장. 화면영역과 월드스페이스 영역의 차이를 계산할 수 있음.
+                let vec_cam2pos_s = new THREE.Vector3();
+                let vec_cam2pos_e = new THREE.Vector3();
+                vec_cam2pos_s.subVectors(pos_np_start, pos_cam_start).normalize().multiplyScalar(dist); //마우스 시작점과 카메라 영역 시작점의 차이를 통해 벡터를 구하고 단위벡터화한뒤, dist를 곱해 시작점 벡터를 월드스페이스 상으로 계산.
+                vec_cam2pos_e.subVectors(pos_np_end, pos_cam_start).normalize().multiplyScalar(dist);   //위와 같은 방식으로 마우스의 끝점을 계산 후 월드스페이스 상으로 계산.
+                let vec_s2e_cube = new THREE.Vector3();
+                vec_s2e_cube.subVectors(vec_cam2pos_e, vec_cam2pos_s);  //마우스의 시작점과 끝점의 차를 통해 마우스가 이동한 거리, 방향을 벡터로 저장.
+                let pos_pan = new THREE.Vector3();
+
+                if (mode_movement == "object") {        //우클릭시 오브젝트 모드일때 실행.
+                    pos_pan.addVectors(pos_cube_start, vec_s2e_cube);//큐브의 시작점과 큐브의 움직임을 통해 pos_pan의 벡터를 생성.
+                    cube.position.set(pos_pan.x, pos_pan.y, pos_pan.z);//큐브의 위치를 pos_pan의 위치로 이동.
+                    update_light(light.position);//라이트가 비추는 방향을 움직인 큐브의 위치로 업데이트.
+                }
+                if (mode_movement == "light") {         //우클릭시 라이트 모드일때 실행.
+                    pos_pan.addVectors(pos_light_start, vec_s2e_cube);
+                    light.position.set(pos_pan.x, pos_pan.y, pos_pan.z);//오브젝트의 패닝과 같으나 라이트의 위치를 이동 및 비추는 방향 업데이트.
+                    update_light(light.position);   //원래는 라이트의 위치를 통해서 새로 계산하는게 맞으나 큐브와 라이트의 차이가 크지 않기때문에 이동에 문제가 없어 실행가능.
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
