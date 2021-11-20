@@ -189,10 +189,11 @@ function onMouseClick(e) {
 function MouseWheel(event) {
   console.log(event.wheelDelta);
   if (event.wheelDelta < 0) {
-    bubble_speed -= 0.15;
-    //console.log("wheel down");
+    if (bubble_speed > 0.13) {
+      bubble_speed -= 0.09;
+    }
   } else if (event.wheelDelta > 0) {
-    bubble_speed += 0.15;
+    bubble_speed += 0.09;
     //console.log("wheel up");
   }
 }
