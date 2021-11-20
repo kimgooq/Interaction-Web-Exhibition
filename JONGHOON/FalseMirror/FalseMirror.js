@@ -11,7 +11,7 @@ var audio = document.getElementById("audio_play");
 
 document.addEventListener("mouseup", () => {
   mouse = !mouse;
-  audio.play();
+  // audio.play();
 });
 document.addEventListener("mousedown", () => {
   mouse = !mouse;
