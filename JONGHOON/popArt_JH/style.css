@@ -4,23 +4,34 @@
   box-sizing: border-box;
 }
 
-body {
+body #container {
   width: 100vw;
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-wrap: wrap;
+  overflow: hidden;
 }
 
-.container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  /* grid-gap: 0; */
+p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 2rem;
+  font-weight: bold;
+  transform: translate(-50%, -50%);
+  z-index: -1;
 }
 
-canvas {
-  border: 1px solid black;
-  width: max(300px, 15vw);
-  height: min(400px, 30vh);
+input {
+  display: none;
+}
+
+.fa-file-image {
+  position: absolute;
+  top: 2vh;
+  right: 2vw;
+  cursor: pointer;
+  z-index: 99;
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
 }
