@@ -12,7 +12,15 @@ body {
   background-color: black;
 }
 
-.rain_drop {
+img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -999;
+}
+
+/* .rain_drop {
   position: absolute;
   color: black;
   width: 1px;
@@ -25,4 +33,4 @@ body {
   to {
     transform: translateY(120vh);
   }
-}
+} */
