@@ -7,6 +7,7 @@ import { ConvexObjectBreaker } from "https://cdn.skypack.dev/three@0.132.2/examp
 import { ConvexGeometry } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/geometries/ConvexGeometry.js";
 
 // - Global variables -
+var custom_texture, custom_material;
 
 // Graphics variables
 let container, stats;
@@ -19,7 +20,8 @@ const raycaster = new THREE.Raycaster();
 const ballMaterial = new THREE.MeshPhongMaterial({ color: 0x202020 });
 
 // Physics variables
-const gravityConstant = 7.8;
+// const gravityConstant = 7.8;
+const gravityConstant = 0.8;
 let collisionConfiguration;
 let dispatcher;
 let broadphase;
@@ -95,6 +97,14 @@ function initGraphics() {
   controls.update();
 
   textureLoader = new THREE.TextureLoader();
+  ////////
+
+  // custom_texture = new THREE.MeshPhongMaterial();
+  custom_material = new THREE.MeshBasicMaterial({
+    map: textureLoader.load("./wall.jpg"),
+  });
+
+  ///////
 
   const ambientLight = new THREE.AmbientLight(0x707070);
   scene.add(ambientLight);
@@ -144,18 +154,29 @@ function initPhysics() {
   transformAux1 = new Ammo.btTransform();
   tempBtVec3_1 = new Ammo.btVector3(0, 0, 0);
 }
-
-function createObject(mass, halfExtents, pos, quat, material) {
+//수정
+// function createObject(mass, halfExtents, pos, quat, material) {
+function createObject(mass, halfExtents, pos, quat) {
   const object = new THREE.Mesh(
     new THREE.BoxGeometry(
-      halfExtents.x * 2,
-      halfExtents.y * 2,
-      halfExtents.z * 2
+      //수정
+      halfExtents.x * 4,
+      halfExtents.y * 4,
+      halfExtents.z * 4
+      // halfExtents.x * 2,
+      // halfExtents.y * 2,
+      // halfExtents.z * 2
     ),
-    material
+    custom_material
   );
+  //수정
+  // object.material.needsUpdate = true;
+
   object.position.copy(pos);
   object.quaternion.copy(quat);
+
+  object.material.needsUpdate = true;
+
   convexBreaker.prepareBreakableObject(
     object,
     mass,
@@ -163,6 +184,7 @@ function createObject(mass, halfExtents, pos, quat, material) {
     new THREE.Vector3(),
     true
   );
+  // console.log(object.material);
   createDebrisFromBreakableObject(object);
 }
 
@@ -180,69 +202,22 @@ function createObjects() {
     new THREE.MeshPhongMaterial({ color: 0xffffff })
   );
   ground.receiveShadow = true;
-  textureLoader.load("textures/grid.png", function (texture) {
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(40, 40);
-    ground.material.map = texture;
-    ground.material.needsUpdate = true;
-  });
+  // textureLoader.load("textures/grid.png", function (texture) {
+  //   texture.wrapS = THREE.RepeatWrapping;
+  //   texture.wrapT = THREE.RepeatWrapping;
+  //   texture.repeat.set(40, 40);
+  //   ground.material.map = texture;
+  //   ground.material.needsUpdate = true;
+  // });
 
   // Tower 1
-  const towerMass = 1000;
-  const towerHalfExtents = new THREE.Vector3(2, 5, 2);
-  pos.set(-8, 5, 0);
+  const towerMass = 1000; //1000
+  const towerHalfExtents = new THREE.Vector3(2, 2, 2);
+  // const towerHalfExtents = new THREE.Vector3(2, 5, 2);
+  pos.set(0, 0, 0);
   quat.set(0, 0, 0, 1);
-  createObject(
-    towerMass,
-    towerHalfExtents,
-    pos,
-    quat,
-    createMaterial(0xb03014)
-  );
+  createObject(towerMass, towerHalfExtents, pos, quat);
 
-  // Tower 2
-  pos.set(8, 5, 0);
-  quat.set(0, 0, 0, 1);
-  createObject(
-    towerMass,
-    towerHalfExtents,
-    pos,
-    quat,
-    createMaterial(0xb03214)
-  );
-
-  //Bridge
-  const bridgeMass = 100;
-  const bridgeHalfExtents = new THREE.Vector3(7, 0.2, 1.5);
-  pos.set(0, 10.2, 0);
-  quat.set(0, 0, 0, 1);
-  createObject(
-    bridgeMass,
-    bridgeHalfExtents,
-    pos,
-    quat,
-    createMaterial(0xb3b865)
-  );
-
-  // Stones
-  const stoneMass = 120;
-  const stoneHalfExtents = new THREE.Vector3(1, 2, 0.15);
-  const numStones = 8;
-  quat.set(0, 0, 0, 1);
-  for (let i = 0; i < numStones; i++) {
-    pos.set(0, 2, 15 * (0.5 - i / (numStones + 1)));
-
-    createObject(
-      stoneMass,
-      stoneHalfExtents,
-      pos,
-      quat,
-      createMaterial(0xb0b0b0)
-    );
-  }
-
-  // Mountain
   const mountainMass = 860;
   const mountainHalfExtents = new THREE.Vector3(4, 5, 4);
   pos.set(5, mountainHalfExtents.y * 0.5, -7);
@@ -279,7 +254,7 @@ function createObjects() {
   mountainPoints.push(new THREE.Vector3(0, mountainHalfExtents.y, 0));
   const mountain = new THREE.Mesh(
     new ConvexGeometry(mountainPoints),
-    createMaterial(0xb03814)
+    custom_material
   );
   mountain.position.copy(pos);
   mountain.quaternion.copy(quat);
@@ -300,11 +275,13 @@ function createParalellepipedWithPhysics(
   mass,
   pos,
   quat,
-  material
+  // material
+  custom_material
 ) {
   const object = new THREE.Mesh(
     new THREE.BoxGeometry(sx, sy, sz, 1, 1, 1),
-    material
+    //material
+    custom_material
   );
   const shape = new Ammo.btBoxShape(
     new Ammo.btVector3(sx * 0.5, sy * 0.5, sz * 0.5)
@@ -320,11 +297,15 @@ function createDebrisFromBreakableObject(object) {
   object.castShadow = true;
   object.receiveShadow = true;
 
+  // object.material.needsUpdate = true;
+
   const shape = createConvexHullPhysicsShape(
     object.geometry.attributes.position.array
   );
   shape.setMargin(margin);
 
+  object.material = custom_material;
+  console.log(object);
   const body = createRigidBody(
     object,
     shape,
@@ -360,6 +341,7 @@ function createConvexHullPhysicsShape(coords) {
 }
 
 function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
+  // console.log("break");
   if (pos) {
     object.position.copy(pos);
   } else {
@@ -389,7 +371,8 @@ function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
   );
   const body = new Ammo.btRigidBody(rbInfo);
 
-  body.setFriction(0.5);
+  //수정
+  body.setFriction(0.5); //0.5
 
   if (vel) {
     body.setLinearVelocity(new Ammo.btVector3(vel.x, vel.y, vel.z));
@@ -401,6 +384,8 @@ function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
 
   object.userData.physicsBody = body;
   object.userData.collided = false;
+
+  object.material = custom_material;
 
   scene.add(object);
 
@@ -557,7 +542,8 @@ function updatePhysics(deltaTime) {
 
     // Subdivision
 
-    const fractureImpulse = 250;
+    //수정
+    const fractureImpulse = 250; //250
 
     if (breakable0 && !collided0 && maxImpulse > fractureImpulse) {
       const debris = convexBreaker.subdivideByImpact(
@@ -580,6 +566,15 @@ function updatePhysics(deltaTime) {
           angVel.y(),
           angVel.z()
         );
+        // fragment.texture = custom_material;
+        // fragment.texture.image = "./wall.jpg";
+        // fragment.texture.wrapS = THREE.RepeatWrapping;
+        // fragment.texture.wrapT = THREE.RepeatWrapping;
+        // fragment.texture.repeat.set(40, 40);
+        // fragment.material.map = texture;
+        // fragment.material.needsUpdate = true;
+        //수정
+        // console.log(fragment);
 
         createDebrisFromBreakableObject(fragment);
       }
@@ -623,4 +618,9 @@ function updatePhysics(deltaTime) {
   }
 
   numObjectsToRemove = 0;
+}
+
+document.addEventListener("keydown", InputKey);
+function InputKey(event) {
+  console.log(camera.position);
 }
