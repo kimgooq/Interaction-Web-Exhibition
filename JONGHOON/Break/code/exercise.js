@@ -54,8 +54,8 @@ Chip.prototype.die = function () {
 };
 
 /*
-	Each chip has cracks
-*/
+      Each chip has cracks
+  */
 
 function Crack(parentChip, id, dir) {
   this.parentChip = parentChip;
@@ -92,8 +92,8 @@ Crack.prototype.draw = function () {
 };
 
 /*
-	InterCracks are smaller cracks that are perpendicular to regular cracks
-*/
+      InterCracks are smaller cracks that are perpendicular to regular cracks
+  */
 
 function InterCrack(parentChipId, id, parentCrack_1, parentCrack_2) {
   this.parentChipId = parentChipId;
@@ -140,8 +140,8 @@ InterCrack.prototype.draw = function () {
 };
 
 /* 
-	Pieces are used to make the animated circular transition 
-*/
+      Pieces are used to make the animated circular transition 
+  */
 
 function Piece(chipId, id, dir1, dir2) {
   this.chipId = chipId;
