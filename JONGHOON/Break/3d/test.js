@@ -30,6 +30,16 @@ let transformAux1;
 const pos = new THREE.Vector3();
 const quat = new THREE.Quaternion();
 
+var color_1;
+var color_2;
+var color_3;
+var color_4;
+var color_url = 0;
+var color_text;
+var color_list;
+
+var List = [];
+
 Ammo().then(function (AmmoLib) {
   Ammo = AmmoLib;
 
@@ -41,6 +51,13 @@ function init() {
   initGraphics();
 
   initPhysics();
+  for (var tmp_num = 0; tmp_num < 52; tmp_num++) {
+    url = "./image/" + tmp_num + ".png";
+    custom_material = new THREE.MeshBasicMaterial({
+      map: textureLoader.load(url),
+    });
+    List.push(custom_material);
+  }
 
   createObjects();
 
@@ -98,10 +115,14 @@ function initGraphics() {
   scene.add(light);
 
   textureLoader = new THREE.TextureLoader();
-  url = "./wall_" + list + ".jpg";
-  custom_material = new THREE.MeshBasicMaterial({
-    map: textureLoader.load(url),
-  });
+
+  //tmp
+  color_1 = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+  color_2 = new THREE.MeshPhongMaterial({ color: 0xffa500 });
+  color_3 = new THREE.MeshPhongMaterial({ color: 0xffff00 });
+  color_4 = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
+  color_list = [color_1, color_2, color_3, color_4];
+  /////
 
   stats = new Stats();
   stats.domElement.style.position = "absolute";
@@ -169,7 +190,7 @@ function createObjects() {
 
   for (let j = 0; j < numBricksHeight; j++) {
     const oddRow = j % 2 == 1;
-
+    console.log(numBricksHeight);
     pos.z = z0;
 
     if (oddRow) {
@@ -181,20 +202,14 @@ function createObjects() {
     for (let i = 0; i < nRow; i++) {
       let brickLengthCurrent = brickLength;
       let brickMassCurrent = brickMass;
+      console.log(nRow);
       if (oddRow && (i == 0 || i == nRow - 1)) {
         brickLengthCurrent *= 0.5;
         brickMassCurrent *= 0.5;
 
         console.log(list);
-        list++;
       }
-      if (list > 1) {
-        list = 0;
-      }
-      url = "./wall_" + list + ".jpg";
-      custom_material = new THREE.MeshBasicMaterial({
-        map: textureLoader.load(url),
-      });
+      // color_text = "color_" + color_url;
       //수정필요 : material
       const brick = createParalellepiped(
         brickDepth,
@@ -203,8 +218,10 @@ function createObjects() {
         brickMassCurrent,
         pos,
         quat,
-        custom_material
+        List[color_url]
       );
+      color_url++;
+      // console.log(color_text);
       brick.castShadow = true;
       brick.receiveShadow = true;
 
