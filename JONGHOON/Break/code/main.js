@@ -65,11 +65,15 @@ function Crack(parentChip, id, dir) {
   this.x = chips[this.parentChip].x;
   this.y = chips[this.parentChip].y;
 
-  this.length = DIAG;
+  // this.length = DIAG
+  this.length = DIAG * 8;
   this.segments = Math.floor(Math.random() * 2);
 
-  this.endX = this.x + Math.cos(degToRad(this.dir)) * this.length;
-  this.endY = this.y + Math.sin(degToRad(this.dir)) * this.length;
+  // this.endX = this.x + Math.cos(degToRad(this.dir)) * this.length;
+  // this.endY = this.y + Math.sin(degToRad(this.dir)) * this.length;
+
+  this.endX = this.x + (Math.cos(degToRad(this.dir)) * this.length) / 4;
+  this.endY = this.y + (Math.sin(degToRad(this.dir)) * this.length) / 4;
 
   this.draw();
 }
@@ -109,12 +113,19 @@ function InterCrack(parentChipId, id, parentCrack_1, parentCrack_2) {
     parentChip.y +
     Math.sin(degToRad(parentCrack_1.dir)) * this.distanceFromCenter;
 
+  // this.endX =
+  //   parentChip.x +
+  //   Math.cos(degToRad(parentCrack_2.dir)) * this.distanceFromCenter;
+  // this.endY =
+  //   parentChip.y +
+  //   Math.sin(degToRad(parentCrack_2.dir)) * this.distanceFromCenter;
+
   this.endX =
     parentChip.x +
-    Math.cos(degToRad(parentCrack_2.dir)) * this.distanceFromCenter;
+    Math.cos(degToRad(parentCrack_2.dir / 2)) * this.distanceFromCenter;
   this.endY =
     parentChip.y +
-    Math.sin(degToRad(parentCrack_2.dir)) * this.distanceFromCenter;
+    Math.sin(degToRad(parentCrack_2.dir / 2)) * this.distanceFromCenter;
 
   this.draw();
 }
@@ -143,10 +154,15 @@ function Piece(chipId, id, dir1, dir2) {
   this.points = {
     x1: chips[chipId].x,
     y1: chips[chipId].y,
-    x2: chips[chipId].x + Math.cos(degToRad(this.dir1)) * this.dist,
-    y2: chips[chipId].y + Math.sin(degToRad(this.dir1)) * this.dist,
-    x3: chips[chipId].x + Math.cos(degToRad(this.dir2)) * this.dist,
-    y3: chips[chipId].y + Math.sin(degToRad(this.dir2)) * this.dist,
+    //수정
+    // x2: chips[chipId].x + Math.cos(degToRad(this.dir1)) * this.dist,
+    // y2: chips[chipId].y + Math.sin(degToRad(this.dir1)) * this.dist,
+    // x3: chips[chipId].x + Math.cos(degToRad(this.dir2)) * this.dist,
+    // y3: chips[chipId].y + Math.sin(degToRad(this.dir2)) * this.dist,
+    x2: chips[chipId].x + (Math.cos(degToRad(this.dir1)) * this.dist) / 5,
+    y2: chips[chipId].y + (Math.sin(degToRad(this.dir1)) * this.dist) / 5,
+    x3: chips[chipId].x + (Math.cos(degToRad(this.dir2)) * this.dist) / 5,
+    y3: chips[chipId].y + (Math.sin(degToRad(this.dir2)) * this.dist) / 5,
   };
 }
 
@@ -215,11 +231,11 @@ sky2.onload = function () {
     var chipId = 0;
     chips[chipId] = new Chip(chipId, e.clientX, e.clientY);
     chips[chipId].init();
-    listening = false;
+    //listening = false;
 
-    setTimeout(function () {
-      animate(0);
-    }, 1000);
+    //setTimeout(function () {
+    //animate(0);
+    //}, 1000);
   });
 };
 

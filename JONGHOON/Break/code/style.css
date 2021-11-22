@@ -2,7 +2,7 @@ html,
 body {
   margin: 0;
   overflow: hidden;
-  cursor: pointer;
+  /* cursor: pointer; */
   background-color: black;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 }
