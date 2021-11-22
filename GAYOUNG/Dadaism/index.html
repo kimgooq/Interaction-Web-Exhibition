@@ -17,7 +17,6 @@
             overflow: hidden;
         }
         
-        
         .out {
             display: flex;
         }
@@ -28,20 +27,29 @@
         }
         .small{
             width: 400px;
+            transition:all ease-out 0.3s;
         }
         .large {
-            width: 650px;
+            width: 750px;
             transition:all ease-out 0.3s;
         }
         .background{
             width:100%; 
             height:100%;
+            transition:all ease-out 0.3s;
             
         }
 
         .background-large {
-            width: 100%;
+            width: 100%;1
             transition:all ease-out 0.3s;
+        }
+        .colorpick{
+            box-shadow: 3px 0px 20px 13px rgba(94, 94, 94, 0.2);
+        background-color:white; 
+        width:800px; 
+        border-radius:30px;
+        height:100px;
         }
     </style>
 </head>
@@ -55,9 +63,15 @@
             <div>
             
         </div>
+        <div class="in colorpick container" >
+            <div class="row">
+                <div class="col border"></div>
+                <div class="col border"></div>
+            </div>
+        </div>
+        
     </div>
-    
-    <div class="color-picker"></div>
+   
 </body>
 <script src = "index.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
