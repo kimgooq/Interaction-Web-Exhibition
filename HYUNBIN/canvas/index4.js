@@ -6,44 +6,44 @@ img.src = "../images/img_1.png";
 let arr_rain = [];
 let arr_drop = [];
 let drop_time = 0;
-let drop_delay = 1000;
+let drop_delay = 25;
 let speed = 1;
 let wind = 4;
-let color = "lightskyblue";
-// let color = `rgba(112, 243, 246, 1)`;
 let time = 0;
 
 img.addEventListener("load", () => {
+  let i_width = (window.innerHeight * window.innerWidth) / img.height;
+  let i_height = window.innerHeight;
+  img.width = i_width;
+  img.height = i_height;
+  let back_img = document.querySelector("#back_img");
+  back_img.setAttribute("src", img.src);
+  back_img.style.width = `${img.width}px`;
+  back_img.style.height = `${img.height}px`;
+
   cnv = document.querySelector("#cnv");
   cnv.width = img.width;
   cnv.height = img.height;
   ctx = cnv.getContext("2d");
-  // ctx.drawImage(img, 0, 0, cnv.width, cnv.height);
-  // cnv.addEventListener("mousemove", (e) => {
-  //   console.log("Adda");
-  //   drop_delay = Math.pow(1 - e.clientY, 3) * 100 + 2;
-  //   wind = (e.clientX - 0.5) * 50;
-  // });
+  ctx.drawImage(img, 0, 0, cnv.width, cnv.height);
 
-  // setInterval(() => {
   startRain();
-  // }, 10);
 });
 
 const startRain = () => {
   time += 1;
   drop_time += time * speed;
-  // console.log(drop_time);
   while (drop_time > drop_delay) {
     drop_time -= drop_delay;
-    // time = 0;
-    // let initial_x_pos = Math.random() * wind;
-    let initial_x_pos = Math.random() * window.innerWidth;
-    let rain = new Rain();
-    // if ( wind > 0 ) initial_x_pos -= wind
-    rain.x = initial_x_pos;
-    rain.fall();
-    arr_rain.push(rain);
+    if (arr_rain.length < 700) {
+      let rain = new Rain();
+      let wind_expand = Math.abs((window.innerHeight / rain.speed) * wind);
+      let initial_x_pos = Math.random() * (window.innerWidth + wind_expand);
+      if (wind > 0) initial_x_pos -= wind_expand;
+      rain.x = initial_x_pos;
+      rain.fall();
+      arr_rain.push(rain);
+    }
   }
 
   for (let i = arr_rain.length - 1; i >= 0; i--) {
@@ -53,7 +53,6 @@ const startRain = () => {
 
     if (r.y > cnv.height) {
       r.disappear();
-      // console.log(r.x);
     }
 
     if (
@@ -62,8 +61,6 @@ const startRain = () => {
       (wind > 0 && r.x > cnv.width + wind)
     ) {
       arr_rain.splice(i, 1);
-      // let rain_again =
-      // reuse_rain.push(rain_again);
     }
   }
 
@@ -81,8 +78,6 @@ const startRain = () => {
 
     if (d.y > cnv.height + d.r) {
       arr_drop.splice(i, 1);
-      // let drop_again =
-      // arr_drop.push(drop_again);
     }
   }
 
@@ -106,15 +101,12 @@ function Rain() {
   };
 
   this.disappear = () => {
-    // console.log(this.x);
     if (!this.isGround) {
       this.isGround = !this.isGround;
-      for (let i = 0; i < 16; i++) {
+      for (let i = 0; i < 2; i++) {
         let drop = new Drop();
         arr_drop.push(drop);
         drop.fall(this.x);
-        // console.log(arr_drop.length, drop.x, drop.y);
-        // drop 시작
       }
     }
   };
@@ -141,44 +133,44 @@ function Drop() {
     this.r,
     this.r
   );
-  circle_color.addColorStop(0, "rgba(112, 243, 246, 1)");
-  circle_color.addColorStop(1, "rgba(112, 243, 246, 0)");
+  circle_color.addColorStop(0, "rgba(255, 255, 255, 0.8)");
+  circle_color.addColorStop(1, "rgba(255, 255, 255, 0)");
   this.ctx_drop.fillStyle = circle_color;
   this.ctx_drop.fillRect(0, 0, this.cnv_drop.width, this.cnv_drop.height);
 
   this.fall = (x) => {
     this.x = x;
-    // console.log(x);
     this.y = window.innerHeight;
-    // console.log(arr_drop.length, this.x, this.y);
     let angle = Math.random() * Math.PI - Math.PI * 0.5;
-    let speed = Math.random() * this.max_speed;
-    this.x_speed = Math.sin(angle) * speed;
-    this.y_speed = -Math.cos(angle) * speed;
+    let fall_speed = Math.random() * this.max_speed;
+    this.x_speed = Math.sin(angle) * fall_speed;
+    this.y_speed = -Math.cos(angle) * fall_speed;
   };
 }
 
 const draw_cnv = () => {
-  // console.log("Aaa");
   ctx.clearRect(0, 0, cnv.width, cnv.height);
 
   ctx.beginPath();
   for (let i = arr_rain.length - 1; i >= 0; i--) {
     let r = arr_rain[i];
-    // let x_pos = r.x;
-    // let y_pos = r.y;
     ctx.moveTo(r.x, r.y);
     ctx.lineTo(r.x - wind * r.z * 1.5, r.y - r.height * r.z);
   }
   ctx.lineWidth = Rain.width;
-  ctx.strokeStyle = color;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
   ctx.stroke();
 
   for (let i = arr_drop.length - 1; i >= 0; i--) {
     let d = arr_drop[i];
-    // let x_pos = d.x - d.r;
-    // let y_pos = d.y - d.r;
-    // console.log(d.x, d.y);
-    ctx.drawImage(d.cnv_drop, d.x, d.y);
+    let x_pos = d.x - d.r;
+    let y_pos = d.y - d.r;
+    ctx.drawImage(d.cnv_drop, x_pos, y_pos);
   }
 };
+
+document.querySelector("body").addEventListener("mousemove", (e) => {
+  let calc_y = 1 - e.clientY / window.innerHeight;
+  drop_delay = Math.pow(calc_y, 2) * 100 + 2;
+  wind = (e.clientX / window.innerWidth - 0.5) * 50;
+});
