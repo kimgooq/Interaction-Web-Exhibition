@@ -3,6 +3,8 @@ const canvas = document.getElementById("canvas"),
 const background = new Image();
 background.src = "mona-lisa.jpeg";
 
+let colorStr = ["red","yellow","black","blue","green"];
+let activeElement = "";
 let pos = {
   drawable: false,
   X: -1,
@@ -25,7 +27,56 @@ background.onload = function () {
   canvas.addEventListener("mouseup", listener);
   canvas.addEventListener("mouseout", listener);
   canvas.addEventListener("mouseover", listener);
-};
+
+  $("#canvas-container").hover(function () {
+      // over
+      moveClose();
+      
+    }, function () {
+      // out
+      moveFar();
+    }
+  );
+
+  $("input[name = red]").click(()=>{
+      console.log("click")
+  });
+  colorStr.forEach((value)=>{
+    
+    colorPick(value);
+  });
+
+  $("#camera").click(()=>{
+// 캡쳐 라이브러리를 통해서 canvas 오브젝트를 받고 이미지 파일로 리턴한다.
+  html2canvas(document.querySelector("#capture")).then(canvas => {
+    saveAs(canvas.toDataURL('image/png'),"capture-test.png");
+  });
+  function saveAs(uri, filename) {
+    // 캡쳐된 파일을 이미지 파일로 내보낸다.
+    var link = document.createElement('a');
+    if (typeof link.download === 'string') {
+      link.href = uri;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+    document.body.removeChild(link);
+    } else {
+      window.open(uri);
+    }
+  }
+    
+});
+
+function colorPick(color){
+  $("#"+color+"Radio").click(()=>{
+   
+    ctx.strokeStyle = $("." + color).css("background-color");
+    console.log(ctx.strokeStyle);
+
+  });
+}
+
+
 
 function listener(event) {
   switch (event.type) {
@@ -38,36 +89,38 @@ function listener(event) {
     case "mouseup":
       finishDraw();
       break;
-    case "mouseover":
-      moveClose();
-      break;
-    case "mouseout":
-      moveFar();
-      break;
+    // case "mouseover":
+    //   moveClose();
+    //   break;
+    // case "mouseout":
+    //   moveFar();
+    //   break;
   }
 }
 
 function moveClose() {
-  console.log("hover");
+  // console.log("hover");
   $("#canvas").removeClass("small");
   $("#canvas").addClass("large");
   $("#background").removeClass("background");
   $("#background").addClass("background-large");
+  $("#colorpick").fadeIn();
 }
 
 function moveFar() {
   finishDraw();
-  console.log("mouseout");
+  // console.log("mouseout");
   $("#canvas").removeClass("large");
   $("#canvas").addClass("small");
 
   $("#background").removeClass("background-large");
   $("#background").addClass("background");
+  $("#colorpick").fadeOut();
 }
 
 function getMousePos(event) {
   var rect = canvas.getBoundingClientRect();
-  console.log(rect);
+  // console.log(rect
   return {
     x: ((event.clientX - rect.left) / (rect.right - rect.left)) * canvas.width,
     y: ((event.clientY - rect.top) / (rect.bottom - rect.top)) * canvas.height,
@@ -75,7 +128,7 @@ function getMousePos(event) {
 }
 
 function initDraw(event) {
-  console.log("draw");
+  // console.log("draw");
   ctx.beginPath();
   pos.drawable = true;
   let coors = getMousePos(event);
