@@ -1,13 +1,29 @@
-import * as THREE from "https://cdn.skypack.dev/three@0.132.2";
+// import * as THREE from "https://cdn.skypack.dev/three@0.132.2";
+import * as THREE from "./three.module.js";
 import Stats from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/libs/stats.module.js";
+import { FontLoader } from "./FontLoader.js";
+import { TextGeometry } from "./TextGeometry.js";
+
 import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js";
 
+THREE.Cache.enabled = true;
+
+let targetRotation = 0;
+let targetRotationOnPointerDown = 0;
+let pointerX = 0;
+let pointerXOnPointerDown = 0;
+let windowHalfX = window.innerWidth / 2;
+
 var custom_material;
-var list = 0;
 var url;
+
+var material_index = 0;
+var List = [];
+
+var controls;
 // Graphics variables
 let container, stats;
-let camera, controls, scene, renderer;
+let camera, scene, renderer;
 let textureLoader;
 const clock = new THREE.Clock();
 const mouseCoords = new THREE.Vector2();
@@ -15,8 +31,33 @@ const raycaster = new THREE.Raycaster();
 
 const ballMaterial = new THREE.MeshPhongMaterial({ color: 0x202020 });
 
+let textureLoader_gr = new THREE.TextureLoader().load("./image/ground.jpeg");
+textureLoader_gr.wrapS = THREE.RepeatWrapping;
+textureLoader_gr.wrapT = THREE.RepeatWrapping;
+textureLoader_gr.repeat.set(4, 4);
+var groundMaterial = new THREE.MeshStandardMaterial({
+  map: textureLoader_gr,
+});
+
+const text_loader = new FontLoader();
+var textMesh, text_materials, text_geometry;
+// text_loader.load("DH.typeface.json", function (font) {
+text_loader.load("DH.json", function (font) {
+  text_geometry = new TextGeometry("Thank　You", {
+    font: font,
+    size: 7, //70
+    height: 2, //20
+    curveSegments: 4, //4
+    bevelEnabled: true,
+    bevelThickness: 2, //2
+    bevelSize: 1.5, //1.5
+    bevelOffset: 0,
+    bevelSegments: 1, //1
+  });
+});
+
 // Physics variables
-const gravityConstant = -6.0;
+const gravityConstant = -5.0;
 let collisionConfiguration;
 let dispatcher;
 let broadphase;
@@ -30,27 +71,21 @@ let transformAux1;
 const pos = new THREE.Vector3();
 const quat = new THREE.Quaternion();
 
-var color_1;
-var color_2;
-var color_3;
-var color_4;
-var color_url = 0;
-var color_text;
-var color_list;
-
-var List = [];
-
 Ammo().then(function (AmmoLib) {
   Ammo = AmmoLib;
-
   init();
+
   animate();
 });
 
 function init() {
   initGraphics();
-
+  // setTimeout(function () {
+  //   console.log("Works!");
+  // }, 2500);
   initPhysics();
+
+  //brick material load => List[]
   for (var tmp_num = 0; tmp_num < 52; tmp_num++) {
     url = "./image/" + tmp_num + ".png";
     custom_material = new THREE.MeshBasicMaterial({
@@ -75,27 +110,50 @@ function initGraphics() {
   );
 
   scene = new THREE.Scene();
-  scene.background = new THREE.Color(0xbfd1e5);
+
+  // scene.background = new THREE.Color(0xbfd1e5);
 
   camera.position.set(14, 2.2, -0.5);
   camera.lookAt(18, 2.3, -0.5);
-  // camera.rotation.set(new THREE.Euler(-0.7, -1.5, -0.47));
-  // console.log(camera.rotation);
+  // camera.lookAt(18, 0, -0.5);
 
-  renderer = new THREE.WebGLRenderer();
+  //수정
+  // renderer = new THREE.WebGLRenderer();
+  const canvas = document.querySelector("#c");
+  renderer = new THREE.WebGLRenderer({
+    canvas,
+    alpha: true,
+  });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
   container.appendChild(renderer.domElement);
 
-  // controls = new OrbitControls(camera, renderer.domElement);
-  // controls.target.set(-1, -1, -1);
-  // controls.update();
-
   textureLoader = new THREE.TextureLoader();
+
+  //orbit
+  // controls = new OrbitControls(camera, renderer.domElement);
+  // controls.target.set(0, 2, 0);
+  // controls.update();
 
   const ambientLight = new THREE.AmbientLight(0x404040);
   scene.add(ambientLight);
+
+  //text
+  text_materials = [
+    new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
+    new THREE.MeshPhongMaterial({ color: 0xffffff }), // side
+  ];
+  textMesh = new THREE.Mesh(text_geometry, text_materials);
+  scene.add(textMesh);
+  textMesh.rotation.y = -Math.PI / 2;
+  textMesh.position.x = 75;
+  textMesh.position.z = -30;
+  setTimeout(function () {
+    console.log("Works!");
+  }, 2500);
+
+  // console.log(textMesh.position);
 
   const light = new THREE.DirectionalLight(0xffffff, 1);
   light.position.set(-10, 10, 5);
@@ -114,29 +172,19 @@ function initGraphics() {
 
   scene.add(light);
 
-  textureLoader = new THREE.TextureLoader();
+  // textureLoader = new THREE.TextureLoader();
 
-  //tmp
-  color_1 = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-  color_2 = new THREE.MeshPhongMaterial({ color: 0xffa500 });
-  color_3 = new THREE.MeshPhongMaterial({ color: 0xffff00 });
-  color_4 = new THREE.MeshPhongMaterial({ color: 0x00ff00 });
-  color_list = [color_1, color_2, color_3, color_4];
-  /////
-
+  //stats
   stats = new Stats();
   stats.domElement.style.position = "absolute";
   stats.domElement.style.top = "0px";
   container.appendChild(stats.domElement);
-
-  //
 
   window.addEventListener("resize", onWindowResize);
 }
 
 function initPhysics() {
   // Physics configuration
-
   collisionConfiguration = new Ammo.btSoftBodyRigidBodyCollisionConfiguration();
   dispatcher = new Ammo.btCollisionDispatcher(collisionConfiguration);
   broadphase = new Ammo.btDbvtBroadphase();
@@ -153,7 +201,6 @@ function initPhysics() {
   physicsWorld
     .getWorldInfo()
     .set_m_gravity(new Ammo.btVector3(0, gravityConstant, 0));
-
   transformAux1 = new Ammo.btTransform();
 }
 
@@ -171,8 +218,11 @@ function createObjects() {
     0,
     pos,
     quat,
-    new THREE.MeshPhongMaterial({ color: 0xffffff })
+    groundMaterial
+    // new THREE.MeshPhongMaterial({ color: 0xffffff })
   );
+  // ground.texure.wrapS = THREE.RepeatWrapping;
+  // ground.texure.wrapT = THREE.RepeatWrapping;
   ground.castShadow = true;
   ground.receiveShadow = true;
 
@@ -184,13 +234,11 @@ function createObjects() {
   const numBricksLength = 6;
   const numBricksHeight = 8;
   const z0 = -numBricksLength * brickLength * 0.5;
-  // pos.set(0, brickHeight * 0.5, z0);
-  pos.set(19, brickHeight * 0.5, z0);
+  pos.set(19.5, brickHeight * 0.5, z0);
   quat.set(0, 0, 0, 1);
 
   for (let j = 0; j < numBricksHeight; j++) {
     const oddRow = j % 2 == 1;
-    console.log(numBricksHeight);
     pos.z = z0;
 
     if (oddRow) {
@@ -202,15 +250,10 @@ function createObjects() {
     for (let i = 0; i < nRow; i++) {
       let brickLengthCurrent = brickLength;
       let brickMassCurrent = brickMass;
-      console.log(nRow);
       if (oddRow && (i == 0 || i == nRow - 1)) {
         brickLengthCurrent *= 0.5;
         brickMassCurrent *= 0.5;
-
-        console.log(list);
       }
-      // color_text = "color_" + color_url;
-      //수정필요 : material
       const brick = createParalellepiped(
         brickDepth,
         brickHeight,
@@ -218,10 +261,9 @@ function createObjects() {
         brickMassCurrent,
         pos,
         quat,
-        List[color_url]
+        List[material_index]
       );
-      color_url++;
-      // console.log(color_text);
+      material_index++;
       brick.castShadow = true;
       brick.receiveShadow = true;
 
@@ -281,7 +323,7 @@ function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
   );
   const body = new Ammo.btRigidBody(rbInfo);
 
-  body.setFriction(0.5);
+  body.setFriction(1.5); //0.5
 
   if (vel) {
     body.setLinearVelocity(new Ammo.btVector3(vel.x, vel.y, vel.z));
@@ -294,8 +336,6 @@ function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
   object.userData.physicsBody = body;
   object.userData.collided = false;
 
-  //수정
-  // object.material = custom_material;
   scene.add(object);
 
   if (mass > 0) {
@@ -308,14 +348,6 @@ function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
   physicsWorld.addRigidBody(body);
 
   return body;
-}
-
-function createRandomColor() {
-  return Math.floor(Math.random() * (1 << 24));
-}
-
-function createMaterial() {
-  return new THREE.MeshPhongMaterial({ color: createRandomColor() });
 }
 
 function initInput() {
@@ -335,14 +367,12 @@ function initInput() {
     // Creates a ball and throws it
     // const ballMass = 35;
     const ballMass = 55;
-    const ballRadius = 0.4;
+    const ballRadius = 0.2;
 
     const ball = new THREE.Mesh(
       new THREE.SphereGeometry(ballRadius, 14, 10),
       ballMaterial
     );
-    // ball.castShadow = true;
-    // ball.receiveShadow = true;
     ball.visible = false;
     const ballShape = new Ammo.btSphereShape(ballRadius);
     ballShape.setMargin(margin);
@@ -352,10 +382,28 @@ function initInput() {
     const ballBody = createRigidBody(ball, ballShape, ballMass, pos, quat);
 
     pos.copy(raycaster.ray.direction);
-    // pos.multiplyScalar(24);
     pos.multiplyScalar(24);
     ballBody.setLinearVelocity(new Ammo.btVector3(pos.x, pos.y, pos.z));
   });
+
+  //여기부터
+  document.addEventListener("pointermove", onPointerMove);
+  function onPointerMove(event) {
+    pointerXOnPointerDown = event.clientX - windowHalfX;
+    targetRotationOnPointerDown = targetRotation;
+    pointerX = event.clientX - windowHalfX;
+    targetRotation =
+      targetRotationOnPointerDown + (pointerX - pointerXOnPointerDown) * 0.2;
+    console.log(pointerX);
+    console.log(pointerXOnPointerDown);
+  }
+  // window.addEventListener("pointermove", function (event) {
+  //   pointerXOnPointerDown = event.clientX - windowHalfX;
+  //   targetRotationOnPointerDown = targetRotation;
+  //   pointerX = event.clientX - windowHalfX;
+  //   targetRotation =
+  //     targetRotationOnPointerDown + (pointerX - pointerXOnPointerDown) * 0.02;
+  // });
 }
 
 function onWindowResize() {
@@ -376,6 +424,8 @@ function render() {
   const deltaTime = clock.getDelta();
 
   updatePhysics(deltaTime);
+
+  textMesh.rotation.y += (targetRotation - textMesh.rotation.y) * 0.05;
 
   renderer.render(scene, camera);
 }
