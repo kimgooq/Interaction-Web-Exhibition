@@ -174,3 +174,8 @@ document.querySelector("body").addEventListener("mousemove", (e) => {
   drop_delay = Math.pow(calc_y, 2) * 100 + 2;
   wind = (e.clientX / window.innerWidth - 0.5) * 50;
 });
+
+window.onload = function () {
+  document.getElementById("bgm").muted = false;
+  // document.getElementById("bgm").play();
+};
