@@ -12,7 +12,7 @@ let wind = 4;
 let time = 0;
 
 img.addEventListener("load", () => {
-  let i_width = (window.innerHeight * window.innerWidth) / img.height;
+  let i_width = (window.innerHeight / img.height) * img.width;
   let i_height = window.innerHeight;
   img.width = i_width;
   img.height = i_height;
@@ -173,9 +173,10 @@ document.querySelector("body").addEventListener("mousemove", (e) => {
   let calc_y = 1 - e.clientY / window.innerHeight;
   drop_delay = Math.pow(calc_y, 2) * 100 + 2;
   wind = (e.clientX / window.innerWidth - 0.5) * 50;
+  let sound = e.clientY / 600 + 0.2;
+  document.getElementById("bgm").volume = `${sound > 1 ? 1 : sound}`;
 });
 
 window.onload = function () {
-  document.getElementById("bgm").muted = false;
-  // document.getElementById("bgm").play();
+  document.getElementById("bgm").play();
 };
