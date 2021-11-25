@@ -9,10 +9,10 @@ import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/js
 THREE.Cache.enabled = true;
 
 let targetRotation = 0;
-let targetRotationOnPointerDown = 0;
 let pointerX = 0;
 let pointerXOnPointerDown = 0;
 let windowHalfX = window.innerWidth / 2;
+var group;
 
 var custom_material;
 var url;
@@ -21,6 +21,7 @@ var material_index = 0;
 var List = [];
 
 var controls;
+
 // Graphics variables
 let container, stats;
 let camera, scene, renderer;
@@ -42,7 +43,13 @@ var groundMaterial = new THREE.MeshStandardMaterial({
 const text_loader = new FontLoader();
 var textMesh, text_materials, text_geometry;
 // text_loader.load("DH.typeface.json", function (font) {
-text_loader.load("DH.json", function (font) {
+function test(url) {
+  return new Promise((resolve) => {
+    new THREE.FontLoader().load(url, resolve);
+  });
+}
+test("DH.json").then((font) => {
+  console.log(font);
   text_geometry = new TextGeometry("Thank　You", {
     font: font,
     size: 7, //70
@@ -80,12 +87,9 @@ Ammo().then(function (AmmoLib) {
 
 function init() {
   initGraphics();
-  // setTimeout(function () {
-  //   console.log("Works!");
-  // }, 2500);
   initPhysics();
 
-  //brick material load => List[]
+  //brick material load
   for (var tmp_num = 0; tmp_num < 52; tmp_num++) {
     url = "./image/" + tmp_num + ".png";
     custom_material = new THREE.MeshBasicMaterial({
@@ -111,14 +115,9 @@ function initGraphics() {
 
   scene = new THREE.Scene();
 
-  // scene.background = new THREE.Color(0xbfd1e5);
-
   camera.position.set(14, 2.2, -0.5);
   camera.lookAt(18, 2.3, -0.5);
-  // camera.lookAt(18, 0, -0.5);
 
-  //수정
-  // renderer = new THREE.WebGLRenderer();
   const canvas = document.querySelector("#c");
   renderer = new THREE.WebGLRenderer({
     canvas,
@@ -130,30 +129,25 @@ function initGraphics() {
   container.appendChild(renderer.domElement);
 
   textureLoader = new THREE.TextureLoader();
-
   //orbit
   // controls = new OrbitControls(camera, renderer.domElement);
   // controls.target.set(0, 2, 0);
   // controls.update();
-
   const ambientLight = new THREE.AmbientLight(0x404040);
   scene.add(ambientLight);
 
+  group = new THREE.Group();
+  group.position.x = 75;
+  scene.add(group);
   //text
   text_materials = [
     new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
     new THREE.MeshPhongMaterial({ color: 0xffffff }), // side
   ];
-  textMesh = new THREE.Mesh(text_geometry, text_materials);
-  scene.add(textMesh);
-  textMesh.rotation.y = -Math.PI / 2;
-  textMesh.position.x = 75;
-  textMesh.position.z = -30;
-  setTimeout(function () {
-    console.log("Works!");
-  }, 2500);
 
-  // console.log(textMesh.position);
+  textMesh = new THREE.Mesh(text_geometry, text_materials);
+  textMesh.position.x = -30;
+  group.add(textMesh);
 
   const light = new THREE.DirectionalLight(0xffffff, 1);
   light.position.set(-10, 10, 5);
@@ -171,8 +165,6 @@ function initGraphics() {
   light.shadow.mapSize.y = 1024;
 
   scene.add(light);
-
-  // textureLoader = new THREE.TextureLoader();
 
   //stats
   stats = new Stats();
@@ -211,18 +203,7 @@ function createObjects() {
   // Ground
   pos.set(0, -0.5, 0);
   quat.set(0, 0, 0, 1);
-  const ground = createParalellepiped(
-    40,
-    1,
-    40,
-    0,
-    pos,
-    quat,
-    groundMaterial
-    // new THREE.MeshPhongMaterial({ color: 0xffffff })
-  );
-  // ground.texure.wrapS = THREE.RepeatWrapping;
-  // ground.texure.wrapT = THREE.RepeatWrapping;
+  const ground = createParalellepiped(40, 1, 40, 0, pos, quat, groundMaterial);
   ground.castShadow = true;
   ground.receiveShadow = true;
 
@@ -361,14 +342,9 @@ function initInput() {
       (event.clientX / window.innerWidth) * 2 - 1,
       -(event.clientY / window.innerHeight) * 2 + 1
     );
-
     raycaster.setFromCamera(mouseCoords, camera);
-
-    // Creates a ball and throws it
-    // const ballMass = 35;
     const ballMass = 55;
     const ballRadius = 0.2;
-
     const ball = new THREE.Mesh(
       new THREE.SphereGeometry(ballRadius, 14, 10),
       ballMaterial
@@ -389,12 +365,12 @@ function initInput() {
   //여기부터
   document.addEventListener("pointermove", onPointerMove);
   function onPointerMove(event) {
-    pointerXOnPointerDown = event.clientX - windowHalfX;
-    targetRotationOnPointerDown = targetRotation;
+    // pointerXOnPointerDown = event.clientX - windowHalfX;
+    pointerXOnPointerDown = 0;
+    // targetRotationOnPointerDown = targetRotation;
+
     pointerX = event.clientX - windowHalfX;
-    targetRotation =
-      targetRotationOnPointerDown + (pointerX - pointerXOnPointerDown) * 0.2;
-    console.log(pointerX);
+    targetRotation = pointerX * 0.02;
     console.log(pointerXOnPointerDown);
   }
   // window.addEventListener("pointermove", function (event) {
@@ -425,9 +401,27 @@ function render() {
 
   updatePhysics(deltaTime);
 
-  textMesh.rotation.y += (targetRotation - textMesh.rotation.y) * 0.05;
+  group.rotation.y += (targetRotation - group.rotation.y) * 0.05; //0.05
 
   renderer.render(scene, camera);
+}
+
+function detectCollision() {
+  let dispatcher = physicsWorld.getDispatcher();
+  let numManifolds = dispatcher.getNumManifolds();
+
+  for (let i = 0; i < numManifolds; i++) {
+    let contactManifold = dispatcher.getManifoldByIndexInternal(i);
+    let numContacts = contactManifold.getNumContacts();
+
+    for (let j = 0; j < numContacts; j++) {
+      let contactPoint = contactManifold.getContactPoint(j);
+      let distance = contactPoint.getDistance();
+
+      // console.log({ manifoldIndex: i, contactIndex: j, distance: distance });
+      console.log(contactPoint);
+    }
+  }
 }
 
 function updatePhysics(deltaTime) {
@@ -447,4 +441,5 @@ function updatePhysics(deltaTime) {
       objThree.quaternion.set(q.x(), q.y(), q.z(), q.w());
     }
   }
+  // detectCollision();
 }
