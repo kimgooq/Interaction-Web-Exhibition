@@ -42,26 +42,106 @@ var groundMaterial = new THREE.MeshStandardMaterial({
 
 const text_loader = new FontLoader();
 var textMesh, text_materials, text_geometry;
+
+// async function loadFont() {
+//   return new Promise((resolve) => {
+//     const loader = new FontLoader();
+//     loader.load(
+//       "DH.json",
+//       (font) =>
+//         resolve(
+//           (text_geometry = new TextGeometry("Thank　You", {
+//             font: font,
+//             size: 7, //70
+//             height: 2, //20
+//             curveSegments: 4, //4
+//             bevelEnabled: true,
+//             bevelThickness: 2, //2
+//             bevelSize: 1.5, //1.5
+//             bevelOffset: 0,
+//             bevelSegments: 1, //1
+//           }))
+//         ),
+//       () => resolve()
+//     );
+//   });
+// }
+// const temp = await loadFont();
+// console.log(temp);
+
 // text_loader.load("DH.typeface.json", function (font) {
-function test(url) {
-  return new Promise((resolve) => {
-    new THREE.FontLoader().load(url, resolve);
+// function test(url) {
+//   return new Promise((resolve) => {
+//     new THREE.FontLoader().load(url, resolve);
+//   });
+// }
+// test("DH.json").then((font) => {
+//   console.log(font);
+//   text_geometry = new TextGeometry("Thank　You", {
+//     font: font,
+//     size: 7, //70
+//     height: 2, //20
+//     curveSegments: 4, //4
+//     bevelEnabled: true,
+//     bevelThickness: 2, //2
+//     bevelSize: 1.5, //1.5
+//     bevelOffset: 0,
+//     bevelSegments: 1, //1
+//   });
+// });
+function Basic() {
+  scene = new THREE.Scene();
+  text_loader.load("DH.json", function (font) {
+    text_geometry = new TextGeometry("Thank　You", {
+      font: font,
+      size: 7, //70
+      height: 2, //20
+      curveSegments: 4, //4
+      bevelEnabled: true,
+      bevelThickness: 2, //2
+      bevelSize: 1.5, //1.5
+      bevelOffset: 0,
+      bevelSegments: 1, //1
+    });
+
+    group = new THREE.Group();
+    group.position.x = 75;
+    // console.log(scene);
+    scene.add(group);
+    //text
+    text_materials = [
+      new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
+      new THREE.MeshPhongMaterial({ color: 0xffffff }), // side
+    ];
+
+    textMesh = new THREE.Mesh(text_geometry, text_materials);
+    textMesh.position.x = -30;
+    group.add(textMesh);
   });
+  if (scene != undefined) {
+    sleep(500);
+  }
+  console.log(scene);
+  const ambientLight = new THREE.AmbientLight(0x404040);
+  scene.add(ambientLight);
+
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(-10, 10, 5);
+  light.castShadow = true;
+  const d = 10;
+  light.shadow.camera.left = -d;
+  light.shadow.camera.right = d;
+  light.shadow.camera.top = d;
+  light.shadow.camera.bottom = -d;
+
+  light.shadow.camera.near = 2;
+  light.shadow.camera.far = 50;
+
+  light.shadow.mapSize.x = 1024;
+  light.shadow.mapSize.y = 1024;
+
+  scene.add(light);
 }
-test("DH.json").then((font) => {
-  console.log(font);
-  text_geometry = new TextGeometry("Thank　You", {
-    font: font,
-    size: 7, //70
-    height: 2, //20
-    curveSegments: 4, //4
-    bevelEnabled: true,
-    bevelThickness: 2, //2
-    bevelSize: 1.5, //1.5
-    bevelOffset: 0,
-    bevelSegments: 1, //1
-  });
-});
 
 // Physics variables
 const gravityConstant = -5.0;
@@ -81,6 +161,8 @@ const quat = new THREE.Quaternion();
 Ammo().then(function (AmmoLib) {
   Ammo = AmmoLib;
   init();
+
+  // sleep(1000);
 
   animate();
 });
@@ -104,6 +186,8 @@ function init() {
 }
 
 function initGraphics() {
+  Basic();
+
   container = document.getElementById("container");
 
   camera = new THREE.PerspectiveCamera(
@@ -113,7 +197,7 @@ function initGraphics() {
     2000
   );
 
-  scene = new THREE.Scene();
+  // scene = new THREE.Scene();
 
   camera.position.set(14, 2.2, -0.5);
   camera.lookAt(18, 2.3, -0.5);
@@ -133,38 +217,41 @@ function initGraphics() {
   // controls = new OrbitControls(camera, renderer.domElement);
   // controls.target.set(0, 2, 0);
   // controls.update();
-  const ambientLight = new THREE.AmbientLight(0x404040);
-  scene.add(ambientLight);
 
-  group = new THREE.Group();
-  group.position.x = 75;
-  scene.add(group);
+  // const ambientLight = new THREE.AmbientLight(0x404040);
+  // scene.add(ambientLight);
+
+  // group = new THREE.Group();
+  // group.position.x = 75;
+  // scene.add(group);
+
   //text
-  text_materials = [
-    new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
-    new THREE.MeshPhongMaterial({ color: 0xffffff }), // side
-  ];
+  // text_materials = [
+  //   new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
+  //   new THREE.MeshPhongMaterial({ color: 0xffffff }), // side
+  // ];
 
-  textMesh = new THREE.Mesh(text_geometry, text_materials);
-  textMesh.position.x = -30;
-  group.add(textMesh);
+  // textMesh = new THREE.Mesh(text_geometry, text_materials);
+  // textMesh.position.x = -30;
+  // group.add(textMesh);
+  // sleep(1000);
 
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(-10, 10, 5);
-  light.castShadow = true;
-  const d = 10;
-  light.shadow.camera.left = -d;
-  light.shadow.camera.right = d;
-  light.shadow.camera.top = d;
-  light.shadow.camera.bottom = -d;
+  // const light = new THREE.DirectionalLight(0xffffff, 1);
+  // light.position.set(-10, 10, 5);
+  // light.castShadow = true;
+  // const d = 10;
+  // light.shadow.camera.left = -d;
+  // light.shadow.camera.right = d;
+  // light.shadow.camera.top = d;
+  // light.shadow.camera.bottom = -d;
 
-  light.shadow.camera.near = 2;
-  light.shadow.camera.far = 50;
+  // light.shadow.camera.near = 2;
+  // light.shadow.camera.far = 50;
 
-  light.shadow.mapSize.x = 1024;
-  light.shadow.mapSize.y = 1024;
+  // light.shadow.mapSize.x = 1024;
+  // light.shadow.mapSize.y = 1024;
 
-  scene.add(light);
+  // scene.add(light);
 
   //stats
   stats = new Stats();
@@ -332,10 +419,10 @@ function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
 }
 
 function initInput() {
-  window.addEventListener("keydown", function (event) {
-    console.log(camera.position);
-    console.log(camera.rotation);
-  });
+  // window.addEventListener("keydown", function (event) {
+  //   console.log(camera.position);
+  //   console.log(camera.rotation);
+  // });
 
   window.addEventListener("pointerdown", function (event) {
     mouseCoords.set(
@@ -371,7 +458,7 @@ function initInput() {
 
     pointerX = event.clientX - windowHalfX;
     targetRotation = pointerX * 0.02;
-    console.log(pointerXOnPointerDown);
+    // console.log(pointerXOnPointerDown);
   }
   // window.addEventListener("pointermove", function (event) {
   //   pointerXOnPointerDown = event.clientX - windowHalfX;
@@ -380,6 +467,11 @@ function initInput() {
   //   targetRotation =
   //     targetRotationOnPointerDown + (pointerX - pointerXOnPointerDown) * 0.02;
   // });
+}
+
+function sleep(ms) {
+  const wakeUpTime = Date.now() + ms;
+  while (Date.now() < wakeUpTime) {}
 }
 
 function onWindowResize() {
@@ -419,7 +511,7 @@ function detectCollision() {
       let distance = contactPoint.getDistance();
 
       // console.log({ manifoldIndex: i, contactIndex: j, distance: distance });
-      console.log(contactPoint);
+      // console.log(contactPoint);
     }
   }
 }
