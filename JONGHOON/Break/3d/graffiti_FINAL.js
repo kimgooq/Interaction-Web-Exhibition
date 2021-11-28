@@ -1,10 +1,18 @@
-// import * as THREE from "https://cdn.skypack.dev/three@0.132.2";
+window.onload = function () {
+  document.getElementById("bgm").play();
+};
+
+const arr_sound = [];
+for (let i = 0; i < 10; i++) {
+  const sound = new Audio();
+  sound.src = "./shooting_sound.mp3";
+  arr_sound.push(sound);
+}
+var sound_num = 0;
+
 import * as THREE from "./three.module.js";
-import Stats from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/libs/stats.module.js";
 import { FontLoader } from "./FontLoader.js";
 import { TextGeometry } from "./TextGeometry.js";
-
-import { OrbitControls } from "https://cdn.skypack.dev/three@0.132.2/examples/jsm/controls/OrbitControls.js";
 
 THREE.Cache.enabled = true;
 
@@ -12,18 +20,15 @@ let targetRotation = 0;
 let pointerX = 0;
 let pointerXOnPointerDown = 0;
 let windowHalfX = window.innerWidth / 2;
-var group;
-
-var custom_material;
-var url;
+var group, custom_material, url;
 
 var material_index = 0;
 var List = [];
 
-var controls;
-
+var brickList = [];
+var ball, ballBody;
 // Graphics variables
-let container, stats;
+let container;
 let camera, scene, renderer;
 let textureLoader;
 const clock = new THREE.Clock();
@@ -43,85 +48,33 @@ var groundMaterial = new THREE.MeshStandardMaterial({
 const text_loader = new FontLoader();
 var textMesh, text_materials, text_geometry;
 
-// async function loadFont() {
-//   return new Promise((resolve) => {
-//     const loader = new FontLoader();
-//     loader.load(
-//       "DH.json",
-//       (font) =>
-//         resolve(
-//           (text_geometry = new TextGeometry("Thank　You", {
-//             font: font,
-//             size: 7, //70
-//             height: 2, //20
-//             curveSegments: 4, //4
-//             bevelEnabled: true,
-//             bevelThickness: 2, //2
-//             bevelSize: 1.5, //1.5
-//             bevelOffset: 0,
-//             bevelSegments: 1, //1
-//           }))
-//         ),
-//       () => resolve()
-//     );
-//   });
-// }
-// const temp = await loadFont();
-// console.log(temp);
-
-// text_loader.load("DH.typeface.json", function (font) {
-// function test(url) {
-//   return new Promise((resolve) => {
-//     new THREE.FontLoader().load(url, resolve);
-//   });
-// }
-// test("DH.json").then((font) => {
-//   console.log(font);
-//   text_geometry = new TextGeometry("Thank　You", {
-//     font: font,
-//     size: 7, //70
-//     height: 2, //20
-//     curveSegments: 4, //4
-//     bevelEnabled: true,
-//     bevelThickness: 2, //2
-//     bevelSize: 1.5, //1.5
-//     bevelOffset: 0,
-//     bevelSegments: 1, //1
-//   });
-// });
 function Basic() {
   scene = new THREE.Scene();
   text_loader.load("DH.json", function (font) {
     text_geometry = new TextGeometry("Thank　You", {
       font: font,
-      size: 7, //70
-      height: 2, //20
-      curveSegments: 4, //4
+      size: 7,
+      height: 2,
+      curveSegments: 4,
       bevelEnabled: true,
-      bevelThickness: 2, //2
-      bevelSize: 1.5, //1.5
+      bevelThickness: 2,
+      bevelSize: 1.5,
       bevelOffset: 0,
-      bevelSegments: 1, //1
+      bevelSegments: 1,
     });
-
     group = new THREE.Group();
     group.position.x = 75;
-    // console.log(scene);
     scene.add(group);
     //text
     text_materials = [
       new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
       new THREE.MeshPhongMaterial({ color: 0xffffff }), // side
     ];
-
     textMesh = new THREE.Mesh(text_geometry, text_materials);
     textMesh.position.x = -30;
     group.add(textMesh);
   });
-  if (scene != undefined) {
-    sleep(500);
-  }
-  console.log(scene);
+
   const ambientLight = new THREE.AmbientLight(0x404040);
   scene.add(ambientLight);
 
@@ -161,9 +114,6 @@ const quat = new THREE.Quaternion();
 Ammo().then(function (AmmoLib) {
   Ammo = AmmoLib;
   init();
-
-  // sleep(1000);
-
   animate();
 });
 
@@ -179,7 +129,6 @@ function init() {
     });
     List.push(custom_material);
   }
-
   createObjects();
 
   initInput();
@@ -196,9 +145,6 @@ function initGraphics() {
     0.2,
     2000
   );
-
-  // scene = new THREE.Scene();
-
   camera.position.set(14, 2.2, -0.5);
   camera.lookAt(18, 2.3, -0.5);
 
@@ -207,57 +153,13 @@ function initGraphics() {
     canvas,
     alpha: true,
   });
+
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.shadowMap.enabled = true;
   container.appendChild(renderer.domElement);
 
   textureLoader = new THREE.TextureLoader();
-  //orbit
-  // controls = new OrbitControls(camera, renderer.domElement);
-  // controls.target.set(0, 2, 0);
-  // controls.update();
-
-  // const ambientLight = new THREE.AmbientLight(0x404040);
-  // scene.add(ambientLight);
-
-  // group = new THREE.Group();
-  // group.position.x = 75;
-  // scene.add(group);
-
-  //text
-  // text_materials = [
-  //   new THREE.MeshPhongMaterial({ color: 0xffffff, flatShading: true }), // front
-  //   new THREE.MeshPhongMaterial({ color: 0xffffff }), // side
-  // ];
-
-  // textMesh = new THREE.Mesh(text_geometry, text_materials);
-  // textMesh.position.x = -30;
-  // group.add(textMesh);
-  // sleep(1000);
-
-  // const light = new THREE.DirectionalLight(0xffffff, 1);
-  // light.position.set(-10, 10, 5);
-  // light.castShadow = true;
-  // const d = 10;
-  // light.shadow.camera.left = -d;
-  // light.shadow.camera.right = d;
-  // light.shadow.camera.top = d;
-  // light.shadow.camera.bottom = -d;
-
-  // light.shadow.camera.near = 2;
-  // light.shadow.camera.far = 50;
-
-  // light.shadow.mapSize.x = 1024;
-  // light.shadow.mapSize.y = 1024;
-
-  // scene.add(light);
-
-  //stats
-  stats = new Stats();
-  stats.domElement.style.position = "absolute";
-  stats.domElement.style.top = "0px";
-  container.appendChild(stats.domElement);
 
   window.addEventListener("resize", onWindowResize);
 }
@@ -312,9 +214,7 @@ function createObjects() {
     if (oddRow) {
       pos.z -= 0.25 * brickLength;
     }
-
     const nRow = oddRow ? numBricksLength + 1 : numBricksLength;
-
     for (let i = 0; i < nRow; i++) {
       let brickLengthCurrent = brickLength;
       let brickMassCurrent = brickMass;
@@ -331,17 +231,17 @@ function createObjects() {
         quat,
         List[material_index]
       );
+      brickList.push(brick.position);
+
       material_index++;
       brick.castShadow = true;
       brick.receiveShadow = true;
-
       if (oddRow && (i == 0 || i == nRow - 2)) {
         pos.z += 0.75 * brickLength;
       } else {
         pos.z += brickLength;
       }
     }
-
     pos.y += brickHeight;
   }
 }
@@ -355,25 +255,30 @@ function createParalellepiped(sx, sy, sz, mass, pos, quat, material) {
     new Ammo.btVector3(sx * 0.5, sy * 0.5, sz * 0.5)
   );
   shape.setMargin(margin);
-
-  createRigidBody(threeObject, shape, mass, pos, quat);
-
+  createRigidBody("wall", threeObject, shape, mass, pos, quat);
   return threeObject;
 }
 
-function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
+function createRigidBody(
+  tag,
+  object,
+  physicsShape,
+  mass,
+  pos,
+  quat,
+  vel,
+  angVel
+) {
   if (pos) {
     object.position.copy(pos);
   } else {
     pos = object.position;
   }
-
   if (quat) {
     object.quaternion.copy(quat);
   } else {
     quat = object.quaternion;
   }
-
   const transform = new Ammo.btTransform();
   transform.setIdentity();
   transform.setOrigin(new Ammo.btVector3(pos.x, pos.y, pos.z));
@@ -390,9 +295,9 @@ function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
     localInertia
   );
   const body = new Ammo.btRigidBody(rbInfo);
+  body.threeObject = tag;
 
   body.setFriction(1.5); //0.5
-
   if (vel) {
     body.setLinearVelocity(new Ammo.btVector3(vel.x, vel.y, vel.z));
   }
@@ -419,12 +324,13 @@ function createRigidBody(object, physicsShape, mass, pos, quat, vel, angVel) {
 }
 
 function initInput() {
-  // window.addEventListener("keydown", function (event) {
-  //   console.log(camera.position);
-  //   console.log(camera.rotation);
-  // });
-
+  //shoot ball
   window.addEventListener("pointerdown", function (event) {
+    arr_sound[sound_num].play();
+    sound_num++;
+    if (sound_num > 9) {
+      sound_num = 0;
+    }
     mouseCoords.set(
       (event.clientX / window.innerWidth) * 2 - 1,
       -(event.clientY / window.innerHeight) * 2 + 1
@@ -432,7 +338,7 @@ function initInput() {
     raycaster.setFromCamera(mouseCoords, camera);
     const ballMass = 55;
     const ballRadius = 0.2;
-    const ball = new THREE.Mesh(
+    ball = new THREE.Mesh(
       new THREE.SphereGeometry(ballRadius, 14, 10),
       ballMaterial
     );
@@ -442,36 +348,19 @@ function initInput() {
     pos.copy(raycaster.ray.direction);
     pos.add(raycaster.ray.origin);
     quat.set(0, 0, 0, 1);
-    const ballBody = createRigidBody(ball, ballShape, ballMass, pos, quat);
+    ballBody = createRigidBody("ball", ball, ballShape, ballMass, pos, quat);
 
     pos.copy(raycaster.ray.direction);
     pos.multiplyScalar(24);
     ballBody.setLinearVelocity(new Ammo.btVector3(pos.x, pos.y, pos.z));
   });
-
-  //여기부터
+  //text rotation
   document.addEventListener("pointermove", onPointerMove);
   function onPointerMove(event) {
-    // pointerXOnPointerDown = event.clientX - windowHalfX;
     pointerXOnPointerDown = 0;
-    // targetRotationOnPointerDown = targetRotation;
-
     pointerX = event.clientX - windowHalfX;
     targetRotation = pointerX * 0.02;
-    // console.log(pointerXOnPointerDown);
   }
-  // window.addEventListener("pointermove", function (event) {
-  //   pointerXOnPointerDown = event.clientX - windowHalfX;
-  //   targetRotationOnPointerDown = targetRotation;
-  //   pointerX = event.clientX - windowHalfX;
-  //   targetRotation =
-  //     targetRotationOnPointerDown + (pointerX - pointerXOnPointerDown) * 0.02;
-  // });
-}
-
-function sleep(ms) {
-  const wakeUpTime = Date.now() + ms;
-  while (Date.now() < wakeUpTime) {}
 }
 
 function onWindowResize() {
@@ -485,7 +374,6 @@ function animate() {
   requestAnimationFrame(animate);
 
   render();
-  stats.update();
 }
 
 function render() {
@@ -496,24 +384,6 @@ function render() {
   group.rotation.y += (targetRotation - group.rotation.y) * 0.05; //0.05
 
   renderer.render(scene, camera);
-}
-
-function detectCollision() {
-  let dispatcher = physicsWorld.getDispatcher();
-  let numManifolds = dispatcher.getNumManifolds();
-
-  for (let i = 0; i < numManifolds; i++) {
-    let contactManifold = dispatcher.getManifoldByIndexInternal(i);
-    let numContacts = contactManifold.getNumContacts();
-
-    for (let j = 0; j < numContacts; j++) {
-      let contactPoint = contactManifold.getContactPoint(j);
-      let distance = contactPoint.getDistance();
-
-      // console.log({ manifoldIndex: i, contactIndex: j, distance: distance });
-      // console.log(contactPoint);
-    }
-  }
 }
 
 function updatePhysics(deltaTime) {
@@ -533,5 +403,4 @@ function updatePhysics(deltaTime) {
       objThree.quaternion.set(q.x(), q.y(), q.z(), q.w());
     }
   }
-  // detectCollision();
 }

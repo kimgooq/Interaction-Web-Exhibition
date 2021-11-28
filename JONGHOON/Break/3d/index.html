@@ -6,17 +6,18 @@
       name="viewport"
       content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
     />
+    <audio id="audio_play" src="./shooting_sound.mp3"></audio>
     <link type="text/css" rel="stylesheet" href="style.css" />
+
     <script src="./ammo.wasm.js" defer></script>
 
     <script type="module" src="./graffiti_FINAL.js" defer></script>
-    <!-- <style>
-      body {
-        color: #333;
-      }
-    </style> -->
   </head>
   <body>
+    <iframe src="./silence.mp3" allow="autoplay" style="display: none"></iframe>
+    <audio id="bgm" currentTime="0" loop="loop">
+      <source src="./bgm_graffiti.mp3" type="audio/mp3" />
+    </audio>
     <div id="container"></div>
     <canvas id="c"></canvas>
   </body>

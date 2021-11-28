@@ -43,7 +43,7 @@ const img_width = 10, // 전체 표현 너비
   img_height = 10, // 전체 표현 높이
   SW = img_width * 20,
   SH = img_height * 20;
-const IMG_URLS = ["../images/test1.jpeg", "../images/test2.jpg"]; // 이미지 파일
+const IMG_URLS = ["../images/art_img2.jpeg", "../images/art_img3.jpg"]; // 이미지 파일
 
 camera.position.set(0, 0, 8);
 
@@ -51,8 +51,6 @@ camera.position.set(0, 0, 8);
 for (const { color, intensity, x, y, z } of [
   { color: "white", intensity: 1, x: -img_width, y: 0, z: 0 }, // 우상단용
   { color: "white", intensity: 1, x: img_width, y: 0, z: 0 }, // 좌하단용
-  // { color: "white", intensity: 1, x: 0, y: -img_height, z: 0 }, // 우상단용
-  // { color: "white", intensity: 1, x: 0, y: img_height, z: 0 }, // 좌하단용
 ]) {
   const spotLight = new THREE.SpotLight(
     color,
@@ -138,12 +136,3 @@ for (const [i, geom] of geoms.entries()) {
   g.add(mesh);
 }
 scene.add(g);
-
-//// Animate
-
-const k = Math.PI / 5;
-// gsap
-//   .timeline({ defaults: { duration: 0.35 }, repeat: 1, yoyo: true })
-//   .to(g.rotation, { x: -k / 2, y: k })
-//   .to(g.rotation, { x: -k / 2, y: -k })
-//   .to(g.rotation, { x: 0, y: 0 });

@@ -1,0 +1,62 @@
+body {
+    background-color: lightblue;
+}
+
+.explain {
+    float: right;
+    position: absolute;
+    bottom: 40px;
+    right: 60px;
+    width: 300px;
+    height: 300px;
+}
+
+#small_img {
+    width: 300px;
+    margin-bottom: 8px;
+}
+
+.info_btn {
+    border-radius: 100%;
+    box-shadow: 2.5px 2.5px 5px 0 rgba(0, 0, 0, 0.16);
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transition: all 0.3s ease-in-out;
+}
+
+.info_btn:hover {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+}
+
+.back_btn {
+    border: 3.5px #fff solid;
+    border-radius: 100%;
+    box-shadow: 2.5px 2.5px 5px 0 rgba(0, 0, 0, 0.16);
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transition: all 0.3s ease-in-out;
+}
+
+.back_btn:hover {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+}

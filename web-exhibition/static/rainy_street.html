@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <script src="js/rainy.js" defer></script>
+    <link rel="stylesheet" href="css/rainy.css" />
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="css/detail.css">
+    <script src="js/detail.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <img id="back_img" alt="Paris rainy day" />
+    <canvas id="cnv"></canvas>
+    <audio id="bgm" autoplay loop>
+      <source src="mp3/rainy_day.mp3" type="audio/mp3" />
+    </audio>
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
+    <div class="explain">
+        <img src="media/white.png" id="small_img">
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+    </div>
+  </body>
+</html>

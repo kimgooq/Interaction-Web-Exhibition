@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="icon" href="data:;base64,=" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="css/detail.css">
+    <script src="js/detail.js"></script>
+    <title>BalloonDog.html</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+      }
+      canvas {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      #webgl-pick {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+      #c {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
+    <div class="explain">
+        <img src="media/white.png" id="small_img">
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+    </div>
+    <canvas id="c"></canvas>
+
+    <!-- <script src="BalloonDog.js" type="module"></script> -->
+    <script src="js/BalloonDog_test.js" type="module"></script>
+    <!-- mp3 -->
+    <audio id="balloon_bgm" autoplay="true" muted="muted">
+      <source src="./mp3/balloon_bgm.mp3" type="audio/mp3" />
+    </audio>
+    <audio id="balloon_effects" muted="muted">
+      <source src="./mp3/balloon_sound_effects.mp3" type="audio/mp3" />
+    </audio>
+  </body>
+</html>
