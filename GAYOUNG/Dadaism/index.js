@@ -12,13 +12,16 @@ let pos = {
   Y: -1,
 };
 
+function eventWindowLoaded() {
+  document.querySelector("#museum_bgm").muted = false;
+}
+
 // Make sure the image is loaded first otherwise nothing will draw.
 background.onload = function () {
   canvas.width = $("#canvas-background").width();
   canvas.height = $("#canvas-background").height();
 
   // ctx.drawImage(background, 0, 0);
-  document.querySelector("#museum_bgm").muted = false;
 
   $("#canvas").addClass("small");
   $("#canvas-background").addClass("small");
