@@ -11,171 +11,21 @@
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
     />
-    <style>
-    
-        body{
-            overflow: hidden;
-        }
-        
-        .out {
-            display: flex;
-        }
-        .in {
-            margin: 0 auto;
-            padding-top: 60px;
-            text-align: center;
-        }
-        .small{
-            width: 400px;
-            transition:all ease-out 0.3s;
-        }
-        .large {
-            width: 620px;
-            transition:all ease-out 0.3s;
-        }
-        .background{
-            width:100%; 
-            height:100%;
-            transition:all ease-out 0.3s;
-            
-        }
-
-        .background-large {
-            width: 100%;
-            transition:all ease-out 0.3s;
-        }
-        .colorpick{
-            box-shadow: 3px 0px 20px 13px rgba(94, 94, 94, 0.2);
-            background-color:white; 
-            width:117px; 
-            border-radius:30px;
-            height:590px;
-        }
-
-        input[type="radio"] {
-            display:none;
-        }
-
-        input[type="radio"] + label {
-            display: inline-block;
-            text-align: center;
-            width : 60px; 
-            height : 60px; 
-            border-radius: 50px;
-            transition:all ease-out 0.1s;
-        }
-
-        input[type="radio"] + label span{
-            display: inline-block;
-            text-align: center;
-            width : 50px; 
-            height : 50px; 
-            border-radius: 50px;
-            transition:all ease-out 0.1s;
-        }
-
-        input[type="radio"]:hover + label span {
-            width : 60px; 
-            height : 60px; 
-        }
-        input[type="radio"]:checked + label span {
-            width : 60px; 
-            height : 60px; 
-        }
-        /* input[type = radio] {
-            display: none;
-        }
-        input[type = radio] + label {
-            display: inline-block;
-            text-align: center;
-            width : 50px; 
-            height : 50px; 
-            border-radius: 50px;
-            transition:all ease-out 0.1s;
-        }
-        input[type = radio] :checked + label {
-       
-            width : 60px; 
-            height : 60px; 
-        } */
-
-        .circle:hover{
-            width : 60px; 
-            height : 60px; 
-            border-radius: 50px;
-            transition:all ease-out 0.1s;
-        }
-
-        .circle-click{
-            display: inline-block;
-            text-align: center;
-            width : 60px; 
-            height : 60px; 
-            border-radius: 50px;
-            transition:all ease-out 0.1s;
-        }
-        
-        .red{
-            background-color: #E74C3C;
-        }
-        .yellow{
-            background-color: #F1C40F;
-        }
-        .black{
-            background-color: black;
-        }
-        .blue{
-            background-color:#3498DB;
-        }
-        .green{
-            background-color: #2ECC71;
-        }
-        .eraser{
-            width : 50px; 
-            height :50px; 
-            border-radius: 10px;
-            display: inline-block;
-            text-align: center;
-            transition:all ease-out 0.1s;
-            /* border: solid black 1px; */
-        }
-        .eraser:hover{
-            width : 60px; 
-            height : 60px; 
-            transition:all ease-out 0.1s;
-        }
-        .layer {
-            /* position: absolute; */
-            text-align: center;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            font-size: 50px;
-        }
-        .layer .content {
-            display: inline-block;
-            vertical-align: middle
-        }
-
-        /* #canvas:hover .trans{
-            transform: translateX(-30px);
-        } */
-
-    </style>
+    <link rel="stylesheet" type="text/css" href="dadaism.css"/>
 </head>
-    <div id = "capture">
+    <div id = "capture" style = "width:100%; height:100%;">
         <img id = "background" class="background" src="background.png" style=" position:absolute; z-index: 1;" > 
 
         <div  style="position:relative; z-index: 3;">
             <div class="out " >
                 <!-- style="position: relative;" -->
-                <div class="in container " style="width: 1000px;">
+                <div class="in container " style="width: 1000vw;height:100vh">
                     <div id = "canvas-container" class="row ">
                         <div class="col "></div>
                         <div class="col ">
-                            <canvas id = "canvas" class="small"  style=" box-shadow: rgba(252, 235, 235, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;"></canvas>
-                            
+                            <img id = "canvas-background" class="small" src= "mona-lisa.jpeg" style ="position: absolute;">
+                            <canvas id = "canvas" class="small"  style="position: relative; box-shadow: rgba(252, 235, 235, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;"></canvas>
+                            <input id = "rangeBar" style="display: none;" type="range" max="50" value="0">
                         </div>
                         <div class="col out">
                             <div id = 'colorpick' class="in colorpick trans container" style="float: none; margin:100 auto; display: none;">
@@ -183,7 +33,7 @@
                                     <div class="col"  >
                                         <input type="radio" id="redRadio" name="color" />
                                             <label for="redRadio">
-                                                <span class="red"></span>
+                                                <span class="red circle"></span>
                                             </labe>
                                     </div>
                                 </div>
@@ -192,16 +42,15 @@
                                     <div class="col ">
                                         <input type="radio" id="yellowRadio" name="color" />
                                         <label for="yellowRadio">
-                                            <span class="yellow"></span>
+                                            <span class="yellow circle"></span>
                                         </label>
-                                      
                                     </div>
                                 </div>
                                 <div class="row mb-4 ">
                                     <div class="col">
-                                        <input type="radio" name = "color"  id = "blackRadio"  >
+                                        <input type="radio" name = "color"  id = "blackRadio" checked ="checked" >
                                         <label for = "blackRadio" >
-                                            <span  class="black "></span>
+                                            <span  class="black circle"></span>
                                         </label>
                                     </div>
                                 </div>
@@ -209,7 +58,7 @@
                                     <div class="col">
                                         <input type="radio" name = "color"  id = "blueRadio"  >
                                         <label for = "blueRadio">
-                                            <span  class="blue" ></span>
+                                            <span  class="blue circle" ></span>
                                         </label>
                                     </div>
                                 </div>
@@ -217,17 +66,26 @@
                                     <div class="col">
                                         <input type="radio" name = "color"  id = "greenRadio"  >
                                         <label for = "greenRadio" >
-                                            <span  class="green "></span>
+                                            <span  class="green circle"></span>
                                         </label>
                                     </div>
                                 </div>
 
                                 <div class="row mb-4">
                                     <div class="col">
-                                    
-                                        <div id = "eraser" class="eraser border border-dark border-2">
+                                        <input type="radio" name = "color"  id = "eraserRadio"  >
+                                        <label for = "eraserRadio" >
+                                            <!-- <span  class="green circle"></span> -->
+                                            <span id = "eraser" class="eraser border border-dark border-2">
+                                                <hr style="border: solid black 1px;">
+                                            </span>
+                                            
+                                        </label>
+
+
+                                        <!-- <div id = "eraser" class="eraser border border-dark border-2">
                                             <hr style="border: solid black 1px;">
-                                        </div>
+                                        </div> -->
                                     
                                     </div>
                                 </div>
@@ -239,6 +97,7 @@
                         </div> -->
                         
                     </div>
+                    
                     <div id = "camera" style="margin-top: 100px;">
                         <svg width="47" height="47" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M27.875 25.4584C27.875 27.8746 25.9162 29.8334 23.5 29.8334V32.8334C27.5731 32.8334 30.875 29.5315 30.875 25.4584H27.875ZM23.5 29.8334C21.0838 29.8334 19.125 27.8746 19.125 25.4584H16.125C16.125 29.5315 19.4269 32.8334 23.5 32.8334V29.8334ZM19.125 25.4584C19.125 23.0421 21.0838 21.0834 23.5 21.0834V18.0834C19.4269 18.0834 16.125 21.3853 16.125 25.4584H19.125ZM23.5 21.0834C25.9162 21.0834 27.875 23.0421 27.875 25.4584H30.875C30.875 21.3853 27.5731 18.0834 23.5 18.0834V21.0834ZM39.625 17.625V33.2917H42.625V17.625H39.625ZM37.2083 35.7084H9.79167V38.7084H37.2083V35.7084ZM7.375 33.2917V17.625H4.375V33.2917H7.375ZM9.79167 15.2084H14.6875V12.2084H9.79167V15.2084ZM32.3125 15.2084H37.2083V12.2084H32.3125V15.2084ZM18.6042 11.2917H28.3958V8.29169H18.6042V11.2917ZM28.8542 11.75C28.8542 13.66 30.4025 15.2084 32.3125 15.2084V12.2084C32.0594 12.2084 31.8542 12.0032 31.8542 11.75H28.8542ZM14.6875 15.2084C16.5975 15.2084 18.1458 13.66 18.1458 11.75H15.1458C15.1458 12.0032 14.9406 12.2084 14.6875 12.2084V15.2084ZM31.8542 11.75C31.8542 9.84004 30.3058 8.29169 28.3958 8.29169V11.2917C28.649 11.2917 28.8542 11.4969 28.8542 11.75H31.8542ZM18.1458 11.75C18.1458 11.4969 18.351 11.2917 18.6042 11.2917V8.29169C16.6942 8.29169 15.1458 9.84004 15.1458 11.75H18.1458ZM9.79167 35.7084C8.45698 35.7084 7.375 34.6264 7.375 33.2917H4.375C4.375 36.2832 6.80012 38.7084 9.79167 38.7084V35.7084ZM39.625 33.2917C39.625 34.6264 38.543 35.7084 37.2083 35.7084V38.7084C40.1999 38.7084 42.625 36.2832 42.625 33.2917H39.625ZM42.625 17.625C42.625 14.6335 40.1999 12.2084 37.2083 12.2084V15.2084C38.543 15.2084 39.625 16.2903 39.625 17.625H42.625ZM7.375 17.625C7.375 16.2903 8.45698 15.2084 9.79167 15.2084V12.2084C6.80012 12.2084 4.375 14.6335 4.375 17.625H7.375Z" fill="white"/>
@@ -256,5 +115,10 @@
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src = "index.js"></script>
-
+<audio id="camera_effects" muted="muted">
+    <source src="./mp3/camera.mp3" type="audio/mp3" />
+</audio>
+<audio id="museum_bgm" muted="muted">
+    <source src="./mp3/museum_bgm.mp3" type="audio/mp3" />
+</audio>
 </html>
