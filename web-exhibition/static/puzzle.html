@@ -7,10 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/puzzle.css">
     <script src="js/puzzle.js"></script>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="css/detail.css">
+    <script src="js/detail.js"></script>
     <title>Document</title>
 </head>
 
 <body>
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
+    <div class="explain">
+        <img src="media/white.png" id="small_img">
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+    </div>
     <div id="grid1" class="grid"></div>
     <div id="grid2" class="grid"></div>
     <div id="grid3" class="grid"></div>

@@ -1,0 +1,147 @@
+body {
+    background-color: #BADCE4;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+#piece {
+    overflow-x: scroll;
+    white-space: nowrap;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#piece ul {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+#piece ul li {
+    display: inline-block;
+    width: 60%;
+    font-size: 1.8em;
+    color: #fff;
+    font-weight: 600;
+}
+
+#era{
+    font-size: 2.2em;
+    font-weight: bolder;
+}
+
+figure.tocaption {
+    position: relative;
+    overflow: hidden;
+    width: 76%;
+    color: #ffffff;
+    text-align: left;
+    font-size: 0.8em;
+    background-color: #000000;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transition: all 0.3s ease-in-out;
+}
+
+figure.tocaption:hover {
+    transform: scale(1.6);
+    -webkit-transform: scale(1.6);
+    -moz-transform: scale(1.6);
+    -ms-transform: scale(1.6);
+    -o-transform: scale(1.6);
+}
+
+figure.tocaption img {
+    max-width: 100%;
+    backface-visibility: hidden;
+    vertical-align: top;
+}
+
+figure.tocaption figcaption {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+figure.tocaption:after {
+    content: '';
+    background-color: rgba(0, 0, 0, 0.65);
+    -webkit-transition: all 0.35s ease;
+    transition: all 0.35s ease;
+    opacity: 0;
+}
+
+figure.tocaption figcaption {
+    z-index: 1;
+    padding: 6%;
+}
+
+figure.tocaption p {
+    font-size: 1em;
+    font-weight: 500;
+    opacity: 0;
+    top: 50%;
+}
+
+figure.tocaption a {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+figure.tocaption:hover:after,
+figure.tocaption.hover:after {
+    opacity: 1;
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+}
+
+figure.tocaption:hover p,
+figure.tocaption.hover p {
+    -webkit-transform: translate(0px, 0px);
+    transform: translate(0px, 0px);
+    opacity: 1;
+}
+
+.thumbnail {
+    width: 100%;
+}
+
+.grid_icon {
+    border-radius: 100%;
+    box-shadow: 2.5px 2.5px 5px 0 rgba(0, 0, 0, 0.16);
+    padding: 4px;
+    background-color: #fff;
+    position: fixed;
+    top: 40px;
+    right: 40px;
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.grid_icon:hover {
+    transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+}
+

@@ -43,7 +43,7 @@ const img_width = 10, // 전체 표현 너비
   img_height = 10, // 전체 표현 높이
   SW = img_width * 20,
   SH = img_height * 20;
-const IMG_URLS = ["../images/test1.jpeg", "../images/test2.jpg"]; // 이미지 파일
+const IMG_URLS = ["../image/test1.jpeg", "../image/test2.jpg"]; // 이미지 파일
 
 camera.position.set(0, 0, 8);
 

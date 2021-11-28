@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="css/detail.css">
+    <script src="js/detail.js"></script>
     <title>Document</title>
     <style>
       * {
@@ -26,6 +29,15 @@
     </style>
   </head>
   <body>
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
+    <div class="explain" style="color: #fff;">
+        <img src="media/white.png" id="small_img">
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+        <br> 가나다라마바사아자차카타파하
+    </div>
     <canvas id="canvasOne" width="500" height="300"></canvas>
     <!-- mp3 -->
     <audio id="click" autoplay="true" muted="muted">

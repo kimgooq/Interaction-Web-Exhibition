@@ -66,6 +66,11 @@ app.get("/guestbook", (req, res) => {
   res.sendfile(path.join(__dirname, "static/guestbook.html"));
 });
 
+app.get("/pieces", (req, res) => {
+  res.sendfile(path.join(__dirname, "static/pieces.html"));
+});
+
+
 // 404 에러 방지 필요
 
 app.post("/api/comment/write", async (req, res) => {
