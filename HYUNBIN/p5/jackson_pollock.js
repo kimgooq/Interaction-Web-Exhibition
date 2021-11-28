@@ -14,11 +14,7 @@ function CircleOne(x, y, col, id) {
   this.id = id;
   this.speed = 0;
 
-  // noStroke();
-
   this.display = function () {
-    // stroke("red");
-    // strokeWeight(4);
     fill(this.col);
     if (this.speed > 70) {
       // size ( speed )
@@ -81,21 +77,6 @@ function mousePressed() {
   if (mouseButton === LEFT) {
     particles.push(new CircleOne(mouseX, mouseY, colorPicker.color(), id));
   }
-  /*
-  else if (mouseButton === RIGHT) {
-    ran_col = [
-      color(179, 119, 0),
-      color(204, 51, 0),
-      color(0, 0, 0),
-      color(255, 255, 255),
-      color(255, 210, 77),
-      color(0, 51, 0),
-    ];
-    // brown, red, black, white, yellow, green
-    let random_index = parseInt(random(0, 6));
-    new CircleTwo(mouseX, mouseY, ran_col[random_index]);
-  }
-   */
 }
 
 function mouseReleased() {
@@ -123,7 +104,7 @@ const dom_setup = () => {
   menu.style.display = "flex";
   menu.style.justifyContent = "space-around";
   menu.style.alignItems = "center";
-  menu.innerHTML = "<h3>좌클릭 후 드래그로 그리기 </h3>";
+  menu.innerHTML = "<h3>좌클릭 드래그로 그리기 </h3>";
   document.querySelector("body").appendChild(menu);
   colorPicker = createColorPicker("#8a1601");
   menu.appendChild(document.querySelector("input"));

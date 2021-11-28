@@ -1,7 +1,7 @@
 let cnv;
 let ctx;
 let img = new Image();
-img.src = "../images/img_1.png";
+img.src = "../images/art_img1.png";
 
 let arr_rain = [];
 let arr_drop = [];
