@@ -1,0 +1,46 @@
+.piece {
+    background-size: 100px 100px;
+    width: 100px;
+    height: 100px;
+    border: 1px solid gray;
+    position: absolute;
+}
+
+.grid {
+    background-size: 100px 100px;
+    width: 100px;
+    height: 100px;
+    border: 1px solid gray;
+    position: absolute;
+}
+
+#grid1 {
+    top: 4%;
+    left: 20%;
+}
+
+#piece1 {
+    top: 4%;
+    left: 55%;
+}
+
+#solve {
+    width: 100px;
+    height: 40px;
+    background-color: white;
+    border: solid 1px gray;
+    border-radius: 10%;
+}
+
+#jumble {
+    width: 100px;
+    height: 40px;
+    background-color: white;
+    border: solid 1px gray;
+    border-radius: 10%;
+}
+
+body {
+    background-image: url("image/back.jpg");
+    background-size: 100vw 100vh;
+}

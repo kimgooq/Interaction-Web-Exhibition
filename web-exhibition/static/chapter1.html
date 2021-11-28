@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        width: 100vw;
+        height: 100vh;
+      }
+
+      body {
+        background: url("image/cow.jpg") center;
+        width: 100vw;
+        min-height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvasOne" width="500" height="300"></canvas>
+    <!-- mp3 -->
+    <audio id="click" autoplay="true" muted="muted">
+      <source src="./mp3/click.mp3" type="audio/mp3" />
+    </audio>
+    <audio id="water_dripping" autoplay="true" muted="muted">
+      <source src="./mp3/water_dripping.mp3" type="audio/mp3" />
+    </audio>
+    <!-- Script -->
+    <script src="js/chapter.js"></script>
+  </body>
+</html>
