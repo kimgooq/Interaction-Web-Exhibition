@@ -1,10 +1,10 @@
 const arr_sound = [];
-for (let i = 0; i < 21; i++) {
-  if (i > 6) {
-    i = 0;
-  }
+for (let i = 0; i < 7; i++) {
+  // if (i > 6) {
+  //   i = 0;
+  // }
   const sound = new Audio();
-  sound.src = "./mp3/pop/" + i + ".wav";
+  sound.src = "./mp3/pop/" + i + ".mp3";
   arr_sound.push(sound);
 }
 var sound_num = 0;
@@ -108,7 +108,7 @@ const addEventOnCanvas = () => {
   document.querySelectorAll("canvas").forEach((el) => {
     el.addEventListener("mouseover", (e) => {
       sound_delay++;
-      sound_num = Math.random() * 10;
+      sound_num = Math.random() * 6;
       random_sound = Math.floor(sound_num);
       if (sound_delay == 2) {
         arr_sound[random_sound].play();

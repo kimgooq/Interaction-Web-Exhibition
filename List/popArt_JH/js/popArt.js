@@ -1,12 +1,4 @@
-// const img = new Image();
-// let currentIndex = 0; // 현재 마우스 위치
-// let canvasContexts = []; // 캔버스 이미지 데이터
-// let imageFilters = []; // 미리 필터된 데이터를 저장
-// let container = document.getElementById("container");
-// let cnv_width;
-// let cnv_height;
-// cnv_width;
-// cnv_height;
+var audio = new Audio("./mp3/bgm_popArt.mp3");
 
 const file_icon = document.getElementById("file-icon");
 file_icon.onclick = () => {
@@ -22,6 +14,8 @@ file_icon.onmouseout = () => {
 };
 
 document.getElementById("img_input").addEventListener("change", (e) => {
+  audio.play();
+  audio.loop = true;
   img = new Image();
   currentIndex = 0; // 현재 마우스 위치
   canvasContexts = []; // 캔버스 이미지 데이터
@@ -74,7 +68,6 @@ const readImage = (img_input) => {
 
 const addCanvases = (width, height) => {
   cnv_width = Math.floor(window.innerWidth / 9);
-  console.log(cnv_width);
   cnv_height = Math.floor((height * cnv_width) / width);
   for (
     let i = 0;
@@ -98,13 +91,11 @@ const addFilters = () => {
       imageFilters.push(editedImageData); // 미리 필터 저장
     }
   });
-  console.log(imageFilters);
 };
 
 const addEventOnCanvas = () => {
   document.querySelectorAll("canvas").forEach((el) => {
     el.addEventListener("mouseover", (e) => {
-      console.log(e.target.classList.value);
       let here = e.target.classList.value.split(",");
       // here[1], here[2]
 
@@ -116,7 +107,6 @@ const addEventOnCanvas = () => {
               Math.pow(Math.abs(there[2] - here[2]), 2)
           )
         );
-        console.log(d);
         if (d === 0) {
           canvasContexts[i].putImageData(imageFilters[0], 0, 0);
         } else if (d === 1) {
