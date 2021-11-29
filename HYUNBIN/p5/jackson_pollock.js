@@ -29,8 +29,8 @@ function CircleOne(x, y, col, id) {
     px = pow(mouseX - pmouseX, 2);
     py = pow(mouseY - pmouseY, 2);
     this.speed = sqrt(px + py) + 10;
-    this.x += (mouseX - this.x + this.speed) / 12;
-    this.y += (mouseY - this.y + this.speed) / 12;
+    this.x = lerp(this.x, mouseX, 0.05);
+    this.y = lerp(this.y, mouseY, 0.05);
 
     ran_col = [
       color(179, 119, 0),
