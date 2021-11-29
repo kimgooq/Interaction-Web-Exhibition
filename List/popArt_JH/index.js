@@ -1,10 +1,15 @@
 const arr_sound = [];
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 21; i++) {
+  if (i > 6) {
+    i = 0;
+  }
   const sound = new Audio();
-  sound.src = "./Swoosh.mp3";
+  sound.src = "./mp3/pop/" + i + ".wav";
   arr_sound.push(sound);
 }
 var sound_num = 0;
+var sound_delay = 0;
+let random_sound;
 
 const file_icon = document.getElementById("file-icon");
 file_icon.onclick = () => {
@@ -102,11 +107,14 @@ const addFilters = () => {
 const addEventOnCanvas = () => {
   document.querySelectorAll("canvas").forEach((el) => {
     el.addEventListener("mouseover", (e) => {
-      arr_sound[sound_num].play();
-      sound_num++;
-      if (sound_num > 19) {
-        sound_num = 0;
+      sound_delay++;
+      sound_num = Math.random() * 10;
+      random_sound = Math.floor(sound_num);
+      if (sound_delay == 2) {
+        arr_sound[random_sound].play();
+        sound_delay = 0;
       }
+
       console.log(e.target.classList.value);
       let here = e.target.classList.value.split(",");
       // here[1], here[2]
