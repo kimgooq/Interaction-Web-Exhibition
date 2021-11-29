@@ -1,18 +1,19 @@
-body {
-    background-color: lightblue;
-}
-
 .explain {
     float: right;
     position: absolute;
-    bottom: 40px;
-    right: 60px;
-    width: 300px;
-    height: 300px;
+    bottom: 220px;
+    right: 100px;
+    width: 500px;
+    height: 500px;
+    color: #fff;
+    font-size: 18px;
+    white-space: normal;
+    z-index: 1000;
 }
 
 #small_img {
-    width: 300px;
+    width: 500px;
+    height: 270px;
     margin-bottom: 8px;
 }
 

@@ -19,5 +19,12 @@
         </div>
     </div>
 </body>
-
+<script type="text/javascript">
+    var filter = "win16|win32|win64|mac";
+    if(navigator.platform){
+        if(0 > filter.indexOf(navigator.platform.toLowerCase())){
+            window.location.href="mobile.html";
+        }
+    }
+    </script>
 </html>

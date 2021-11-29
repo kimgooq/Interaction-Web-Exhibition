@@ -4,6 +4,37 @@ body {
     overflow-y: hidden;
 }
 
+@media all and (max-width:1100px){
+    :root{
+        font-size: 4px;
+    }
+}
+@media all and (min-width:1100px) and (max-width:1300px) {
+    :root{
+        font-size: 6px;
+    }
+}
+@media all and (min-width:1300px) and (max-width:1500px) {
+    :root{
+        font-size: 8px;
+    }
+}
+@media all and (min-width:1500px) and (max-width:1700px) {
+    :root{
+        font-size: 10px;
+    }
+}
+@media all and (min-width:1700px) and (max-width:2000px) {
+    :root{
+        font-size: 13px;
+    }
+}
+@media all and (min-width:2000px) {
+    :root{
+        font-size: 16px;
+    }
+}
+
 #piece {
     overflow-x: scroll;
     white-space: nowrap;
@@ -22,14 +53,9 @@ body {
 #piece ul li {
     display: inline-block;
     width: 60%;
-    font-size: 1.8em;
+    font-size: 2.2rem;
     color: #fff;
     font-weight: 600;
-}
-
-#era{
-    font-size: 2.2em;
-    font-weight: bolder;
 }
 
 figure.tocaption {
@@ -38,7 +64,7 @@ figure.tocaption {
     width: 76%;
     color: #ffffff;
     text-align: left;
-    font-size: 0.8em;
+    font-size: 1.2rem;
     background-color: #000000;
     transform: scale(1);
     -webkit-transform: scale(1);
@@ -68,6 +94,8 @@ figure.tocaption figcaption {
     bottom: 0;
     left: 0;
     right: 0;
+    white-space: normal;
+    display: flex;
 }
 
 figure.tocaption:after {
@@ -81,14 +109,23 @@ figure.tocaption:after {
 figure.tocaption figcaption {
     z-index: 1;
     padding: 6%;
+    padding-top: 2%;
 }
 
 figure.tocaption p {
-    font-size: 1em;
+    font-size: 1.2rem;
     font-weight: 500;
     opacity: 0;
     top: 50%;
 }
+
+figure.tocaption h1 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    opacity: 0;
+    top: 50%;
+}
+
 
 figure.tocaption a {
     position: absolute;
@@ -110,7 +147,9 @@ figure.tocaption.hover:after {
 }
 
 figure.tocaption:hover p,
-figure.tocaption.hover p {
+figure.tocaption.hover p,
+figure.tocaption:hover h1,
+figure.tocaption.hover h1 {
     -webkit-transform: translate(0px, 0px);
     transform: translate(0px, 0px);
     opacity: 1;
@@ -143,5 +182,12 @@ figure.tocaption.hover p {
     -moz-transform: scale(1.1);
     -ms-transform: scale(1.1);
     -o-transform: scale(1.1);
+}
+
+#guestbook_icon{
+    width: 44px;
+    height: 44px;
+    top: 40px;
+    left: 40px;
 }
 

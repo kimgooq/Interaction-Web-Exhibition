@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
-    <link rel="stylesheet" href="css/jackson.css" />
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <link rel="stylesheet" href="css/detail.css">
+    <link rel="stylesheet" href="css/jackson.css">
     <script src="js/detail.js"></script>
     <script src="js/jackson_pollock.js" defer></script>
-    <title>Document</title>
-  </head>
-  <body>
-    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
-    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
-    <div class="explain">
-        <img src="media/white.png" id="small_img">
-        <br> 가나다라마바사아자차카타파하
-        <br> 가나다라마바사아자차카타파하
-        <br> 가나다라마바사아자차카타파하
-        <br> 가나다라마바사아자차카타파하
+    <title>Jackson Pollock-No.5</title>
+</head>
+
+<body>
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg" style="background-color: black;">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg" style="background-color: black;">
+    <div class="explain" style="z-index: 1000; height: 700px; bottom: 80px; color: black;">
+        <img src="detail/no5.png" id="small_img">
+        <br> 추상표현주의는 개인마다 자유롭게 추상적인 형식으로 자신의 감정을 표현해내는 예술사조다. 잭슨 폴록은 넓은 캔버스에 페인트를 흩뿌리는 방식의 드리핑 기법으로 작품을 그리는 자신만의 독창적인 방식을 창안했다. 역동적인 움직임으로 캔버스 위에 페인트들을 여러 겹으로 떨어뜨린다는 점에서 액션 페인팅이라고도 불린다. 
+
+        이러한 기법을 구현하기 위해서 HTML의 캔버스를 다룰 수 있는 p5 라이브러리를 사용했다. 사용자로부터 마우스 이벤트를 받게 되면 화면에 원형 객체로 구성된 도형을 그리고 랜덤한 위치에 작은 원들을 추가적으로 위치시켜 페인트가 떨어지는 듯한 느낌을 주었다. 사용자가 마우스를 움직일 때 순간적으로 마우스 좌표값이 변경되기 때문에 원들이 띄엄띄엄 표현되는 문제점이 있었다. 이처럼 좌표 이동 시, 값이 크게 변경될 때 자연스럽게 도형들이 이어질 수 있도록 하기 위해서 p5의 lerp 함수를 사용했다. 과거 마우스 좌표와 현재 마우스 좌표 간 선형 보간을 통해서 인터랙션에서 사용자가 느끼는 사용성을 높이고자 하였다.
     </div>
-  </body>
+    <audio id="musicplayer" autoplay><source src="mp3/jazz.mp3"></audio>
+</body>
+
 </html>

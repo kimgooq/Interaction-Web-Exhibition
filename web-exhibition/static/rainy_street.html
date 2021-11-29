@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,21 +12,22 @@
     <link rel="stylesheet" href="css/detail.css">
     <script src="js/detail.js"></script>
     <title>Document</title>
-  </head>
-  <body>
+</head>
+
+<body>
     <img id="back_img" alt="Paris rainy day" />
-    <canvas id="cnv"></canvas>
+    <canvas id="cnv" style="z-index: 1;"></canvas>
     <audio id="bgm" autoplay loop>
       <source src="mp3/rainy_day.mp3" type="audio/mp3" />
     </audio>
-    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
-    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
+    <img class="info_btn" style="z-index: 2;" onclick="expalin_toggle();" src="media/info_icon.svg">
+    <img class="back_btn" style="z-index: 3;" onclick="backsite();" src="media/back_icon.svg">
     <div class="explain">
-        <img src="media/white.png" id="small_img">
-        <br> 가나다라마바사아자차카타파하
-        <br> 가나다라마바사아자차카타파하
-        <br> 가나다라마바사아자차카타파하
-        <br> 가나다라마바사아자차카타파하
+        <img src="detail/rain.png" id="small_img">
+        <br> 인상주의는 대상을 보고 작가가 느끼는 순간적인 인상을 그려나가는 미술 사조이다. 하지만 카유보트가 이 그림을 그릴 때는 인상주의보다 대상을 있는 그대로 묘사하는 사실주의 방식을 사용하여 그렸다. 파리 거리의 구성 요소를 자세하게 묘사하고 있는 점에서 이를 확인할 수 있다. 이러한 작품에 비도 실제로 내리는 효과를 표현하고자 하였다. 
+
+        HTML의 기본 캔버스를 통해서 빗줄기를 하나의 객체로 구성하여 매 프레임마다 위치 값을 조절하는 방식으로 구현하였다. 사용자의 마우스 x 좌표를 통해서 바람이 부는 것과 같은 환경을 조성할 수 있고, y 좌표를 통해서 비가 오는 양을 조절할 수 있다. 또한 비의 양과 빗소리의 볼륨이 비례하도록 구성하였다. 특히 비가 바닥에 부딪혔을 때 나타나는 물방울들은 캔버스 위에 또 다시 캔버스를 그리는 방식으로 구현하여 생동감을 더했다. 실시간으로 동적인 움직임을 주는 방식은 많은 연산으로 성능이 떨어지는 문제가 생길 수 있어서 이에 주안점을 두고 제작하였다.
     </div>
-  </body>
+</body>
+
 </html>
