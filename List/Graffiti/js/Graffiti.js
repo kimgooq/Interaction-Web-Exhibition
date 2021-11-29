@@ -5,14 +5,14 @@ window.onload = function () {
 const arr_sound = [];
 for (let i = 0; i < 10; i++) {
   const sound = new Audio();
-  sound.src = "./audio/shooting_sound.mp3";
+  sound.src = "./mp3/shooting_sound.mp3";
   arr_sound.push(sound);
 }
 var sound_num = 0;
 
-import * as THREE from "./js/three.module.js";
-import { FontLoader } from "./js/FontLoader.js";
-import { TextGeometry } from "./js/TextGeometry.js";
+import * as THREE from "./three.module.js";
+import { FontLoader } from "./FontLoader.js";
+import { TextGeometry } from "./TextGeometry.js";
 
 THREE.Cache.enabled = true;
 
