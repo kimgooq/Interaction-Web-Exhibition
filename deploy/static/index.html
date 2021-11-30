@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="js/index.js"></script>
+    <title>Interaction-Web-Exhibition</title>
+  </head>
+
+  <body>
+    <div id="outline">
+      <div id="main_page">
+        <img src="media/title.svg" id="title" alt="title" />
+        <span id="start_btn" onclick="start();">START</span>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    var filter = "win16|win32|win64|mac|macintel";
+    if (navigator.platform) {
+      if (0 > filter.indexOf(navigator.platform.toLowerCase())) {
+        window.location.href = "mobile.html";
+      }
+    }
+  </script>
+</html>

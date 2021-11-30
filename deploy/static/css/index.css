@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+body {
+    background-color: #BADCE4;
+}
+
+#main_page {
+    width: 32%;
+    display: block;
+    margin: auto;
+    margin-top: 6%;
+    text-align: right;
+}
+
+#title {
+    width: 100%;
+    display: block;
+    margin: auto;
+    margin-bottom: 10%;
+}
+
+#start_btn {
+    color: #fff;
+    font-size: 1.5em;
+    font-weight: 700;
+    border-bottom: solid 2px #ffffff;
+    cursor: pointer;
+}

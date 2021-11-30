@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<link>
+<meta charset="UTF-8">
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/false_mirror.css">
+<audio id="audio_play" src="mp3/DDYong.mp3"></audio>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<link rel="stylesheet" href="css/detail.css">
+<script src="js/detail.js"></script>
+<title>The False Mirror</title>
+</head>
+
+<body>
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg" style="z-index: 4;">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg" style="z-index: 3;">
+    <div class="explain" style="color: #fff; z-index: 2; height: 580px; bottom: 40px;">
+        <img src="detail/mirror.png" id="small_img">
+        <br>초현실주의란 1920년대 초
+        프랑스를 중심으로 퍼진 예술사조 중 하나이다. 이는 인간의
+        자유로운 상상력으로 지성을 초월한 꿈이나 무의식의 세계를
+        해방하는 것으로서 초현실적인 미를 창조하고자 한다. 잘못된 거울은
+        르네 마그리트의 대표작 중 하나로, 푸른 하늘을 둘러싼 인간의 눈을
+        묘사한 작품이다. 그림 속의 눈동자가 파란 하늘을 보고 있는데, 이
+        때 우리가 보는 저 하늘이 실제 하늘인지, 거울처럼 비친 허상의
+        하늘인지, 혹은 우리의 눈으로 보는 이 세상이 실제의 세상이 아닌
+        거울에 비친 가짜의 세상인지 헷갈리듯 깊이 생각할 수 있도록
+        유도하고자 했다. 하늘이 채워져 있던 부분에 Camera를 통한 화면을
+        굴곡지게 채워 넣었고, 눈동자가 굴러가도록 가공 및 제작했다.
+    </div>
+    <img src="image/the_false_mirror_fixed.png" id="a" style="z-index: 1;" />
+    <video id="video" style="display:none" autoplay playsinline></video>
+    <audio id="bgm" currentTime="0" loop="loop">
+      <source src="p3/bgm_false_mirror.mp3" type="audio/mp3" />
+    </audio>
+    <script type="module" src="js/FalseMirror.js"></script>
+</body>
+
+</html>

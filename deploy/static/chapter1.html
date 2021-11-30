@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="css/detail.css" />
+    <script src="js/detail.js"></script>
+    <title>Cave of Altamira</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        width: 100vw;
+        height: 100vh;
+      }
+
+      body {
+        background: url("image/cow.jpg") center;
+        width: 100vw;
+        min-height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      class="info_btn"
+      onclick="expalin_toggle();"
+      src="media/info_icon.svg"
+    />
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg" />
+    <div class="explain" style="color: #fff">
+      <img src="image/cow.jpg" id="small_img" />
+      <br />
+      알타미라 동굴은 인류 최초의 동굴 벽화로 알려져 있다. 알타미라는 스페인의
+      세계 유산으로서 '높은 곳에서 바라보는 전망' 이라는 뜻을 가지고 있다. 후기
+      구석기 시대의 유적으로서 야생 동물의 뼈와 손으로 그린 암벽화가 그대로
+      보존되고 있다. 원시인들은 숯이나 황토, 적철석으로 형상을 그리거나
+      자연염료를 이용해 그림을 그렸다. 더군다나 명암법이 드러나 있어 일부
+      형상에는 3차원 이미지가 나타나기도 한다. 이렇듯 현대 예술가들이 그렸다고
+      이상하지 않을 정도로 동물의 생김새나 생동감 넘치는 표현력을 확인할 수
+      있다. 이러한 벽화를 현장에서 보는듯한 느낌을 주기 위하며 동굴에서 직접
+      벽화를 보는 듯한 상황을 해당 작품에서 구현하였다. 추가로 동굴에 있는듯한
+      배경음을 통해 더욱 몰입감있게 작품을 감상할 수 있다. 캔버스의
+      createRadialGradient() 함수를 사용하여 마우스 포인터의 거리에 따라
+      그라디언트를 다르게 주어 손전등을 표현하였다. 클릭을 하면 소리와 함께
+      손전등의 크기를 3단계로 조절할 수 있으며 손전등과 벽화의 거리가 멀어지는
+      듯한 느낌을 준다.
+    </div>
+    <canvas id="canvasOne" width="500" height="300"></canvas>
+    <!-- mp3 -->
+    <audio id="click" autoplay="true" muted="muted">
+      <source src="./mp3/click.mp3" type="audio/mp3" />
+    </audio>
+    <audio id="water_dripping" autoplay="true" muted="muted">
+      <source src="./mp3/water_dripping.mp3" type="audio/mp3" />
+    </audio>
+    <!-- Script -->
+    <script src="js/chapter.js"></script>
+  </body>
+</html>
