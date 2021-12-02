@@ -317,3 +317,5 @@ function main() {
 }
 
 main();
+
+document.getElementById("balloon_effects").volume = "0.6";

@@ -17,7 +17,7 @@ let corsOption = {
 
 app.use(express.json());
 app.use(cors(corsOption));
-app.use(express.static(path.join(__dirname, "static/")));
+app.use(express.static(path.join(__dirname, "static")));
 
 mongoose
   .connect(process.env.MONGO_URL, {

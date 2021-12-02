@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css" rel="stylesheet"/>
     <link rel="stylesheet" href="css/detail.css" />
     <script src="js/detail.js"></script>
     <title>Cave of Altamira</title>
@@ -35,10 +36,18 @@
       src="media/info_icon.svg"
     />
     <img class="back_btn" onclick="backsite();" src="media/back_icon.svg" />
-    <div class="explain" style="color: #fff">
+    <div class="explain" style="height: 780px; bottom: 50px">
       <img src="image/cow.jpg" id="small_img" />
       <br />
-      알타미라 동굴은 인류 최초의 동굴 벽화로 알려져 있다. 알타미라는 스페인의
+      <div class="caption-title" style="color: #f29191; margin-top: 240px">
+        | 알타미라 동굴벽화
+      </div>
+      <br />
+      <div class="caption-artist">&nbsp;작가미상</div>
+      <hr />
+      <br />
+      <div class="caption-explain">
+      &nbsp;알타미라 동굴은 인류 최초의 동굴 벽화로 알려져 있다. 알타미라는 스페인의
       세계 유산으로서 '높은 곳에서 바라보는 전망' 이라는 뜻을 가지고 있다. 후기
       구석기 시대의 유적으로서 야생 동물의 뼈와 손으로 그린 암벽화가 그대로
       보존되고 있다. 원시인들은 숯이나 황토, 적철석으로 형상을 그리거나
@@ -52,6 +61,7 @@
       그라디언트를 다르게 주어 손전등을 표현하였다. 클릭을 하면 소리와 함께
       손전등의 크기를 3단계로 조절할 수 있으며 손전등과 벽화의 거리가 멀어지는
       듯한 느낌을 준다.
+      </div>
     </div>
     <canvas id="canvasOne" width="500" height="300"></canvas>
     <!-- mp3 -->
@@ -63,5 +73,8 @@
     </audio>
     <!-- Script -->
     <script src="js/chapter.js"></script>
+    <script type="text/javascript">
+      window.localStorage.setItem("Background", "mural.png");
+    </script>
   </body>
 </html>

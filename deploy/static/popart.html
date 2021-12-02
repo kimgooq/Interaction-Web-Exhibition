@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
     <script src="js/detail.js"></script>
     <!-- <script src="js/popArt.js"></script> -->
     <!-- <link rel="stylesheet" type="text/css" href="css/popArt.css" /> -->
@@ -89,38 +90,38 @@
       accept="image/png, image/jpeg, image/jpg"
     />
     <div id="container"></div>
-    <img
-      class="info_btn"
-      onclick="expalin_toggle();"
-      src="media/info_icon.svg"
-      style="background-color: black"
-    />
-    <img
-      class="back_btn"
-      onclick="backsite();"
-      src="media/back_icon.svg"
-      style="background-color: black"
-    />
-    <div class="explain" style="color: black; height: 600px">
+    
+    
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg" style="background-color: black;">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg" style="background-color: black;">
+    <div class="explain" style="height: 820px; bottom:50px">
       <img src="detail/pop.png" id="small_img" />
       <br />
-      팝아트는 기존의 예술에 대해서 고결하고 순수하게 취급하던 관념들을 타파하고
-      대량 생산된 작품들로 예술은 복제되고 소비할 수 있는 존재라는 메세지를
-      던진다. 대표적인 작가인 앤디워홀은 실크 스크린을 사용하여 당시 TV 매체를
-      통해서 대중들에게 널리 알려진 배우들의 사진을 자신의 의도에 맞게 가공하여
-      작품을 인쇄하였다. 사용자들이 원하는 이미지를 팝아트 형식으로 즐겨볼 수
-      있도록 사진 파일을 입력 받아 실행할 수 있게 구현하였다. 입력 받은 이미지
-      크기에 따라 동적으로 자바스크립트로 캔버스를 생성한다. 각각의 캔버스에는
-      앤디 워홀이 작품에서 사용한 방식을 표현하기 위해 각 픽셀에 대한 밝기를
-      구하고, 임계값을 적용하여 기존의 이미지와는 달리 몇 가지의 색상만 적용된
-      그림으로 표현할 수 있다. 이렇게 생성된 캔버스 위를 마우스가 이동할 때마다
-      필터가 적용되도록 하였고, 현재 위치를 기준으로 하여 캔버스 간의 거리에
-      따라 다양한 필터가 적용되도록 구성했다. 이처럼 마우스 위치에 따라서 화면
-      상에 나타난 캔버스의 내용이 실시간으로 변경되어야 하기 때문에 성능 문제가
-      발생하지 않도록 미리 각 필터를 적용시킨 캔버스의 Context를 저장하여
-      사용하는 방식을 선택했다.
-    </div>
+      <div class="caption-title" style="color: #a6c9e9;
+      margin-top: 280px; margin-bottom:10px;">| 마릴린 먼로</div>
+      <div class="caption-artist">&nbsp;앤디워홀</div>
+      <hr style="margin-bottom:10px;"/>
+      <div class="caption-explain">
+        &nbsp;팝아트는 기존의 예술에 대해서 고결하고 순수하게 취급하던 관념들을 타파하고
+        대량 생산된 작품들로 예술은 복제되고 소비할 수 있는 존재라는 메세지를
+        던진다. 대표적인 작가인 앤디워홀은 실크 스크린을 사용하여 당시 TV 매체를
+        통해서 대중들에게 널리 알려진 배우들의 사진을 자신의 의도에 맞게 가공하여
+        작품을 인쇄하였다. 사용자들이 원하는 이미지를 팝아트 형식으로 즐겨볼 수
+        있도록 사진 파일을 입력 받아 실행할 수 있게 구현하였다. 입력 받은 이미지
+        크기에 따라 동적으로 자바스크립트로 캔버스를 생성한다. 각각의 캔버스에는
+        앤디 워홀이 작품에서 사용한 방식을 표현하기 위해 각 픽셀에 대한 밝기를
+        구하고, 임계값을 적용하여 기존의 이미지와는 달리 몇 가지의 색상만 적용된
+        그림으로 표현할 수 있다. 이렇게 생성된 캔버스 위를 마우스가 이동할 때마다
+        필터가 적용되도록 하였고, 현재 위치를 기준으로 하여 캔버스 간의 거리에
+        따라 다양한 필터가 적용되도록 구성했다. 이처럼 마우스 위치에 따라서 화면
+        상에 나타난 캔버스의 내용이 실시간으로 변경되어야 하기 때문에 성능 문제가
+        발생하지 않도록 미리 각 필터를 적용시킨 캔버스의 Context를 저장하여
+        사용하는 방식을 선택했다.
+      </div>
   </body>
+  <script type="text/javascript">
+    window.localStorage.setItem("Background", "popart.png");
+  </script>
   <script>
     var audio = new Audio("mp3/bgm_popArt.mp3");
 
@@ -139,6 +140,7 @@
 
     document.getElementById("img_input").addEventListener("change", (e) => {
       audio.play();
+      audio.volume = 0.15;
       audio.loop = true;
       img = new Image();
       currentIndex = 0; // 현재 마우스 위치

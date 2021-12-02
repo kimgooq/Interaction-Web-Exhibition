@@ -28,8 +28,8 @@ input {
 
 .fa-file-image {
   position: absolute;
-  top: 3vh;
-  right: 7vw;
+  top: 2vh;
+  right: 6vw;
   cursor: pointer;
   z-index: 99;
   opacity: 1;

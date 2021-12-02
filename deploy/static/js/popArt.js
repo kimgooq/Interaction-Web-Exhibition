@@ -1,9 +1,9 @@
 var audio = new Audio("mp3/bgm_popArt.mp3");
 
-const file_icon = document.getElementById("file_icon");
-file_icon.addEventListener("click", () => {
+const file_icon = document.getElementById("file-icon");
+file_icon.onclick = () => {
   document.getElementById("img_input").click();
-});
+};
 
 file_icon.onmouseover = () => {
   icon_status(0);
@@ -15,6 +15,7 @@ file_icon.onmouseout = () => {
 
 document.getElementById("img_input").addEventListener("change", (e) => {
   audio.play();
+  console.log(1);
   audio.loop = true;
   img = new Image();
   currentIndex = 0; // 현재 마우스 위치
@@ -44,11 +45,11 @@ document.getElementById("img_input").addEventListener("change", (e) => {
 
 const icon_status = (flag) => {
   if (flag === 0) {
-    file_icon.style.color = "maroon";
+    file_icon.style.color = "black";
     file_icon.style.opacity = 1;
     file_icon.style.transform = "scale(120%)";
   } else if (flag === 1) {
-    file_icon.style.color = "lightred";
+    file_icon.style.color = "lightgray";
     file_icon.style.opacity = 0.5;
     file_icon.style.transform = "scale(100%)";
   }
