@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+
+    <link rel="stylesheet" href="css/guestbook.css" />
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="js/guestbook.js" type="module" defer></script>
+    <title>KW-Interactive-Web</title>
+  </head>
+
+  <body>
+    <div id="index_container">
+      <img id="background" class="img-back" src="pieces/balloon.png" />
+    </div>
+    <div id="grid">
+      <div id="title">방명록</div>
+      <ul id="allComments"></ul>
+      <div id="user_form">
+        <input
+        type="tel"
+        placeholder="- 없이 입력하세요 (11자리)"
+        id="user_tel"
+        minlength="11"
+        maxlength="11"
+        /><br />
+        <!-- <input type="text" placeholder="전시회 감상 후기를 남겨주세요" id="comment"><br> -->
+        <div id="comment_space">
+          <textarea
+            name=""
+            id="comment"
+            rows="4"
+            placeholder="웹 전시회를 어떻게 즐기셨나요?&#13;&#10;후기를 남겨 알려주세요!&#13;&#10;추첨을 통해 기프티콘을 보내드립니다."
+          ></textarea>
+        </div>
+        <div id="btn_space"><input type="button" value="등록" id="btn" /></div>
+      </div>
+      <div id="notice">*전화번호는 추첨을 통한 기프티콘 전송 후 즉시 파기됩니다.</div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    let Background = window.localStorage.getItem("Background");
+    document.getElementById("background").src = "pieces/" + Background;
+    //window.localStorage.setItem("stageState", "balloon.png");
+  </script>
+</html>

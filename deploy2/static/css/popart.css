@@ -1,0 +1,37 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body #container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+}
+
+p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 2rem;
+  font-weight: bold;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+input {
+  display: none;
+}
+
+.fa-file-image {
+  position: absolute;
+  top: 2vh;
+  right: 6vw;
+  cursor: pointer;
+  z-index: 99;
+  opacity: 1;
+  transition: all 0.3s ease-in-out;
+}

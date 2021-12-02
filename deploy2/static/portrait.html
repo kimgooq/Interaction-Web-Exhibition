@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/portrait.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
+
+    <script src="js/portrait.js" type="module"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="css/detail.css">
+    <script src="js/detail.js"></script>
+    <title>Portrait</title>
+</head>
+
+<body>
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
+
+    <div id="container"></div>
+    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg" style="background-color: black;">
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg" style="background-color: black;">
+    <div
+      class="explain"
+      style="height: 750px; bottom:50px"
+    >
+      <img src="detail/portrait.png" id="small_img" />
+      <br />
+      <div class="caption-title" style="color: #a6c9e9;
+      margin-top: 280px; margin-bottom:10px;">| 자화상</div>
+      <div class="caption-artist">&nbsp;피카소</div>
+      <hr style="margin-bottom:10px;"/>
+      <div class="caption-explain">
+        &nbsp;하나의 화폭을 입체적인 공간으로 나누어 여러 시점에서 바라본 대상을
+        재구성하는 방식인 입체주의의 대표적인 작가로는 피카소가 있다. 그림에
+        표현된 자화상은 각각 25살, 90살의 자화상이다. 피카소는 자신의 작품들이
+        대상을 각기 다른 모습으로 표현한 것뿐이라고 말했다. 이에 따라 그가 그린
+        자화상의 본질은 변하지 않았기 때문에 3차원 환경에서 하나의 객체로
+        나타내고자 했다. 2D로 된 그림을 3D 객체의 Texture로 사용하기 위해
+        three.js의 BufferGeometry를 활용하여 UV mapping을 수행했다. 각각의
+        객체들을 하나의 그룹으로 구성하고 사용자의 시점에 따라서 서로 다른
+        자화상이 보일 수 있도록 두 가지 각도를 가진 Lighting들을 3차원 공간에
+        추가했다. Orbit Control을 추가하여 사용자가 마우스 드래그를 통해 방향을
+        조절하고 양면에 렌더링된 작품을 고정된 카메라에서 감상할 수 있도록
+        구성했다.
+      </div>
+   
+    <audio id="musicplayer" autoplay><source src="mp3/piano.mp3"></audio>
+</body>
+<script type="text/javascript">
+  window.localStorage.setItem("Background", "portrait.png");
+</script>
+</html>

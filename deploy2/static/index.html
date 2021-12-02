@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/index.css" />
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <link
+      href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css"
+      rel="stylesheet"
+    />
+
+    <title>web-exhibition</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <img id="background" src="pieces/balloon.png" />
+      <div class="slide">
+        <div id="main_page">
+          <img src="media/title.svg" id="title" alt="title" />
+          <div class="explain-first">
+            저희의 Interaction Web Exhibition은<br />
+            유명 미술작품을 오마주해 인터랙션을 넣어 작품들을
+            재구성하였습니다<br />
+            미술사에 따라 작품을 관람하며 재밌는 여러 인터렉션을 즐겨보세요
+          </div>
+          <span id="start_btn" onclick="start();" class="button-css"
+            >START</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <!-- <div id="outline" class="middle-box">
+      <div id="main_page">
+        <img src="media/title.svg" id="title" alt="title" />
+        <span id="start_btn" onclick="start();" class="button-css">START</span>
+      </div>
+    </div> -->
+  </body>
+  <script type="text/javascript">
+    window.localStorage.setItem("Background", "balloon.png");
+
+    $(window).on("resize scroll", function () {
+      rect = $("#container")[0].getBoundingClientRect();
+    });
+
+    var filter = "win16|win32|win64|mac";
+    if (navigator.platform) {
+      if (0 > filter.indexOf(navigator.platform.toLowerCase())) {
+        window.location.href = "mobile.html";
+      }
+    }
+  </script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.18.0/TweenMax.min.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/parallax.js"></script>
+</html>
