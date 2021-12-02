@@ -8,6 +8,7 @@
     <title>Document</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
     <link rel="stylesheet" type="text/css" href="css/dadaism.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css">
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="js/detail.js"></script>
     <link rel="stylesheet" href="css/detail.css">
@@ -173,17 +174,34 @@
 </div>
 <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg" style="z-index: 5;">
 <img class="back_btn" onclick="backsite();" src="media/back_icon.svg" style="z-index: 6;">
-<div class="explain" style="z-index: 10; bottom: 300px;">
-    <img src="detail/lhooq.png" id="small_img">
-    <br> 다다이즘의 작품이자 레디메이드중 하나인 L.H.O.O.Q는  1919년에 메르셀 뒤샹이 만든 작품이다. 다다이즘은 제1차 세계 대전 중, 스위스에 망명 온 작가들이 일으킨 반 문명, 반 합리주의 예술 운동으로,모든 문화적 가치, 전통적 가치, 이성에 대한 신뢰를 부정하며 예술 형식의 파괴와 부정을 주장하였다. 이처럼 해당 작품은 모나리자의 그림에 수염과 턱수염을 그려  예술에 대한 풍자를 나타낸다. 
 
-    다다이즘의 "예술형식의 파괴"라는 특성을 가지고 전시되어 있는 모나리자를 직접 낙서를 해보는 듯한 체험형 예술작품을 만들어보았다. 캔버스의 그리기를 이용해 마우스 포인터의 값을 읽어 작품위에 그림을 그리는듯한 느낌을 준다. 그리고 png사진을 svg로 변경하고 해당 path의 값을 읽어 캔버스 위에 도장을 찍을 수 있도록 하였다. 사용자는 팔레트를 이용하여 그림과 도장툴을 이용해 자신만의 또 다른 예술을 만들어낼 수 있다. 그후 전시되어있는 나의 그림을 사진을 찍어 저장할 수 있도록 하였다.
-</div>
+<div
+      class="explain"
+      style="z-index: 10; height: 800px; bottom:50px"
+    >
+    <img src="detail/lhooq.png" id="small_img">
+      <br />
+      <div class="caption-title" style="color: #a6c9e9;
+      margin-top: 280px;">| L.H.O.O.Q</div>
+      <div class="caption-artist">&nbsp;L.H.O.O.Q</div>
+      <hr />
+      <div class="caption-explain">
+        &nbsp;다다이즘의 작품이자 레디메이드중 하나인 L.H.O.O.Q는  1919년에 메르셀 뒤샹이 만든 작품이다. 다다이즘은 제1차 세계 대전 중, 스위스에 망명 온 작가들이 일으킨 반 문명, 반 합리주의 예술 운동으로,모든 문화적 가치, 전통적 가치, 이성에 대한 신뢰를 부정하며 예술 형식의 파괴와 부정을 주장하였다. 이처럼 해당 작품은 모나리자의 그림에 수염과 턱수염을 그려  예술에 대한 풍자를 나타낸다. 
+        <br /><br />
+        &nbsp;다다이즘의 "예술형식의 파괴"라는 특성을 가지고 전시되어 있는 모나리자를 직접 낙서를 해보는 듯한 체험형 예술작품을 만들어보았다. 캔버스의 그리기를 이용해 마우스 포인터의 값을 읽어 작품위에 그림을 그리는듯한 느낌을 준다. 그리고 png사진을 svg로 변경하고 해당 path의 값을 읽어 캔버스 위에 도장을 찍을 수 있도록 하였다. 사용자는 팔레트를 이용하여 그림과 도장툴을 이용해 자신만의 또 다른 예술을 만들어낼 수 있다. 그후 전시되어있는 나의 그림을 사진을 찍어 저장할 수 있도록 하였다.
+      </div>
+
+      <br />
+    </div>
 
 </body>
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <script src="js/LHOOQ.js"></script>
+<script type="text/javascript">
+    window.localStorage.setItem("Background", "LHOOQ.png");
+</script>
+
 <audio id="camera_effects" muted="muted">
     <source src="mp3/camera.mp3" type="audio/mp3" />
 </audio>

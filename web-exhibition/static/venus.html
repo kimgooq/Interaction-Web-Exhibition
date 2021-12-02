@@ -5,28 +5,68 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <audio id="audio_play" src="mp3/sound_bubble.mp3"></audio>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquare.css"
+    />
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <link rel="stylesheet" href="css/detail.css">
+    <link rel="stylesheet" href="css/detail.css" />
     <script src="js/detail.js"></script>
     <title>Venus</title>
   </head>
   <body>
-    <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
-    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
-    <div class="explain" style="height: 640px; bottom: 60px;">
-        <img src="detail/venus.png" id="small_img">
-        <br>르네상스란 중세와 근세를 이어주며 예술 전반에 걸친, 고대 그리스와 로마 문명의 재인식, 재수용을 의미하는 문예부흥이라 말할 수 있다. 비너스의 탄생은 이 시기의 산드로 보티첼리 대표작 중 하나이다. 로마 신화에서 사랑과 아름다움의 여신인 비너스가 성숙한 여성의 모습으로 바다에서 탄생하는 내용을 묘사한 작품으로서, 비너스의 왼쪽 어깨 기울기는 불가능하지만 미를 표현하기 위해 묘사되었다. 이러한 작품의 신비롭고 신화적인 분위기를 더해주기 위해서, three.js를 활용하여 비눗방울이 날아다니도록 하였다. 이 때 비눗방울의 볼록렌즈 효과를 적용시키기 위해 배경의 이미지가 확대된 것을 표면에 그려주었다. 또한 Three.Raycast()라는 2D 화면의 좌표를 3D 상으로 이어주는 함수를 통해 마우스 클릭으로 비눗방울을 터뜨릴 수 있도록 하였다.
+    <img
+      class="info_btn"
+      onclick="expalin_toggle();"
+      src="media/info_icon.svg"
+    />
+    <img class="back_btn" onclick="backsite();" src="media/back_icon.svg" />
+    <div class="explain" style="height: 660px; bottom: 50px">
+      <img src="detail/venus.png" id="small_img" />
+      <br />
+      <div class="caption-title" style="color: #f2e391; margin-top: 280px">
+        | 비너스의 탄생
+      </div>
+      <div class="caption-artist" style="margin-top: 5px">
+        &nbsp;산드로 보티첼리
+      </div>
+      <hr />
+      <div class="caption-explain">
+        &nbsp;르네상스란 중세와 근세를 이어주며 예술 전반에 걸친, 고대 그리스와
+        로마 문명의 재인식, 재수용을 의미하는 문예부흥이라 말할 수 있다.
+        비너스의 탄생은 이 시기의 산드로 보티첼리 대표작 중 하나이다. 로마
+        신화에서 사랑과 아름다움의 여신인 비너스가 성숙한 여성의 모습으로
+        바다에서 탄생하는 내용을 묘사한 작품으로서, 비너스의 왼쪽 어깨 기울기는
+        불가능하지만 미를 표현하기 위해 묘사되었다.
+        <br /><br />
+        &nbsp;비너스의 왼쪽 어깨 기울기는 불가능하지만 미를 표현하기 위해
+        묘사되었다. 이러한 작품의 신비롭고 신화적인 분위기를 더해주기 위해서,
+        three.js를 활용하여 비눗방울이 날아다니도록 하였다. 이 때 비눗방울의
+        볼록렌즈 효과를 적용시키기 위해 배경의 이미지가 확대된 것을 표면에
+        그려주었다. 또한 Three.Raycast()라는 2D 화면의 좌표를 3D 상으로 이어주는
+        함수를 통해 마우스 클릭으로 비눗방울을 터뜨릴 수 있도록 하였다.
+      </div>
+
+      <br />
     </div>
-    <iframe src="mp3/silence.mp3" allow="autoplay" style="display: none"></iframe>
+    <iframe
+      src="mp3/silence.mp3"
+      allow="autoplay"
+      style="display: none"
+    ></iframe>
     <audio id="bgm" currentTime="0" loop="loop">
       <source src="mp3/bgm_Venus.mp3" type="audio/mp3" />
     </audio>
     <script type="module" src="js/Venus.js"></script>
   </body>
   <style>
-    *{
+    * {
       overflow-x: hidden;
       overflow-y: hidden;
     }
   </style>
+  <script type="text/javascript">
+    window.localStorage.setItem("Background", "venus.png");
+  </script>
 </html>

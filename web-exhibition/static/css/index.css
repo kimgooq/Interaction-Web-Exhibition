@@ -1,27 +1,95 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 body {
-    background-color: #BADCE4;
+  overflow: hidden;
+}
+
+#container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slide {
+  display: block;
+  position: absolute;
+}
+.middle-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
 }
 
 #main_page {
-    width: 32%;
-    display: block;
-    margin: auto;
-    margin-top: 6%;
-    text-align: right;
+  width: 38%;
+  display: absolute;
+  margin: auto;
+  /* margin-top: 10%; */
+  text-align: right;
+  z-index: 100;
 }
 
 #title {
-    width: 100%;
-    display: block;
-    margin: auto;
-    margin-bottom: 10%;
+  width: 100%;
+  display: block;
+  margin: auto;
+  margin-bottom: 10%;
 }
 
-#start_btn {
-    color: #fff;
-    font-size: 1.5em;
-    font-weight: 700;
-    border-bottom: solid 2px #ffffff;
-    cursor: pointer;
+#background {
+  filter: blur(4px);
+  /* filter: brightness(50%); */
+}
+
+.explain-first {
+  font-family: NanumSquareLight;
+  color: white;
+  margin-top: -30px;
+  margin-bottom: 10px;
+}
+
+.button-css {
+  background: #041f50;
+  color: #fff;
+  border: none;
+  position: relative;
+  height: 60px;
+  font-size: 1.3em;
+  padding: 0 2em;
+  cursor: pointer;
+  transition: 800ms ease all;
+  outline: none;
+  /* border-radius: 10px; */
+}
+.button-css:hover {
+  background: #fff;
+  color: #041f50;
+}
+.button-css:before,
+.button-css:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 2px;
+  width: 0;
+  background: #041f50;
+  transition: 400ms ease all;
+}
+.button-css:after {
+  right: inherit;
+  top: inherit;
+  left: 0;
+  bottom: 0;
+}
+.button-css:hover:before,
+.button-css:hover:after {
+  width: 100%;
+  transition: 800ms ease all;
 }
