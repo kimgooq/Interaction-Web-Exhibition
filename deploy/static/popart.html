@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="js/detail.js"></script>
+    <!-- <script src="js/popArt.js"></script> -->
+    <!-- <link rel="stylesheet" type="text/css" href="css/popArt.css" /> -->
+    <link rel="stylesheet" type="text/css" href="css/detail.css" />
+    <title>Untitled Marilyn Monroe</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body #container {
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-wrap: wrap;
+        overflow: hidden;
+      }
+
+      p {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 2rem;
+        font-weight: bold;
+        transform: translate(-50%, -50%);
+        z-index: -1;
+      }
+
+      input {
+        display: none;
+      }
+
+      .fa-file-image {
+        position: absolute;
+        top: 3vh;
+        right: 7vw;
+        cursor: pointer;
+        z-index: 99;
+        opacity: 1;
+        transition: all 0.3s ease-in-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="file_icon" class="fa-file-image">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="72px"
+        viewBox="0 0 24 24"
+        width="72px"
+        fill="#800000"
+      >
+        <path d="M0 0h24v24H0z" fill="none" />
+        <path
+          d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"
+        />
+      </svg>
+    </div>
+    <p>
+      우측 상단의
+      <span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          height="28px"
+          viewBox="0 0 24 24"
+          width="28px"
+          fill="#000000"
+        >
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path
+            d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"
+          />
+        </svg>
+      </span>
+      버튼을 눌러 사진을 선택해보세요.😉
+    </p>
+    <input
+      type="file"
+      id="img_input"
+      accept="image/png, image/jpeg, image/jpg"
+    />
+    <div id="container"></div>
+    <img
+      class="info_btn"
+      onclick="expalin_toggle();"
+      src="media/info_icon.svg"
+      style="background-color: black"
+    />
+    <img
+      class="back_btn"
+      onclick="backsite();"
+      src="media/back_icon.svg"
+      style="background-color: black"
+    />
+    <div class="explain" style="color: black; height: 600px">
+      <img src="detail/pop.png" id="small_img" />
+      <br />
+      팝아트는 기존의 예술에 대해서 고결하고 순수하게 취급하던 관념들을 타파하고
+      대량 생산된 작품들로 예술은 복제되고 소비할 수 있는 존재라는 메세지를
+      던진다. 대표적인 작가인 앤디워홀은 실크 스크린을 사용하여 당시 TV 매체를
+      통해서 대중들에게 널리 알려진 배우들의 사진을 자신의 의도에 맞게 가공하여
+      작품을 인쇄하였다. 사용자들이 원하는 이미지를 팝아트 형식으로 즐겨볼 수
+      있도록 사진 파일을 입력 받아 실행할 수 있게 구현하였다. 입력 받은 이미지
+      크기에 따라 동적으로 자바스크립트로 캔버스를 생성한다. 각각의 캔버스에는
+      앤디 워홀이 작품에서 사용한 방식을 표현하기 위해 각 픽셀에 대한 밝기를
+      구하고, 임계값을 적용하여 기존의 이미지와는 달리 몇 가지의 색상만 적용된
+      그림으로 표현할 수 있다. 이렇게 생성된 캔버스 위를 마우스가 이동할 때마다
+      필터가 적용되도록 하였고, 현재 위치를 기준으로 하여 캔버스 간의 거리에
+      따라 다양한 필터가 적용되도록 구성했다. 이처럼 마우스 위치에 따라서 화면
+      상에 나타난 캔버스의 내용이 실시간으로 변경되어야 하기 때문에 성능 문제가
+      발생하지 않도록 미리 각 필터를 적용시킨 캔버스의 Context를 저장하여
+      사용하는 방식을 선택했다.
+    </div>
+  </body>
+  <script>
+    var audio = new Audio("mp3/bgm_popArt.mp3");
+
+    const file_icon = document.getElementById("file_icon");
+    file_icon.addEventListener("click", () => {
+      document.getElementById("img_input").click();
+    });
+
+    file_icon.onmouseover = () => {
+      icon_status(0);
+    };
+
+    file_icon.onmouseout = () => {
+      icon_status(1);
+    };
+
+    document.getElementById("img_input").addEventListener("change", (e) => {
+      audio.play();
+      audio.loop = true;
+      img = new Image();
+      currentIndex = 0; // 현재 마우스 위치
+      canvasContexts = []; // 캔버스 이미지 데이터
+      imageFilters = []; // 미리 필터된 데이터를 저장
+      container = document.getElementById("container");
+      while (container.hasChildNodes()) {
+        container.removeChild(container.firstChild);
+      }
+      icon_status(1);
+      readImage(e.target);
+      img.addEventListener("load", () => {
+        addCanvases(img.width, img.height);
+        let canvases = document.querySelectorAll("canvas");
+        canvases.forEach((el) => {
+          el.width = cnv_width;
+          el.height = cnv_height;
+          canvasContexts.push(el.getContext("2d"));
+        });
+        canvasContexts.forEach((el, i) => {
+          el.drawImage(img, 0, 0, cnv_width, cnv_height);
+        });
+        addFilters();
+        addEventOnCanvas();
+      });
+    });
+
+    const icon_status = (flag) => {
+      if (flag === 0) {
+        file_icon.style.color = "maroon";
+        file_icon.style.opacity = 1;
+        file_icon.style.transform = "scale(120%)";
+      } else if (flag === 1) {
+        file_icon.style.color = "lightred";
+        file_icon.style.opacity = 0.5;
+        file_icon.style.transform = "scale(100%)";
+      }
+    };
+
+    const readImage = (img_input) => {
+      // 인풋 태그에 파일이 있는 경우
+      if (img_input.files && img_input.files[0]) {
+        // FileReader 인스턴스 생성
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(img_input.files[0]);
+      }
+    };
+
+    const addCanvases = (width, height) => {
+      cnv_width = Math.floor(window.innerWidth / 9);
+      cnv_height = Math.floor((height * cnv_width) / width);
+      for (
+        let i = 0;
+        i <= Math.floor(9 * Math.floor(window.innerHeight / cnv_height) + 8);
+        i++
+      ) {
+        let temp_canvas = document.createElement("canvas");
+        temp_canvas.width = cnv_width;
+        temp_canvas.height = cnv_height;
+        temp_canvas.classList.add(`${i},${Math.floor(i / 9)},${i % 9}`);
+        container.appendChild(temp_canvas);
+      }
+    };
+
+    const addFilters = () => {
+      canvasContexts.forEach((el, i) => {
+        if (i < 10) {
+          let imageData = el.getImageData(0, 0, cnv_width, cnv_height);
+          let editedImageData = imageData;
+          editPixels(editedImageData.data, i);
+          imageFilters.push(editedImageData); // 미리 필터 저장
+        }
+      });
+    };
+
+    const addEventOnCanvas = () => {
+      document.querySelectorAll("canvas").forEach((el) => {
+        el.addEventListener("mouseover", (e) => {
+          let here = e.target.classList.value.split(",");
+          // here[1], here[2]
+
+          document.querySelectorAll("canvas").forEach((cnv, i) => {
+            let there = cnv.classList.value.split(",");
+            let d = Math.round(
+              Math.sqrt(
+                Math.pow(Math.abs(there[1] - here[1]), 2) +
+                  Math.pow(Math.abs(there[2] - here[2]), 2)
+              )
+            );
+            if (d === 0) {
+              canvasContexts[i].putImageData(imageFilters[0], 0, 0);
+            } else if (d === 1) {
+              canvasContexts[i].putImageData(imageFilters[1], 0, 0);
+            } else if (d === 2) {
+              canvasContexts[i].putImageData(imageFilters[2], 0, 0);
+            } else if (d === 3) {
+              canvasContexts[i].putImageData(imageFilters[3], 0, 0);
+            } else if (d === 4) {
+              canvasContexts[i].putImageData(imageFilters[4], 0, 0);
+            } else if (d === 5) {
+              canvasContexts[i].putImageData(imageFilters[5], 0, 0);
+            } else if (d === 6) {
+              canvasContexts[i].putImageData(imageFilters[6], 0, 0);
+            } else if (d === 7) {
+              canvasContexts[i].putImageData(imageFilters[7], 0, 0);
+            } else if (d === 8) {
+              canvasContexts[i].putImageData(imageFilters[8], 0, 0);
+            } else if (d === 9) {
+              canvasContexts[i].putImageData(imageFilters[9], 0, 0);
+            }
+          });
+        });
+      });
+    };
+
+    function getPixelTotalValue(imgData, i) {
+      let pixel_value =
+        0.2126 * imgData[i] + 0.7152 * imgData[i + 1] + 0.0722 * imgData[i + 2];
+      if (pixel_value > 140) {
+        return 255;
+      } else if (pixel_value > 115) {
+        return 200;
+      } else if (pixel_value > 70) {
+        return 120;
+      } else {
+        return 0;
+      }
+      // threshold ? 255 : 0;
+    }
+
+    //빨강 - 주황 - 하늘 - 분홍
+    const sP1 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 255;
+          imgData[i + 1] = 100;
+          imgData[i + 2] = 100;
+        } else if (value === 200) {
+          imgData[i] = 168;
+          imgData[i + 1] = 229;
+          imgData[i + 2] = 240;
+        } else if (value === 120) {
+          imgData[i] = 240;
+          imgData[i + 1] = 200;
+          imgData[i + 2] = 0;
+        } else if (value === 0) {
+          imgData[i] = 255;
+          imgData[i + 1] = 0;
+          imgData[i + 2] = 0;
+        }
+      }
+    };
+
+    const sP2 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 247;
+          imgData[i + 1] = 188;
+          imgData[i + 2] = 220;
+        } else if (value === 200) {
+          imgData[i] = 70;
+          imgData[i + 1] = 220;
+          imgData[i + 2] = 85;
+        } else if (value === 120) {
+          imgData[i] = 255;
+          imgData[i + 1] = 153;
+          imgData[i + 2] = 0;
+        } else if (value === 0) {
+          imgData[i] = 255;
+          imgData[i + 1] = 204;
+          imgData[i + 2] = 0;
+        }
+      }
+    };
+
+    const sP3 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 252;
+          imgData[i + 1] = 220;
+          imgData[i + 2] = 150;
+        } else if (value === 200) {
+          imgData[i] = 56;
+          imgData[i + 1] = 153;
+          imgData[i + 2] = 214;
+        } else if (value === 120) {
+          imgData[i] = 210;
+          imgData[i + 1] = 252;
+          imgData[i + 2] = 149;
+        } else if (value === 0) {
+          imgData[i] = 17;
+          imgData[i + 1] = 180;
+          imgData[i + 2] = 130;
+        }
+      }
+    };
+
+    const sP4 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 207;
+          imgData[i + 1] = 253;
+          imgData[i + 2] = 230;
+        } else if (value === 200) {
+          imgData[i] = 247;
+          imgData[i + 1] = 188;
+          imgData[i + 2] = 220;
+        } else if (value === 120) {
+          imgData[i] = 120;
+          imgData[i + 1] = 97;
+          imgData[i + 2] = 232;
+        } else if (value === 0) {
+          imgData[i] = 56;
+          imgData[i + 1] = 153;
+          imgData[i + 2] = 214;
+        }
+      }
+    };
+    // 밑에서부터 1 - 2 - 3 - 4
+    const sP5 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 240;
+          imgData[i + 1] = 185;
+          imgData[i + 2] = 90;
+        } else if (value === 200) {
+          imgData[i] = 203;
+          imgData[i + 1] = 211;
+          imgData[i + 2] = 247;
+        } else if (value === 120) {
+          imgData[i] = 240;
+          imgData[i + 1] = 207;
+          imgData[i + 2] = 252;
+        } else if (value === 0) {
+          imgData[i] = 120;
+          imgData[i + 1] = 97;
+          imgData[i + 2] = 232;
+        }
+      }
+    };
+
+    // 4 - 3 - 1 - 2
+    const sP6 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 240;
+          imgData[i + 1] = 207;
+          imgData[i + 2] = 252;
+        } else if (value === 200) {
+          imgData[i] = 120;
+          imgData[i + 1] = 97;
+          imgData[i + 2] = 232;
+        } else if (value === 120) {
+          imgData[i] = 203;
+          imgData[i + 1] = 211;
+          imgData[i + 2] = 247;
+        } else if (value === 0) {
+          imgData[i] = 240;
+          imgData[i + 1] = 185;
+          imgData[i + 2] = 90;
+        }
+      }
+    };
+
+    const sP7 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 120;
+          imgData[i + 1] = 97;
+          imgData[i + 2] = 232;
+        } else if (value === 200) {
+          imgData[i] = 56;
+          imgData[i + 1] = 153;
+          imgData[i + 2] = 214;
+        } else if (value === 120) {
+          imgData[i] = 247;
+          imgData[i + 1] = 188;
+          imgData[i + 2] = 220;
+        } else if (value === 0) {
+          imgData[i] = 207;
+          imgData[i + 1] = 253;
+          imgData[i + 2] = 230;
+        }
+      }
+    };
+
+    const sP8 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 210;
+          imgData[i + 1] = 252;
+          imgData[i + 2] = 149;
+        } else if (value === 200) {
+          imgData[i] = 17;
+          imgData[i + 1] = 180;
+          imgData[i + 2] = 130;
+        } else if (value === 120) {
+          imgData[i] = 56;
+          imgData[i + 1] = 153;
+          imgData[i + 2] = 214;
+        } else if (value === 0) {
+          imgData[i] = 252;
+          imgData[i + 1] = 220;
+          imgData[i + 2] = 150;
+        }
+      }
+    };
+
+    const sP9 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 255;
+          imgData[i + 1] = 153;
+          imgData[i + 2] = 0;
+        } else if (value === 200) {
+          imgData[i] = 255;
+          imgData[i + 1] = 204;
+          imgData[i + 2] = 0;
+        } else if (value === 120) {
+          imgData[i] = 70;
+          imgData[i + 1] = 220;
+          imgData[i + 2] = 85;
+        } else if (value === 0) {
+          imgData[i] = 247;
+          imgData[i + 1] = 188;
+          imgData[i + 2] = 220;
+        }
+      }
+    };
+
+    const sP10 = (imgData) => {
+      for (let i = 0; i < imgData.length; i += 4) {
+        let value = getPixelTotalValue(imgData, i);
+        if (value === 255) {
+          imgData[i] = 240;
+          imgData[i + 1] = 200;
+          imgData[i + 2] = 0;
+        } else if (value === 200) {
+          imgData[i] = 255;
+          imgData[i + 1] = 0;
+          imgData[i + 2] = 0;
+        } else if (value === 120) {
+          imgData[i] = 168;
+          imgData[i + 1] = 229;
+          imgData[i + 2] = 240;
+        } else if (value === 0) {
+          imgData[i] = 255;
+          imgData[i + 1] = 100;
+          imgData[i + 2] = 100;
+        }
+      }
+    };
+
+    let sP_functions = [sP1, sP2, sP3, sP4, sP5, sP6, sP7, sP8, sP9, sP10];
+
+    const editPixels = (imgData, i) => {
+      const rand_index = Math.floor(Math.random() * sP_functions.length);
+      sP_functions[i % sP_functions.length](imgData);
+    };
+
+    //grayscale
+    function grayscale(pixels, args) {
+      let d = pixels.data;
+      for (let i = 0; i < d.length; i += 4) {
+        let r = d[i];
+        let g = d[i + 1];
+        let b = d[i + 2];
+
+        let value = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        d[i] = d[i + 1] = d[i + 2] = value;
+      }
+      return pixels;
+    }
+
+    /* brightness 
+function brightness (pixels, adjustment) {
+  let d = pixels.data;
+  for ( let i = 0 ; i < d.length; i += 4 ) {
+    d[i] += adjustment;
+    d[i+1] += adjustment;
+    d[i+2] += adjustment;
+  }
+  return pixels;
+}
+*/
+
+    //threshold
+    // function threshold (pixels, threshold) {
+    //   let d = pixels.data;
+    //   for ( let i = 0; i < d.length; i += 4 ) {
+    //     let r = d[i];
+    //     let g = d[i+1];
+    //     let b = d[i+2];
+    //     let value = (0.2126 * r + 0.7152 * g + 0.0722 * b >= threshold) ? 255 : 0;
+    //     d[i] = d[i+1] = d[i+2] = value;
+    //   }
+    // }
+  </script>
+</html>
