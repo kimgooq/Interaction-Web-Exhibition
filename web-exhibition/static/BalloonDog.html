@@ -36,14 +36,29 @@
   <body>
     <img class="info_btn" onclick="expalin_toggle();" src="media/info_icon.svg">
     <img class="back_btn" onclick="backsite();" src="media/back_icon.svg">
-    <div class="explain" style="height: 600px;">
+    
+    <!-- <div class="explain" style="height: 600px;">
         <img src="detail/dog.png" id="small_img">
         <br> 1994년부터 2000년까지 제작한 5개의 Balloon Dog은 제프쿤스가 제작했다. 바람이 빠지는 속성의 풍선대신 단단한 재료를 사용함으로써 작품의 형태는 변하지 않고 영구보존적인 성격을 갖게 한다.또한 작은 크기의 상품들이 기념비적인 규모로 크게 바뀜으로써 일상생활에서 익숙한 사물이 낯선 사물로 바뀌게 된다. 이러한 낯선 효과들은 상품을 예술작품의 지위로 위치시키는 의도적인 전략이다. 즉 새로움을 부여받아 상품이 예술이 되는 것이다.
 
         키치의 모조품적인 속성을 가지고 풍선개들을 계속 복제할 수 있도록 하였다. 풍선개 작품의 다섯가지 색상을 각각 3D모델로 만들어 다양한 색으로 풍선개를 생성할 수 있다. Three.js의  Raycaster()를 이용하여 3D환경에 원하는 위치에 풍선개를 생성한다. 생성한 풍선개는 scale을 커지게하여 바람을 집어넣는 듯한 효과를 주었다.  클릭을 한번 더 하게되면 해당 풍선개들을 배열에 넣어 해당 배열에 있는 객체들을 animation을 통해 하늘 위로 날라가는 듯한 효과를 주었다. 날라가는 풍선들을 마우스오버를 하면 회전값과 위치값이 더해져 자유분방하게 더 빠르게 날라가는 듯한 모습을 볼 수 있다.  더불어 OrbitControls를 이용하여 다양한 각도에서 풍선개의 모습을 감상할 수 있다.
-    </div>
+    </div> -->
     <canvas id="c"></canvas>
-
+    <div
+    class="explain"
+    style="height: 720px; bottom:50px"
+  >
+    <img src="detail/dog.png" id="small_img" />
+    <br />
+    <div class="caption-title" style="color: #a6c9e9;
+    margin-top: 280px; margin-bottom:10px;">| 풍선개</div>
+    <div class="caption-artist">&nbsp;제프 쿤스</div>
+    <hr style="margin-bottom:10px;"/>
+    <div class="caption-explain">
+      &nbsp;1994년부터 2000년까지 제작한 5개의 Balloon Dog은 제프쿤스가 제작했다. 바람이 빠지는 속성의 풍선대신 단단한 재료를 사용함으로써 작품의 형태는 변하지 않고 영구보존적인 성격을 갖게 한다.또한 작은 크기의 상품들이 기념비적인 규모로 크게 바뀜으로써 일상생활에서 익숙한 사물이 낯선 사물로 바뀌게 된다. 이러한 낯선 효과들은 상품을 예술작품의 지위로 위치시키는 의도적인 전략이다. 즉 새로움을 부여받아 상품이 예술이 되는 것이다.
+      <br /><br />
+      &nbsp;키치의 모조품적인 속성을 가지고 풍선개들을 계속 복제할 수 있도록 하였다. 풍선개 작품의 다섯가지 색상을 각각 3D모델로 만들어 다양한 색으로 풍선개를 생성할 수 있다. Three.js의  Raycaster()를 이용하여 3D환경에 원하는 위치에 풍선개를 생성한다. 생성한 풍선개는 scale을 커지게하여 바람을 집어넣는 듯한 효과를 주었다.  클릭을 한번 더 하게되면 해당 풍선개들을 배열에 넣어 해당 배열에 있는 객체들을 animation을 통해 하늘 위로 날라가는 듯한 효과를 주었다. 날라가는 풍선들을 마우스오버를 하면 회전값과 위치값이 더해져 자유분방하게 더 빠르게 날라가는 듯한 모습을 볼 수 있다.  더불어 OrbitControls를 이용하여 다양한 각도에서 풍선개의 모습을 감상할 수 있다.
+    </div>
     <!-- <script src="BalloonDog.js" type="module"></script> -->
     <script src="js/BalloonDog_test.js" type="module"></script>
     <!-- mp3 -->
