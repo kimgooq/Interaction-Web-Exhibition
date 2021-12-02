@@ -108,3 +108,5 @@ function animate() {
   requestAnimationFrame(animate);
   renderer.render(scene, camera);
 }
+
+document.getElementById("bgm").volume = 0.3;

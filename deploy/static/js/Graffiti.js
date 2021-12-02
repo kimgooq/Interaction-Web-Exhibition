@@ -326,6 +326,7 @@ function createRigidBody(
 function initInput() {
   //shoot ball
   window.addEventListener("pointerdown", function (event) {
+    arr_sound[sound_num].volume = 0.4;
     arr_sound[sound_num].play();
     sound_num++;
     if (sound_num > 9) {
@@ -404,3 +405,7 @@ function updatePhysics(deltaTime) {
     }
   }
 }
+
+window.addEventListener("load", () => {
+  document.getElementById("bgm").volume = 0.15;
+});

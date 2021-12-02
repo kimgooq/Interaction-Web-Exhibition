@@ -231,3 +231,5 @@ function render() {
 
   renderer.render(scene, camera);
 }
+
+document.getElementById("audio_play").volume = "0.3";
